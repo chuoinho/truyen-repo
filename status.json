@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-06-20T17:12:32.799Z",
+  "durationMs": 1946,
+  "extension": {
+    "apk": "tachiyomi-vi.minotruyen-v1.4.5.apk",
+    "code": 5,
+    "lang": "vi",
+    "name": "Tachiyomi: MinoTruyen",
+    "nsfw": 1,
+    "package": "eu.kanade.tachiyomi.extension.vi.minotruyen",
+    "repoUrl": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
+    "version": "1.4.5"
+  },
+  "level": "healthy",
+  "ok": true,
+  "repo": {
+    "ok": true,
+    "checks": [
+      {
+        "id": "repo-index",
+        "name": "index.min.json",
+        "ok": true,
+        "bytes": 268,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
+        "latencyMs": 219,
+        "status": 200
+      },
+      {
+        "id": "repo-index-pb",
+        "name": "index.pb",
+        "ok": true,
+        "bytes": 631,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
+        "latencyMs": 183,
+        "status": 200
+      },
+      {
+        "id": "repo-json",
+        "name": "repo.json",
+        "ok": true,
+        "bytes": 227,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
+        "latencyMs": 183,
+        "status": 200
+      },
+      {
+        "id": "apk",
+        "name": "APK",
+        "ok": true,
+        "bytes": 154658,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.5.apk",
+        "latencyMs": 181,
+        "status": 200
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "manga",
+      "name": "MinoTruyen Manga",
+      "ok": true,
+      "checks": [
+        {
+          "id": "resolve-domain",
+          "name": "Resolve domain",
+          "ok": true,
+          "detail": "https://minotruyenv7.xyz via script",
+          "latencyMs": 321,
+          "status": 200
+        },
+        {
+          "id": "list-api",
+          "name": "List API",
+          "ok": true,
+          "count": 24,
+          "detail": "24 books",
+          "latencyMs": 235,
+          "status": 200
+        },
+        {
+          "id": "detail-page",
+          "name": "Detail page",
+          "ok": true,
+          "detail": "book data found",
+          "latencyMs": 411,
+          "status": 200
+        },
+        {
+          "id": "chapter-api",
+          "name": "Chapter API",
+          "ok": true,
+          "count": 35,
+          "detail": "35 chapters",
+          "latencyMs": 67,
+          "status": 200
+        },
+        {
+          "id": "read-page",
+          "name": "Read page",
+          "ok": true,
+          "detail": "encrypted payload found",
+          "latencyMs": 597,
+          "status": 200
+        },
+        {
+          "id": "decrypt-pages",
+          "name": "Decrypt pages",
+          "ok": true,
+          "count": 51,
+          "detail": "3 servers, 51 pages"
+        },
+        {
+          "id": "image-fetch",
+          "name": "Image fetch",
+          "ok": true,
+          "bytes": 4096,
+          "detail": "image/jpeg 4096 bytes",
+          "latencyMs": 51,
+          "status": 206
+        }
+      ],
+      "baseUrl": "https://minotruyenv7.xyz",
+      "sampleBook": {
+        "id": 4734,
+        "title": "Có Chút Muộn Màng Nhưng Tôi Đã Phải Lòng Người Bạn Thuở Nhỏ Của Mình"
+      },
+      "sampleChapter": {
+        "number": 35,
+        "title": "47.0"
+      },
+      "latencyMs": 1720
+    },
+    {
+      "id": "comics",
+      "name": "MinoTruyen Comics",
+      "ok": true,
+      "checks": [
+        {
+          "id": "resolve-domain",
+          "name": "Resolve domain",
+          "ok": true,
+          "detail": "https://minotruyenv7.xyz via script",
+          "latencyMs": 119,
+          "status": 200
+        },
+        {
+          "id": "list-api",
+          "name": "List API",
+          "ok": true,
+          "count": 24,
+          "detail": "24 books",
+          "latencyMs": 249,
+          "status": 200
+        },
+        {
+          "id": "detail-page",
+          "name": "Detail page",
+          "ok": true,
+          "detail": "book data found",
+          "latencyMs": 430,
+          "status": 200
+        },
+        {
+          "id": "chapter-api",
+          "name": "Chapter API",
+          "ok": true,
+          "count": 24,
+          "detail": "24 chapters",
+          "latencyMs": 63,
+          "status": 200
+        },
+        {
+          "id": "read-page",
+          "name": "Read page",
+          "ok": true,
+          "detail": "encrypted payload found",
+          "latencyMs": 103,
+          "status": 200
+        },
+        {
+          "id": "decrypt-pages",
+          "name": "Decrypt pages",
+          "ok": true,
+          "count": 90,
+          "detail": "3 servers, 90 pages"
+        },
+        {
+          "id": "image-fetch",
+          "name": "Image fetch",
+          "ok": true,
+          "bytes": 4096,
+          "detail": "image/jpeg 4096 bytes",
+          "latencyMs": 51,
+          "status": 206
+        }
+      ],
+      "baseUrl": "https://minotruyenv7.xyz",
+      "sampleBook": {
+        "id": 13429,
+        "title": "Thiếu Niên Hồi Sinh"
+      },
+      "sampleChapter": {
+        "number": 24,
+        "title": "25"
+      },
+      "latencyMs": 1054
+    },
+    {
+      "id": "hentai",
+      "name": "MinoTruyen Hentai",
+      "ok": true,
+      "checks": [
+        {
+          "id": "resolve-domain",
+          "name": "Resolve domain",
+          "ok": true,
+          "detail": "https://minotruyenv7.xyz via script",
+          "latencyMs": 105,
+          "status": 200
+        },
+        {
+          "id": "list-api",
+          "name": "List API",
+          "ok": true,
+          "count": 24,
+          "detail": "24 books",
+          "latencyMs": 228,
+          "status": 200
+        },
+        {
+          "id": "detail-page",
+          "name": "Detail page",
+          "ok": true,
+          "detail": "book data found",
+          "latencyMs": 167,
+          "status": 200
+        },
+        {
+          "id": "chapter-api",
+          "name": "Chapter API",
+          "ok": true,
+          "count": 40,
+          "detail": "40 chapters",
+          "latencyMs": 68,
+          "status": 200
+        },
+        {
+          "id": "read-page",
+          "name": "Read page",
+          "ok": true,
+          "detail": "encrypted payload found",
+          "latencyMs": 143,
+          "status": 200
+        },
+        {
+          "id": "decrypt-pages",
+          "name": "Decrypt pages",
+          "ok": true,
+          "count": 15,
+          "detail": "3 servers, 15 pages"
+        },
+        {
+          "id": "image-fetch",
+          "name": "Image fetch",
+          "ok": true,
+          "bytes": 4096,
+          "detail": "image/jpeg 4096 bytes",
+          "latencyMs": 156,
+          "status": 206
+        }
+      ],
+      "baseUrl": "https://minotruyenv7.xyz",
+      "sampleBook": {
+        "id": 12135,
+        "title": "Bố Ơi, Cố Lên!!"
+      },
+      "sampleChapter": {
+        "number": 40,
+        "title": "40"
+      },
+      "latencyMs": 904
+    }
+  ],
+  "summary": "MinoTruyen đang hoạt động bình thường."
+}
