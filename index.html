@@ -1,12 +1,128 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>apks</title>
-</head>
-<body>
-<pre>
-<a href="apk/tachiyomi-vi.minotruyen-v1.4.5.apk">Tachiyomi: MinoTruyen</a>
-</pre>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Truyen Repo is a compact Mihon and Komikku extension repository for MinoTruyen."
+    />
+    <title>Truyen Repo</title>
+    <link rel="icon" href="assets/minotruyen.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-nav">
+      <a class="brand" href="#top" aria-label="Truyen Repo home">
+        <img src="assets/minotruyen.png" alt="" />
+        <span>Truyen Repo</span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="#install">Install</a>
+        <a href="#extension">Extension</a>
+        <a href="#files">Files</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Mihon / Komikku extension repository</p>
+          <h1>Truyen Repo</h1>
+          <p class="lead">
+            A small extension repo for MinoTruyen, ready to add in supported
+            Tachiyomi-style apps.
+          </p>
+          <div class="hero-actions" id="install">
+            <a class="button primary" id="installLink" href="#">Open in app</a>
+            <button class="button secondary" id="copyButton" type="button">Copy repo URL</button>
+          </div>
+          <p class="repo-url" id="repoUrlText"></p>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <img src="assets/minotruyen.png" alt="" />
+          <div class="signal">
+            <span class="signal-dot"></span>
+            <span>repo online</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-strip" aria-label="Repository status">
+        <div>
+          <span class="metric" id="extensionCount">1</span>
+          <span class="label">extension</span>
+        </div>
+        <div>
+          <span class="metric" id="sourceCount">3</span>
+          <span class="label">sources</span>
+        </div>
+        <div>
+          <span class="metric">v2</span>
+          <span class="label">index.pb ready</span>
+        </div>
+      </section>
+
+      <section class="section" id="extension">
+        <div class="section-head">
+          <p class="eyebrow">Available extension</p>
+          <h2>MinoTruyen</h2>
+        </div>
+        <div class="extension-layout">
+          <div class="extension-main">
+            <div class="extension-title">
+              <img src="assets/minotruyen.png" alt="" />
+              <div>
+                <h3 id="extensionName">Tachiyomi: MinoTruyen</h3>
+                <p id="extensionPackage">eu.kanade.tachiyomi.extension.vi.minotruyen</p>
+              </div>
+            </div>
+            <div class="source-list" id="sourceList"></div>
+          </div>
+          <div class="extension-meta">
+            <dl>
+              <div>
+                <dt>Language</dt>
+                <dd id="extensionLang">vi</dd>
+              </div>
+              <div>
+                <dt>Version</dt>
+                <dd id="extensionVersion">1.4.5</dd>
+              </div>
+              <div>
+                <dt>Version code</dt>
+                <dd id="extensionCode">5</dd>
+              </div>
+              <div>
+                <dt>NSFW</dt>
+                <dd id="extensionNsfw">Yes</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="files">
+        <div class="section-head">
+          <p class="eyebrow">Repository files</p>
+          <h2>Raw endpoints</h2>
+        </div>
+        <div class="link-grid">
+          <a id="indexJsonLink" href="#">index.min.json</a>
+          <a id="indexPbLink" href="#">index.pb</a>
+          <a id="repoJsonLink" href="#">repo.json</a>
+          <a id="apkLink" href="#">Download APK</a>
+          <a id="githubLink" href="#">GitHub repository</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Truyen Repo</span>
+      <span id="lastChecked">Loading repository data...</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
 </html>
