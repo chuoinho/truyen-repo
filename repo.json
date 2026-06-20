@@ -1,0 +1,9 @@
+{
+  "index_v2": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
+  "meta": {
+    "name": "Truyen Repo",
+    "shortName": "Truyen",
+    "website": "https://github.com/chuoinho/truyen-repo",
+    "signingKeyFingerprint": "1db5710ee3c6ac5bd45b89d0351083525373a0f8827f500f832a595ecdc97aca"
+  }
+}
