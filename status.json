@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-06-20T22:36:37.033Z",
-  "durationMs": 4887,
+  "checkedAt": "2026-06-21T01:41:28.605Z",
+  "durationMs": 4342,
   "extension": {
     "apk": "tachiyomi-vi.minotruyen-v1.4.5.apk",
     "code": 5,
@@ -23,7 +23,7 @@
         "ok": true,
         "bytes": 268,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 139,
+        "latencyMs": 115,
         "status": 200
       },
       {
@@ -32,7 +32,7 @@
         "ok": true,
         "bytes": 631,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 80,
+        "latencyMs": 69,
         "status": 200
       },
       {
@@ -41,7 +41,7 @@
         "ok": true,
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 81,
+        "latencyMs": 63,
         "status": 200
       },
       {
@@ -50,7 +50,7 @@
         "ok": true,
         "bytes": 154658,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.5.apk",
-        "latencyMs": 83,
+        "latencyMs": 78,
         "status": 200
       }
     ]
@@ -59,6 +59,81 @@
     {
       "id": "manga",
       "name": "MinoTruyen Manga",
+      "ok": true,
+      "checks": [
+        {
+          "id": "resolve-domain",
+          "name": "Resolve domain",
+          "ok": true,
+          "detail": "https://minotruyenv7.xyz via script",
+          "latencyMs": 170,
+          "status": 200
+        },
+        {
+          "id": "list-api",
+          "name": "List API",
+          "ok": true,
+          "count": 24,
+          "detail": "24 books",
+          "latencyMs": 1010,
+          "status": 200
+        },
+        {
+          "id": "detail-page",
+          "name": "Detail page",
+          "ok": true,
+          "detail": "book data found",
+          "latencyMs": 1617,
+          "status": 200
+        },
+        {
+          "id": "chapter-api",
+          "name": "Chapter API",
+          "ok": true,
+          "count": 120,
+          "detail": "120 chapters",
+          "latencyMs": 382,
+          "status": 200
+        },
+        {
+          "id": "read-page",
+          "name": "Read page",
+          "ok": true,
+          "detail": "encrypted payload found",
+          "latencyMs": 757,
+          "status": 200
+        },
+        {
+          "id": "decrypt-pages",
+          "name": "Decrypt pages",
+          "ok": true,
+          "count": 72,
+          "detail": "3 servers, 72 pages"
+        },
+        {
+          "id": "image-fetch",
+          "name": "Image fetch",
+          "ok": true,
+          "bytes": 4096,
+          "detail": "image/jpeg 4096 bytes",
+          "latencyMs": 248,
+          "status": 206
+        }
+      ],
+      "baseUrl": "https://minotruyenv7.xyz",
+      "sampleBook": {
+        "id": 20037,
+        "title": "Codebreaker"
+      },
+      "sampleChapter": {
+        "number": 120,
+        "title": "120"
+      },
+      "latencyMs": 4204
+    },
+    {
+      "id": "comics",
+      "name": "MinoTruyen Comics",
       "ok": true,
       "checks": [
         {
@@ -75,7 +150,7 @@
           "ok": true,
           "count": 24,
           "detail": "24 books",
-          "latencyMs": 1243,
+          "latencyMs": 1384,
           "status": 200
         },
         {
@@ -83,82 +158,7 @@
           "name": "Detail page",
           "ok": true,
           "detail": "book data found",
-          "latencyMs": 632,
-          "status": 200
-        },
-        {
-          "id": "chapter-api",
-          "name": "Chapter API",
-          "ok": true,
-          "count": 120,
-          "detail": "120 chapters",
-          "latencyMs": 1097,
-          "status": 200
-        },
-        {
-          "id": "read-page",
-          "name": "Read page",
-          "ok": true,
-          "detail": "encrypted payload found",
-          "latencyMs": 846,
-          "status": 200
-        },
-        {
-          "id": "decrypt-pages",
-          "name": "Decrypt pages",
-          "ok": true,
-          "count": 72,
-          "detail": "3 servers, 72 pages"
-        },
-        {
-          "id": "image-fetch",
-          "name": "Image fetch",
-          "ok": true,
-          "bytes": 4096,
-          "detail": "image/jpeg 4096 bytes",
-          "latencyMs": 6,
-          "status": 206
-        }
-      ],
-      "baseUrl": "https://minotruyenv7.xyz",
-      "sampleBook": {
-        "id": 20037,
-        "title": "Codebreaker"
-      },
-      "sampleChapter": {
-        "number": 120,
-        "title": "120"
-      },
-      "latencyMs": 4103
-    },
-    {
-      "id": "comics",
-      "name": "MinoTruyen Comics",
-      "ok": true,
-      "checks": [
-        {
-          "id": "resolve-domain",
-          "name": "Resolve domain",
-          "ok": true,
-          "detail": "https://minotruyenv7.xyz via script",
-          "latencyMs": 173,
-          "status": 200
-        },
-        {
-          "id": "list-api",
-          "name": "List API",
-          "ok": true,
-          "count": 24,
-          "detail": "24 books",
-          "latencyMs": 1090,
-          "status": 200
-        },
-        {
-          "id": "detail-page",
-          "name": "Detail page",
-          "ok": true,
-          "detail": "book data found",
-          "latencyMs": 2386,
+          "latencyMs": 600,
           "status": 200
         },
         {
@@ -167,7 +167,7 @@
           "ok": true,
           "count": 10,
           "detail": "10 chapters",
-          "latencyMs": 275,
+          "latencyMs": 269,
           "status": 200
         },
         {
@@ -175,7 +175,7 @@
           "name": "Read page",
           "ok": true,
           "detail": "encrypted payload found",
-          "latencyMs": 791,
+          "latencyMs": 362,
           "status": 200
         },
         {
@@ -191,7 +191,7 @@
           "ok": true,
           "bytes": 4096,
           "detail": "image/jpeg 4096 bytes",
-          "latencyMs": 5,
+          "latencyMs": 728,
           "status": 206
         }
       ],
@@ -204,7 +204,7 @@
         "number": 10,
         "title": "10"
       },
-      "latencyMs": 4740
+      "latencyMs": 3605
     },
     {
       "id": "hentai",
@@ -216,7 +216,7 @@
           "name": "Resolve domain",
           "ok": true,
           "detail": "https://minotruyenv7.xyz via script",
-          "latencyMs": 162,
+          "latencyMs": 163,
           "status": 200
         },
         {
@@ -225,7 +225,7 @@
           "ok": true,
           "count": 24,
           "detail": "24 books",
-          "latencyMs": 2152,
+          "latencyMs": 1063,
           "status": 200
         },
         {
@@ -233,7 +233,7 @@
           "name": "Detail page",
           "ok": true,
           "detail": "book data found",
-          "latencyMs": 538,
+          "latencyMs": 593,
           "status": 200
         },
         {
@@ -242,7 +242,7 @@
           "ok": true,
           "count": 27,
           "detail": "27 chapters",
-          "latencyMs": 302,
+          "latencyMs": 279,
           "status": 200
         },
         {
@@ -250,7 +250,7 @@
           "name": "Read page",
           "ok": true,
           "detail": "encrypted payload found",
-          "latencyMs": 540,
+          "latencyMs": 344,
           "status": 200
         },
         {
@@ -266,7 +266,7 @@
           "ok": true,
           "bytes": 4096,
           "detail": "image/jpeg 4096 bytes",
-          "latencyMs": 30,
+          "latencyMs": 372,
           "status": 206
         }
       ],
@@ -279,7 +279,7 @@
         "number": 27,
         "title": "30"
       },
-      "latencyMs": 3745
+      "latencyMs": 2838
     }
   ],
   "summary": "MinoTruyen đang hoạt động bình thường."
