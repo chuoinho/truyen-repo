@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-06-21T10:49:03.040Z",
-  "durationMs": 3182,
+  "checkedAt": "2026-06-21T13:19:11.839Z",
+  "durationMs": 3639,
   "extension": {
     "apk": "tachiyomi-vi.minotruyen-v1.4.5.apk",
     "code": 5,
@@ -23,7 +23,7 @@
         "ok": true,
         "bytes": 268,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 212,
+        "latencyMs": 152,
         "status": 200
       },
       {
@@ -32,7 +32,7 @@
         "ok": true,
         "bytes": 631,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 157,
+        "latencyMs": 96,
         "status": 200
       },
       {
@@ -41,7 +41,7 @@
         "ok": true,
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 160,
+        "latencyMs": 92,
         "status": 200
       },
       {
@@ -50,7 +50,7 @@
         "ok": true,
         "bytes": 154658,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.5.apk",
-        "latencyMs": 198,
+        "latencyMs": 100,
         "status": 200
       }
     ]
@@ -66,7 +66,7 @@
           "name": "Resolve domain",
           "ok": true,
           "detail": "https://minotruyenv7.xyz via script",
-          "latencyMs": 162,
+          "latencyMs": 198,
           "status": 200
         },
         {
@@ -75,7 +75,7 @@
           "ok": true,
           "count": 24,
           "detail": "24 books",
-          "latencyMs": 799,
+          "latencyMs": 1090,
           "status": 200
         },
         {
@@ -83,16 +83,16 @@
           "name": "Detail page",
           "ok": true,
           "detail": "book data found",
-          "latencyMs": 452,
+          "latencyMs": 590,
           "status": 200
         },
         {
           "id": "chapter-api",
           "name": "Chapter API",
           "ok": true,
-          "count": 39,
-          "detail": "39 chapters",
-          "latencyMs": 539,
+          "count": 35,
+          "detail": "35 chapters",
+          "latencyMs": 299,
           "status": 200
         },
         {
@@ -100,7 +100,7 @@
           "name": "Read page",
           "ok": true,
           "detail": "encrypted payload found",
-          "latencyMs": 551,
+          "latencyMs": 355,
           "status": 200
         },
         {
@@ -116,20 +116,20 @@
           "ok": true,
           "bytes": 4096,
           "detail": "image/jpeg 4096 bytes",
-          "latencyMs": 339,
+          "latencyMs": 368,
           "status": 206
         }
       ],
       "baseUrl": "https://minotruyenv7.xyz",
       "sampleBook": {
-        "id": 20063,
-        "title": "Criminale"
+        "id": 19935,
+        "title": "Trò Chơi Tình Ái!"
       },
       "sampleChapter": {
-        "number": 39,
-        "title": "35"
+        "number": 35,
+        "title": "36"
       },
-      "latencyMs": 2922
+      "latencyMs": 2930
     },
     {
       "id": "comics",
@@ -141,7 +141,7 @@
           "name": "Resolve domain",
           "ok": true,
           "detail": "https://minotruyenv7.xyz via script",
-          "latencyMs": 159,
+          "latencyMs": 349,
           "status": 200
         },
         {
@@ -150,7 +150,7 @@
           "ok": true,
           "count": 24,
           "detail": "24 books",
-          "latencyMs": 751,
+          "latencyMs": 1069,
           "status": 200
         },
         {
@@ -158,16 +158,16 @@
           "name": "Detail page",
           "ok": true,
           "detail": "book data found",
-          "latencyMs": 557,
+          "latencyMs": 651,
           "status": 200
         },
         {
           "id": "chapter-api",
           "name": "Chapter API",
           "ok": true,
-          "count": 92,
-          "detail": "92 chapters",
-          "latencyMs": 692,
+          "count": 183,
+          "detail": "183 chapters",
+          "latencyMs": 441,
           "status": 200
         },
         {
@@ -175,15 +175,15 @@
           "name": "Read page",
           "ok": true,
           "detail": "encrypted payload found",
-          "latencyMs": 251,
+          "latencyMs": 351,
           "status": 200
         },
         {
           "id": "decrypt-pages",
           "name": "Decrypt pages",
           "ok": true,
-          "count": 33,
-          "detail": "3 servers, 33 pages"
+          "count": 45,
+          "detail": "3 servers, 45 pages"
         },
         {
           "id": "image-fetch",
@@ -191,20 +191,20 @@
           "ok": true,
           "bytes": 4096,
           "detail": "image/jpeg 4096 bytes",
-          "latencyMs": 281,
+          "latencyMs": 459,
           "status": 206
         }
       ],
       "baseUrl": "https://minotruyenv7.xyz",
       "sampleBook": {
-        "id": 8937,
-        "title": "Dị Ngục Bạo Quân: Cái Bóng Của Ta Có Thể Tiến Hóa Vô Hạn"
+        "id": 149,
+        "title": "Toàn Dân Chuyển Chức: Thành Tựu Của Thánh Kỵ Sĩ Ta Là Mạnh Nhất"
       },
       "sampleChapter": {
-        "number": 92,
-        "title": "92"
+        "number": 183,
+        "title": "182.0"
       },
-      "latencyMs": 2774
+      "latencyMs": 3340
     },
     {
       "id": "hentai",
@@ -216,7 +216,7 @@
           "name": "Resolve domain",
           "ok": true,
           "detail": "https://minotruyenv7.xyz via script",
-          "latencyMs": 172,
+          "latencyMs": 349,
           "status": 200
         },
         {
@@ -225,7 +225,7 @@
           "ok": true,
           "count": 24,
           "detail": "24 books",
-          "latencyMs": 780,
+          "latencyMs": 1084,
           "status": 200
         },
         {
@@ -233,16 +233,16 @@
           "name": "Detail page",
           "ok": true,
           "detail": "book data found",
-          "latencyMs": 457,
+          "latencyMs": 592,
           "status": 200
         },
         {
           "id": "chapter-api",
           "name": "Chapter API",
           "ok": true,
-          "count": 28,
-          "detail": "28 chapters",
-          "latencyMs": 200,
+          "count": 20,
+          "detail": "20 chapters",
+          "latencyMs": 284,
           "status": 200
         },
         {
@@ -250,15 +250,15 @@
           "name": "Read page",
           "ok": true,
           "detail": "encrypted payload found",
-          "latencyMs": 384,
+          "latencyMs": 759,
           "status": 200
         },
         {
           "id": "decrypt-pages",
           "name": "Decrypt pages",
           "ok": true,
-          "count": 12,
-          "detail": "3 servers, 12 pages"
+          "count": 48,
+          "detail": "3 servers, 48 pages"
         },
         {
           "id": "image-fetch",
@@ -266,20 +266,20 @@
           "ok": true,
           "bytes": 4096,
           "detail": "image/jpeg 4096 bytes",
-          "latencyMs": 373,
+          "latencyMs": 379,
           "status": 206
         }
       ],
       "baseUrl": "https://minotruyenv7.xyz",
       "sampleBook": {
-        "id": 20042,
-        "title": "Chơi Bi-a với em gái dâm đãng"
+        "id": 19838,
+        "title": "Ba Người Một Mái Nhà"
       },
       "sampleChapter": {
-        "number": 28,
-        "title": "31"
+        "number": 20,
+        "title": "20"
       },
-      "latencyMs": 2429
+      "latencyMs": 3475
     }
   ],
   "summary": "MinoTruyen đang hoạt động bình thường."
