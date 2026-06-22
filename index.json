@@ -48,5 +48,59 @@
         "versionId": 1
       }
     ]
+  },
+  {
+    "name": "Tachiyomi: CuuTruyen",
+    "pkg": "eu.kanade.tachiyomi.extension.vi.cuutruyen",
+    "apk": "tachiyomi-vi.cuutruyen-v1.4.4.apk",
+    "lang": "vi",
+    "code": 4,
+    "version": "1.4.4",
+    "nsfw": 1,
+    "sources": [
+      {
+        "name": "CuuTruyen",
+        "lang": "vi",
+        "id": "8222087175453285202",
+        "baseUrl": "https://cuutruyen.net",
+        "versionId": 1
+      }
+    ]
+  },
+  {
+    "name": "Tachiyomi: CuuTruyen (unoriginal)",
+    "pkg": "eu.kanade.tachiyomi.extension.vi.cuutruyenmoe",
+    "apk": "tachiyomi-vi.cuutruyenmoe-v1.4.2.apk",
+    "lang": "vi",
+    "code": 2,
+    "version": "1.4.2",
+    "nsfw": 1,
+    "sources": [
+      {
+        "name": "CuuTruyen (unoriginal)",
+        "lang": "vi",
+        "id": "3973269831131863421",
+        "baseUrl": "https://cuutruyen.moe",
+        "versionId": 1
+      }
+    ]
+  },
+  {
+    "name": "Tachiyomi: Top Truyen",
+    "pkg": "eu.kanade.tachiyomi.extension.vi.toptruyen",
+    "apk": "tachiyomi-vi.toptruyen-v1.4.37.apk",
+    "lang": "vi",
+    "code": 37,
+    "version": "1.4.37",
+    "nsfw": 1,
+    "sources": [
+      {
+        "name": "Top Truyen",
+        "lang": "vi",
+        "id": "1166901607721102706",
+        "baseUrl": "https://www.toptruyenzone4.com",
+        "versionId": 1
+      }
+    ]
   }
 ]
