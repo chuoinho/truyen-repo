@@ -92,17 +92,17 @@
   {
     "name": "Tachiyomi: Goc Truyen Tranh Vui",
     "pkg": "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui",
-    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.12.apk",
+    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.13.apk",
     "lang": "vi",
-    "code": 12,
-    "version": "1.4.12",
+    "code": 13,
+    "version": "1.4.13",
     "nsfw": 0,
     "sources": [
       {
         "name": "Goc Truyen Tranh Vui",
         "lang": "vi",
         "id": "2831859393730435398",
-        "baseUrl": "https://goctruyentranhvui23.com",
+        "baseUrl": "https://goctruyentranhvui30.com",
         "versionId": 1
       }
     ]
