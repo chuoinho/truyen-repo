@@ -1,15 +1,15 @@
-name: Check Mino status
+name: Check source status
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17 */5 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: mino-status
+  group: source-status
   cancel-in-progress: false
 
 jobs:
@@ -27,8 +27,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Check MinoTruyen
-        run: node scripts/check-mino-status.js
+      - name: Check sources
+        run: node scripts/check-source-status.js
 
       - name: Commit status.json
         run: |
@@ -40,5 +40,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add status.json
-          git commit -m "Update Mino status"
+          git commit -m "Update source status"
           git push origin HEAD:repo

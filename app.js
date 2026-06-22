@@ -2,23 +2,12 @@ const OWNER = "chuoinho";
 const REPO = "truyen-repo";
 const BRANCH = "repo";
 const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
+const GITHUB_BASE = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}`;
 const REPO_URL = `${RAW_BASE}/index.min.json`;
 const INDEX_PB_URL = `${RAW_BASE}/index.pb`;
 const REPO_JSON_URL = `${RAW_BASE}/repo.json`;
 const STATUS_URL = "status.json";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
-
-const fallbackIndex = [
-  {
-    name: "Tachiyomi: MinoTruyen",
-    pkg: "eu.kanade.tachiyomi.extension.vi.minotruyen",
-    apk: "tachiyomi-vi.minotruyen-v1.4.5.apk",
-    lang: "vi",
-    code: 5,
-    version: "1.4.5",
-    nsfw: 1,
-  },
-];
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -28,7 +17,7 @@ function setText(selector, value) {
 }
 
 function clear(element) {
-  element.replaceChildren();
+  if (element) element.replaceChildren();
 }
 
 function el(tag, className, text) {
@@ -38,8 +27,27 @@ function el(tag, className, text) {
   return node;
 }
 
+function cleanExtensionName(name) {
+  return String(name || "").replace(/^Tachiyomi:\s*/i, "");
+}
+
+function flattenIndexSources(index) {
+  return (index || []).flatMap((extension) =>
+    (extension.sources || []).map((source, sourceIndex) => ({
+      id: source.id || `${extension.pkg || extension.name}:${sourceIndex}`,
+      name: source.name || cleanExtensionName(extension.name),
+      baseUrl: source.baseUrl,
+      extensionName: cleanExtensionName(extension.name),
+      package: extension.pkg,
+      ok: null,
+      status: "unknown",
+      checks: [],
+    })),
+  );
+}
+
 function formatDate(value) {
-  if (!value) return "Chưa có dữ liệu";
+  if (!value) return "Chua co du lieu";
   return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "short",
     timeStyle: "medium",
@@ -53,28 +61,28 @@ function formatMs(value) {
 }
 
 function statusLabel(level) {
-  if (level === "healthy") return "Đang hoạt động";
-  if (level === "degraded") return "Lỗi một phần";
-  if (level === "down") return "Không hoạt động";
-  return "Chưa có dữ liệu";
+  if (level === "healthy") return "working";
+  if (level === "degraded") return "partial";
+  if (level === "down") return "error";
+  return "loading";
 }
 
 function statusForCheck(ok) {
-  return ok ? "OK" : "Lỗi";
+  return ok ? "working" : "error";
 }
 
 function renderIndex(index) {
-  const extension = index[0] || fallbackIndex[0];
-  setText("#extensionName", extension.name?.replace("Tachiyomi: ", "") || "MinoTruyen");
-  setText("#extensionVersion", extension.version || "--");
-  $("#apkLink").href = `${RAW_BASE}/apk/${extension.apk}`;
+  const sources = flattenIndexSources(index);
+  setText("#sourceCount", `${sources.length}`);
+  setText("#workingCount", "--");
+  $("#apkLink").href = `${GITHUB_BASE}/apk`;
 }
 
 function renderCheckList(container, checks) {
   clear(container);
 
   if (!checks?.length) {
-    container.append(el("p", "empty", "Chưa có dữ liệu kiểm tra."));
+    container.append(el("p", "empty", "Chua co du lieu kiem tra."));
     return;
   }
 
@@ -84,11 +92,12 @@ function renderCheckList(container, checks) {
 
     const main = el("div", "check-main");
     main.append(el("strong", "", item.name || item.id));
-    const detail = item.detail || `HTTP ${item.status || "--"}`;
+    const detail = item.detail || item.error || `HTTP ${item.statusCode || "--"}`;
     main.append(el("span", "", detail));
 
     const meta = el("div", "check-meta");
-    meta.append(el("span", "badge", statusForCheck(item.ok)));
+    meta.append(el("span", "badge", item.status || statusForCheck(item.ok)));
+    if (item.statusCode !== undefined) meta.append(el("span", "", `HTTP ${item.statusCode}`));
     meta.append(el("span", "", formatMs(item.latencyMs)));
 
     row.append(main, meta);
@@ -101,25 +110,39 @@ function renderSources(sources) {
   clear(container);
 
   if (!sources?.length) {
-    container.append(el("p", "empty", "Chưa có dữ liệu source."));
+    container.append(el("p", "empty", "Chua co du lieu source."));
     return;
   }
 
-  sources.forEach((source) => {
+  const sortedSources = [...sources].sort((a, b) => {
+    if (Boolean(a.ok) !== Boolean(b.ok)) return a.ok ? 1 : -1;
+    return String(a.name).localeCompare(String(b.name), "vi");
+  });
+
+  sortedSources.forEach((source) => {
     const item = el("article", "source-item");
     item.dataset.ok = String(Boolean(source.ok));
 
     const head = el("div", "source-head");
     const title = el("div");
-    title.append(el("strong", "", source.name));
-    title.append(el("span", "", source.baseUrl || "Chưa rõ domain"));
-    const badge = el("span", "badge", statusForCheck(source.ok));
+    title.append(el("strong", "", source.name || "Unknown source"));
+    title.append(
+      el(
+        "span",
+        "",
+        [source.extensionName || source.package, source.baseUrl || "No base URL"]
+          .filter(Boolean)
+          .join(" · "),
+      ),
+    );
+    const badge = el("span", "badge", source.status || statusForCheck(source.ok));
     head.append(title, badge);
 
+    const baseCheck = source.checks?.find((checkItem) => checkItem.id === "base-url");
     const sample = el("p", "sample");
-    sample.textContent = source.sampleBook?.title
-      ? `Mẫu: ${source.sampleBook.title}`
-      : source.error || "Chưa lấy được truyện mẫu.";
+    sample.textContent = source.ok
+      ? `working · HTTP ${baseCheck?.statusCode || "--"} · ${formatMs(source.latencyMs)}`
+      : `error · ${source.error || baseCheck?.error || `HTTP ${baseCheck?.statusCode || "--"}`}`;
 
     const checks = el("div", "check-list compact");
     renderCheckList(checks, source.checks || []);
@@ -129,16 +152,28 @@ function renderSources(sources) {
   });
 }
 
-function renderStatus(status) {
+function renderQuickInfo(status, index) {
+  const fallbackSources = flattenIndexSources(index);
+  const stats = status?.stats || {};
+  const totalSources = stats.totalSources ?? status?.sources?.length ?? fallbackSources.length;
+  const workingSources =
+    stats.workingSources ?? status?.sources?.filter((source) => source.ok).length ?? 0;
+
+  setText("#sourceCount", `${totalSources}`);
+  setText("#workingCount", `${workingSources}/${totalSources}`);
+  setText("#checkedAt", formatDate(status?.checkedAt));
+  setText("#durationMs", formatMs(status?.durationMs));
+  setText("#footerNote", `Last check: ${formatDate(status?.checkedAt)}`);
+}
+
+function renderStatus(status, index) {
   const level = status?.level || "unknown";
   $("#statusBox").dataset.level = level;
   setText("#statusText", statusLabel(level));
-  setText("#statusSummary", status?.summary || "Chưa đọc được status.json.");
-  setText("#checkedAt", formatDate(status?.checkedAt));
-  setText("#durationMs", formatMs(status?.durationMs));
-  setText("#footerNote", `Lần kiểm tra gần nhất: ${formatDate(status?.checkedAt)}`);
-  renderSources(status?.sources || []);
-  renderCheckList($("#repoChecks"), status?.repo?.checks || []);
+  setText("#statusSummary", status?.summary || "Chua doc duoc status.json.");
+  renderQuickInfo(status, index);
+  renderSources(status?.sources || flattenIndexSources(index));
+  renderCheckList($("#repoChecks"), status?.repository?.checks || status?.repo?.checks || []);
 }
 
 async function loadJson(url) {
@@ -155,23 +190,26 @@ async function hydrate() {
   $("#repoJsonLink").href = REPO_JSON_URL;
   $("#statusJsonLink").href = STATUS_URL;
 
-  renderIndex(fallbackIndex);
-
+  let index = [];
   try {
-    renderIndex(await loadJson(REPO_URL));
+    index = await loadJson(REPO_URL);
   } catch {
-    renderIndex(fallbackIndex);
+    index = [];
   }
+  renderIndex(index);
 
   try {
-    renderStatus(await loadJson(STATUS_URL));
+    renderStatus(await loadJson(STATUS_URL), index);
   } catch (error) {
-    renderStatus({
-      level: "unknown",
-      summary: `Không đọc được status.json: ${error.message}`,
-      sources: [],
-      repo: { checks: [] },
-    });
+    renderStatus(
+      {
+        level: "unknown",
+        summary: `Khong doc duoc status.json: ${error.message}`,
+        sources: flattenIndexSources(index),
+        repository: { checks: [] },
+      },
+      index,
+    );
   }
 }
 
@@ -181,9 +219,9 @@ async function copyRepoUrl() {
 
   try {
     await navigator.clipboard.writeText(REPO_URL);
-    button.textContent = "Đã copy";
+    button.textContent = "Copied";
   } catch {
-    button.textContent = "Copy lỗi";
+    button.textContent = "Copy failed";
   }
 
   setTimeout(() => {

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Trang trạng thái tối giản cho Truyen Repo và extension MinoTruyen."
+      content="Trang trang thai cho Truyen Repo va tat ca source hien co."
     />
     <title>Truyen Repo</title>
     <link rel="icon" href="assets/minotruyen.png" />
@@ -22,51 +22,51 @@
 
     <main id="top">
       <section class="hero" aria-labelledby="pageTitle">
-        <p class="eyebrow">MinoTruyen extension</p>
-        <h1 id="pageTitle">Trạng thái repo</h1>
+        <p class="eyebrow">Truyen Repo monitor</p>
+        <h1 id="pageTitle">Trang thai source</h1>
         <p class="lead">
-          Trang này hiển thị lần kiểm tra gần nhất của extension MinoTruyen và các file repo
-          dùng để thêm vào app.
+          Kiem tra base URL cua tat ca source trong repo moi 5 tieng va hien thi nhanh
+          source nao dang working hoac error.
         </p>
 
         <div class="status-box" id="statusBox" data-level="loading" aria-live="polite">
           <span class="status-dot" aria-hidden="true"></span>
           <div>
-            <strong id="statusText">Đang tải trạng thái</strong>
-            <span id="statusSummary">Đang đọc status.json...</span>
+            <strong id="statusText">loading</strong>
+            <span id="statusSummary">Dang doc status.json...</span>
           </div>
         </div>
 
         <div class="actions" id="install">
-          <a class="button primary" id="installLink" href="#">Mở trong app</a>
+          <a class="button primary" id="installLink" href="#">Mo trong app</a>
           <button class="button secondary" id="copyButton" type="button">Copy repo URL</button>
         </div>
         <p class="repo-url" id="repoUrlText"></p>
       </section>
 
-      <section class="quick-info" aria-label="Thông tin nhanh">
+      <section class="quick-info" aria-label="Thong tin nhanh">
         <div>
-          <span class="label">Extension</span>
-          <strong id="extensionName">MinoTruyen</strong>
+          <span class="label">Source</span>
+          <strong id="sourceCount">--</strong>
         </div>
         <div>
-          <span class="label">Phiên bản</span>
-          <strong id="extensionVersion">1.4.5</strong>
+          <span class="label">Working</span>
+          <strong id="workingCount">--</strong>
         </div>
         <div>
-          <span class="label">Kiểm tra lúc</span>
-          <strong id="checkedAt">Chưa có dữ liệu</strong>
+          <span class="label">Kiem tra luc</span>
+          <strong id="checkedAt">Chua co du lieu</strong>
         </div>
         <div>
-          <span class="label">Thời gian chạy</span>
+          <span class="label">Thoi gian chay</span>
           <strong id="durationMs">--</strong>
         </div>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <h2>Source Mino</h2>
-          <p>Mỗi source được kiểm tra qua danh sách truyện, chi tiết, chương, trang đọc và ảnh.</p>
+          <h2>Source status</h2>
+          <p>Moi source duoc check bang base URL tu index.min.json.</p>
         </div>
         <div class="source-list" id="sourceList"></div>
       </section>
@@ -74,14 +74,14 @@
       <section class="section">
         <div class="section-head">
           <h2>File repo</h2>
-          <p>Các file mà app dùng khi thêm repository.</p>
+          <p>Cac file ma app dung khi them repository.</p>
         </div>
         <div class="check-list" id="repoChecks"></div>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <h2>Liên kết</h2>
+          <h2>Lien ket</h2>
         </div>
         <div class="links">
           <a id="indexJsonLink" href="#">index.min.json</a>
@@ -95,7 +95,7 @@
 
     <footer>
       <span>Truyen Repo</span>
-      <span id="footerNote">Status được cập nhật bằng GitHub Actions.</span>
+      <span id="footerNote">Status duoc cap nhat bang GitHub Actions.</span>
     </footer>
 
     <script src="app.js"></script>
