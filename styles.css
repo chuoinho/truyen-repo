@@ -1,11 +1,11 @@
 :root {
-  --bg: #f7f8f5;
-  --surface: #ffffff;
-  --surface-soft: #f1f3ee;
+  --bg: #e9ede6;
+  --surface: #fbfcf8;
+  --surface-soft: #e2e8df;
   --ink: #111510;
-  --muted: #626b64;
-  --line: #dfe5dc;
-  --line-strong: #cdd7cd;
+  --muted: #5b645d;
+  --line: #cfd8cd;
+  --line-strong: #b8c6b8;
   --ok: #167247;
   --ok-bg: #e8f4ee;
   --warn: #a56200;
@@ -14,7 +14,7 @@
   --bad-bg: #fde8e5;
   --unknown: #68707a;
   --radius: 8px;
-  --shadow: 0 18px 50px rgba(31, 44, 31, 0.08);
+  --shadow: 0 18px 50px rgba(31, 44, 31, 0.12);
 }
 
 * {
@@ -321,7 +321,7 @@ h1 {
   padding: 12px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: rgba(247, 248, 245, 0.94);
+  background: rgba(233, 237, 230, 0.94);
   backdrop-filter: blur(16px);
 }
 
@@ -372,6 +372,7 @@ h1 {
 }
 
 .section {
+  scroll-margin-top: 126px;
   padding: 28px 0;
   border-bottom: 1px solid var(--line);
 }
@@ -544,7 +545,7 @@ h2 {
 .extension-details {
   display: none;
   border-top: 1px solid var(--line);
-  background: #fbfcfa;
+  background: #f1f5ef;
   padding: 0 16px 16px;
 }
 
@@ -697,6 +698,10 @@ footer {
 
   .nav-links a {
     padding: 0 8px;
+  }
+
+  .toolbar {
+    position: static;
   }
 
   .check-row {

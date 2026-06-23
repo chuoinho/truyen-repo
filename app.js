@@ -4,8 +4,9 @@ const BRANCH = "repo";
 const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
 const GITHUB_BASE = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}`;
 const REPO_URL = `${RAW_BASE}/index.min.json`;
-const INDEX_PB_URL = `${RAW_BASE}/index.pb`;
-const REPO_JSON_URL = `${RAW_BASE}/repo.json`;
+const LOCAL_INDEX_URL = "index.min.json";
+const LOCAL_INDEX_PB_URL = "index.pb";
+const LOCAL_REPO_JSON_URL = "repo.json";
 const STATUS_URL = "status.json";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
 
@@ -89,7 +90,8 @@ function statusLabel(level) {
   if (level === "healthy") return "working";
   if (level === "degraded") return "partial";
   if (level === "down") return "error";
-  return "loading";
+  if (level === "loading") return "loading";
+  return "unknown";
 }
 
 function statusFromSource(source) {
@@ -112,17 +114,35 @@ function statusWeight(status) {
 
 function mergeStatus(index, status) {
   const indexExtensions = normalizeIndex(index);
+  const statusSourceList = status?.sources || [];
+  const sourcesByPackage = new Map();
+  statusSourceList.forEach((source) => {
+    const packageName = normalizePackage(source);
+    if (!packageName) return;
+    if (!sourcesByPackage.has(packageName)) sourcesByPackage.set(packageName, []);
+    sourcesByPackage.get(packageName).push(source);
+  });
+  const statusIndex = normalizeIndex(
+    (status?.extensions || []).map((extension) => ({
+      ...extension,
+      pkg: normalizePackage(extension),
+      sources: sourcesByPackage.get(normalizePackage(extension)) || [],
+    })),
+  );
+  const baseExtensions = indexExtensions.length ? indexExtensions : statusIndex;
   const statusExtensions = status?.extensions || [];
-  const statusSources = new Map((status?.sources || []).map((source) => [String(source.id), source]));
+  const statusSources = new Map(statusSourceList.map((source) => [String(source.id), source]));
   const extensionMeta = new Map(
     statusExtensions.map((extension) => [normalizePackage(extension), extension]),
   );
 
-  return indexExtensions.map((extension) => {
+  return baseExtensions.map((extension) => {
     const meta = extensionMeta.get(extension.package) || {};
-    const sources = extension.sources.map((source) => ({
+    const fallbackSources = sourcesByPackage.get(extension.package) || [];
+    const baseSources = extension.sources.length ? extension.sources : fallbackSources;
+    const sources = baseSources.map((source) => ({
       ...source,
-      ...(statusSources.get(source.id) || {}),
+      ...(statusSources.get(String(source.id)) || {}),
     }));
     const sourceCount = sources.length || meta.sourceCount || extension.sourceCount || 0;
     const next = {
@@ -325,7 +345,7 @@ function renderExtensions() {
 }
 
 function renderStatus(status, index) {
-  const level = status?.level || "loading";
+  const level = status?.level || "unknown";
   const statusBox = $("#status");
   if (statusBox) statusBox.dataset.level = level;
 
@@ -366,15 +386,15 @@ async function loadJson(url) {
 async function hydrate() {
   $("#repoUrlText").textContent = REPO_URL;
   $("#installLink").href = INSTALL_URL;
-  $("#indexJsonLink").href = REPO_URL;
-  $("#indexPbLink").href = INDEX_PB_URL;
-  $("#repoJsonLink").href = REPO_JSON_URL;
+  $("#indexJsonLink").href = LOCAL_INDEX_URL;
+  $("#indexPbLink").href = LOCAL_INDEX_PB_URL;
+  $("#repoJsonLink").href = LOCAL_REPO_JSON_URL;
   $("#statusJsonLink").href = STATUS_URL;
   $("#apkLink").href = `${GITHUB_BASE}/apk`;
 
   let index = [];
   try {
-    index = await loadJson(REPO_URL);
+    index = await loadJson(LOCAL_INDEX_URL);
   } catch {
     index = [];
   }
@@ -384,7 +404,7 @@ async function hydrate() {
   } catch (error) {
     renderStatus(
       {
-        level: "loading",
+        level: "unknown",
         summary: `Could not read status.json: ${error.message}`,
         sources: [],
         stats: {},
