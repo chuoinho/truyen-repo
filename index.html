@@ -1,101 +1,120 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Trang trang thai cho Truyen Repo va tat ca source hien co."
+      content="Vietnamese extension repository for Mihon and variants with source status monitoring."
     />
     <title>Truyen Repo</title>
     <link rel="icon" href="assets/minotruyen.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#extensions">Skip to extensions</a>
+
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="Truyen Repo">
+      <a class="brand" href="#top" aria-label="Truyen Repo home">
         <img src="assets/minotruyen.png" alt="" />
         <span>Truyen Repo</span>
       </a>
-      <a class="top-link" href="https://github.com/chuoinho/truyen-repo">GitHub</a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#install">Add repo</a>
+        <a href="#extensions">Extensions</a>
+        <a href="#status">Status</a>
+        <a href="#files">Files</a>
+        <a href="https://github.com/chuoinho/truyen-repo">GitHub</a>
+      </nav>
     </header>
 
     <main id="top">
       <section class="hero" aria-labelledby="pageTitle">
-        <p class="eyebrow">Truyen Repo monitor</p>
-        <h1 id="pageTitle">Trang thai source</h1>
-        <p class="lead">
-          Kiem tra base URL cua tat ca source trong repo moi 5 tieng va hien thi nhanh
-          source nao dang working hoac error.
-        </p>
+        <div class="hero-copy">
+          <p class="eyebrow">Extension repository</p>
+          <h1 id="pageTitle">Truyen Repo</h1>
+          <p class="lead">Vietnamese extension repository for Mihon and variants.</p>
 
-        <div class="status-box" id="statusBox" data-level="loading" aria-live="polite">
-          <span class="status-dot" aria-hidden="true"></span>
+          <div class="actions" id="install">
+            <a class="button primary" id="installLink" href="#">Add repo</a>
+            <button class="button secondary" id="copyButton" type="button">Copy URL</button>
+          </div>
+          <p class="repo-url" id="repoUrlText"></p>
+        </div>
+
+        <aside class="hero-status" id="status" aria-label="Repository status">
+          <div class="status-heading">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="statusText">loading</span>
+          </div>
+          <strong id="workingCount">--</strong>
+          <p id="statusSummary">Reading status.json...</p>
+          <dl class="status-meta">
+            <div>
+              <dt>Warnings</dt>
+              <dd id="warningCount">--</dd>
+            </div>
+            <div>
+              <dt>Checked</dt>
+              <dd id="checkedAt">--</dd>
+            </div>
+            <div>
+              <dt>Interval</dt>
+              <dd id="intervalHours">--</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="toolbar" aria-label="Extension controls">
+        <label class="search">
+          <span>Search</span>
+          <input id="searchInput" type="search" placeholder="Search extension, source, domain..." />
+        </label>
+
+        <div class="filters" role="group" aria-label="Filter extensions">
+          <button class="filter-button active" type="button" data-filter="all">All</button>
+          <button class="filter-button" type="button" data-filter="working">Working</button>
+          <button class="filter-button" type="button" data-filter="warning">Warning</button>
+          <button class="filter-button" type="button" data-filter="error">Error</button>
+          <button class="filter-button" type="button" data-filter="nsfw">NSFW</button>
+        </div>
+      </section>
+
+      <section class="section" id="extensions">
+        <div class="section-head">
           <div>
-            <strong id="statusText">loading</strong>
-            <span id="statusSummary">Dang doc status.json...</span>
+            <h2>Extensions</h2>
+            <p id="extensionSummary">Loading extensions...</p>
+          </div>
+          <span class="small-meta" id="durationMs">--</span>
+        </div>
+
+        <div class="extension-list" id="extensionList" aria-live="polite"></div>
+      </section>
+
+      <section class="section compact-section" id="files">
+        <div class="section-head">
+          <div>
+            <h2>Repository files</h2>
+            <p>Files used by Mihon-compatible apps when adding this repository.</p>
           </div>
         </div>
 
-        <div class="actions" id="install">
-          <a class="button primary" id="installLink" href="#">Mo trong app</a>
-          <button class="button secondary" id="copyButton" type="button">Copy repo URL</button>
-        </div>
-        <p class="repo-url" id="repoUrlText"></p>
-      </section>
-
-      <section class="quick-info" aria-label="Thong tin nhanh">
-        <div>
-          <span class="label">Source</span>
-          <strong id="sourceCount">--</strong>
-        </div>
-        <div>
-          <span class="label">Working</span>
-          <strong id="workingCount">--</strong>
-        </div>
-        <div>
-          <span class="label">Kiem tra luc</span>
-          <strong id="checkedAt">Chua co du lieu</strong>
-        </div>
-        <div>
-          <span class="label">Thoi gian chay</span>
-          <strong id="durationMs">--</strong>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-head">
-          <h2>Source status</h2>
-          <p>Moi source duoc check bang base URL tu index.min.json.</p>
-        </div>
-        <div class="source-list" id="sourceList"></div>
-      </section>
-
-      <section class="section">
-        <div class="section-head">
-          <h2>File repo</h2>
-          <p>Cac file ma app dung khi them repository.</p>
-        </div>
-        <div class="check-list" id="repoChecks"></div>
-      </section>
-
-      <section class="section">
-        <div class="section-head">
-          <h2>Lien ket</h2>
-        </div>
-        <div class="links">
+        <div class="file-links">
           <a id="indexJsonLink" href="#">index.min.json</a>
           <a id="indexPbLink" href="#">index.pb</a>
           <a id="repoJsonLink" href="#">repo.json</a>
           <a id="statusJsonLink" href="#">status.json</a>
-          <a id="apkLink" href="#">APK</a>
+          <a id="apkLink" href="#">APK folder</a>
         </div>
       </section>
     </main>
 
     <footer>
       <span>Truyen Repo</span>
-      <span id="footerNote">Status duoc cap nhat bang GitHub Actions.</span>
+      <span id="footerNote">Status updates every 5 hours.</span>
     </footer>
 
     <script src="app.js"></script>

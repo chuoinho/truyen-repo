@@ -9,6 +9,12 @@ const REPO_JSON_URL = `${RAW_BASE}/repo.json`;
 const STATUS_URL = "status.json";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
 
+const state = {
+  extensions: [],
+  filter: "all",
+  query: "",
+};
+
 const $ = (selector) => document.querySelector(selector);
 
 function setText(selector, value) {
@@ -28,35 +34,54 @@ function el(tag, className, text) {
 }
 
 function cleanExtensionName(name) {
-  return String(name || "").replace(/^Tachiyomi:\s*/i, "");
+  return String(name || "Unknown").replace(/^Tachiyomi:\s*/i, "");
 }
 
-function flattenIndexSources(index) {
-  return (index || []).flatMap((extension) =>
-    (extension.sources || []).map((source, sourceIndex) => ({
-      id: source.id || `${extension.pkg || extension.name}:${sourceIndex}`,
+function normalizePackage(extension) {
+  return extension.package || extension.pkg || "";
+}
+
+function normalizeIndex(index) {
+  return (index || []).map((extension) => ({
+    apk: extension.apk,
+    code: extension.code,
+    lang: extension.lang,
+    name: cleanExtensionName(extension.name),
+    nsfw: Number(extension.nsfw) === 1,
+    package: normalizePackage(extension),
+    sourceCount: extension.sourceCount ?? extension.sources?.length ?? 0,
+    version: extension.version,
+    sources: (extension.sources || []).map((source, sourceIndex) => ({
+      id: String(source.id || `${normalizePackage(extension)}:${sourceIndex}`),
       name: source.name || cleanExtensionName(extension.name),
       baseUrl: source.baseUrl,
+      lang: source.lang || extension.lang,
+      nsfw: Number(source.nsfw ?? extension.nsfw) === 1,
+      package: normalizePackage(extension),
+      apk: extension.apk,
       extensionName: cleanExtensionName(extension.name),
-      package: extension.pkg,
+      extensionVersion: extension.version,
+      versionId: source.versionId,
       ok: null,
       status: "unknown",
       checks: [],
     })),
-  );
+  }));
 }
 
 function formatDate(value) {
-  if (!value) return "Chua co du lieu";
+  if (!value) return "--";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "--";
   return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "short",
-    timeStyle: "medium",
-  }).format(new Date(value));
+    timeStyle: "short",
+  }).format(date);
 }
 
 function formatMs(value) {
   if (!Number.isFinite(value)) return "--";
-  if (value < 1000) return `${value} ms`;
+  if (value < 1000) return `${Math.round(value)} ms`;
   return `${(value / 1000).toFixed(1)} s`;
 }
 
@@ -67,116 +92,269 @@ function statusLabel(level) {
   return "loading";
 }
 
-function statusForCheck(ok) {
-  return ok ? "working" : "error";
+function statusFromSource(source) {
+  if (source.ok === false) return "error";
+  if (source.note || source.status === "warning") return "warning";
+  if (source.ok === true) return "working";
+  return "unknown";
 }
 
-function renderIndex(index) {
-  const sources = flattenIndexSources(index);
-  setText("#sourceCount", `${sources.length}`);
-  setText("#workingCount", "--");
-  $("#apkLink").href = `${GITHUB_BASE}/apk`;
+function statusFromSources(sources) {
+  if (sources.some((source) => statusFromSource(source) === "error")) return "error";
+  if (sources.some((source) => statusFromSource(source) === "warning")) return "warning";
+  if (sources.some((source) => statusFromSource(source) === "working")) return "working";
+  return "unknown";
 }
 
-function renderCheckList(container, checks) {
-  clear(container);
+function statusWeight(status) {
+  return { error: 0, warning: 1, unknown: 2, working: 3 }[status] ?? 2;
+}
+
+function mergeStatus(index, status) {
+  const indexExtensions = normalizeIndex(index);
+  const statusExtensions = status?.extensions || [];
+  const statusSources = new Map((status?.sources || []).map((source) => [String(source.id), source]));
+  const extensionMeta = new Map(
+    statusExtensions.map((extension) => [normalizePackage(extension), extension]),
+  );
+
+  return indexExtensions.map((extension) => {
+    const meta = extensionMeta.get(extension.package) || {};
+    const sources = extension.sources.map((source) => ({
+      ...source,
+      ...(statusSources.get(source.id) || {}),
+    }));
+    const sourceCount = sources.length || meta.sourceCount || extension.sourceCount || 0;
+    const next = {
+      ...extension,
+      ...meta,
+      name: cleanExtensionName(meta.name || extension.name),
+      nsfw: Number(meta.nsfw ?? extension.nsfw) === 1 || Boolean(extension.nsfw),
+      package: normalizePackage(meta) || extension.package,
+      sourceCount,
+      sources,
+    };
+    next.status = statusFromSources(sources);
+    next.warningCount = sources.filter((source) => statusFromSource(source) === "warning").length;
+    next.errorCount = sources.filter((source) => statusFromSource(source) === "error").length;
+    return next;
+  });
+}
+
+function matchesQuery(extension, query) {
+  if (!query) return true;
+  const haystack = [
+    extension.name,
+    extension.package,
+    extension.apk,
+    extension.version,
+    ...extension.sources.flatMap((source) => [
+      source.name,
+      source.baseUrl,
+      source.finalUrl,
+      source.note,
+      source.error,
+    ]),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+function matchesFilter(extension, filter) {
+  if (filter === "all") return true;
+  if (filter === "nsfw") return Boolean(extension.nsfw);
+  return extension.status === filter;
+}
+
+function filteredExtensions() {
+  const query = state.query.trim().toLowerCase();
+  return state.extensions
+    .filter((extension) => matchesFilter(extension, state.filter))
+    .filter((extension) => matchesQuery(extension, query))
+    .sort((a, b) => {
+      const statusDiff = statusWeight(a.status) - statusWeight(b.status);
+      if (statusDiff !== 0) return statusDiff;
+      return String(a.name).localeCompare(String(b.name), "vi");
+    });
+}
+
+function sourceChip(source) {
+  const stateName = statusFromSource(source);
+  const chip = el("span", "source-chip");
+  chip.dataset.state = stateName;
+
+  chip.append(el("span", "source-state"));
+  const text = el("span");
+  text.append(el("strong", "", source.name || "Unknown source"));
+  text.append(el("span", "", source.baseUrl || "No base URL"));
+  chip.append(text);
+
+  return chip;
+}
+
+function badge(status) {
+  const node = el("span", "badge", status);
+  node.dataset.status = status;
+  return node;
+}
+
+function renderCheckGrid(checks) {
+  const grid = el("div", "check-grid");
 
   if (!checks?.length) {
-    container.append(el("p", "empty", "Chua co du lieu kiem tra."));
-    return;
+    grid.append(el("div", "check-row", "No check data yet."));
+    return grid;
   }
 
-  checks.forEach((item) => {
+  checks.forEach((check) => {
     const row = el("div", "check-row");
-    row.dataset.ok = String(Boolean(item.ok));
+    const name = el("strong", "", check.name || check.id || "Check");
+    const status = badge(check.ok ? "working" : "error");
+    const detail = el(
+      "span",
+      "check-detail",
+      [check.detail || check.error || "No detail", `HTTP ${check.statusCode ?? "--"}`, formatMs(check.latencyMs)]
+        .filter(Boolean)
+        .join(" - "),
+    );
 
-    const main = el("div", "check-main");
-    main.append(el("strong", "", item.name || item.id));
-    const detail = item.detail || item.error || `HTTP ${item.statusCode || "--"}`;
-    main.append(el("span", "", detail));
-
-    const meta = el("div", "check-meta");
-    meta.append(el("span", "badge", item.status || statusForCheck(item.ok)));
-    if (item.statusCode !== undefined) meta.append(el("span", "", `HTTP ${item.statusCode}`));
-    meta.append(el("span", "", formatMs(item.latencyMs)));
-
-    row.append(main, meta);
-    container.append(row);
+    row.append(name, status, detail);
+    grid.append(row);
   });
+
+  return grid;
 }
 
-function renderSources(sources) {
-  const container = $("#sourceList");
-  clear(container);
+function renderDetails(extension) {
+  const details = el("div", "extension-details");
 
-  if (!sources?.length) {
-    container.append(el("p", "empty", "Chua co du lieu source."));
-    return;
+  const notes = extension.sources
+    .map((source) => source.note || source.error)
+    .filter(Boolean);
+  if (notes.length) {
+    details.append(el("p", "extension-note", notes.join(" ")));
   }
 
-  const sortedSources = [...sources].sort((a, b) => {
-    if (Boolean(a.ok) !== Boolean(b.ok)) return a.ok ? 1 : -1;
-    return String(a.name).localeCompare(String(b.name), "vi");
-  });
-
-  sortedSources.forEach((source) => {
-    const item = el("article", "source-item");
-    item.dataset.ok = String(Boolean(source.ok));
-
-    const head = el("div", "source-head");
-    const title = el("div");
-    title.append(el("strong", "", source.name || "Unknown source"));
-    title.append(
+  extension.sources.forEach((source) => {
+    const detail = el("div", "source-detail");
+    detail.append(el("h3", "", source.name || "Unknown source"));
+    detail.append(
       el(
-        "span",
+        "p",
         "",
-        [source.extensionName || source.package, source.baseUrl || "No base URL"]
+        [source.baseUrl, source.finalUrl && source.finalUrl !== source.baseUrl ? `Final: ${source.finalUrl}` : ""]
           .filter(Boolean)
           .join(" - "),
       ),
     );
-    const badge = el("span", "badge", source.status || statusForCheck(source.ok));
-    head.append(title, badge);
-
-    const primaryCheck =
-      source.checks?.find((checkItem) => checkItem.id === source.primaryCheckId) ||
-      source.checks?.[0];
-    const sample = el("p", "sample");
-    sample.textContent = source.ok
-      ? source.note ||
-        `working - HTTP ${primaryCheck?.statusCode || "--"} - ${formatMs(source.latencyMs)}`
-      : `error - ${source.error || primaryCheck?.error || `HTTP ${primaryCheck?.statusCode || "--"}`}`;
-
-    const checks = el("div", "check-list compact");
-    renderCheckList(checks, source.checks || []);
-
-    item.append(head, sample, checks);
-    container.append(item);
+    detail.append(renderCheckGrid(source.checks || []));
+    details.append(detail);
   });
+
+  return details;
 }
 
-function renderQuickInfo(status, index) {
-  const fallbackSources = flattenIndexSources(index);
-  const stats = status?.stats || {};
-  const totalSources = stats.totalSources ?? status?.sources?.length ?? fallbackSources.length;
-  const workingSources =
-    stats.workingSources ?? status?.sources?.filter((source) => source.ok).length ?? 0;
+function renderExtension(extension) {
+  const item = el("article", "extension-item");
+  item.dataset.status = extension.status;
 
-  setText("#sourceCount", `${totalSources}`);
-  setText("#workingCount", `${workingSources}/${totalSources}`);
-  setText("#checkedAt", formatDate(status?.checkedAt));
-  setText("#durationMs", formatMs(status?.durationMs));
-  setText("#footerNote", `Last check: ${formatDate(status?.checkedAt)}`);
+  const main = el("div", "extension-main");
+  const title = el("div", "extension-title");
+  const icon = el("img");
+  icon.src = `icon/${extension.package}.png`;
+  icon.alt = "";
+  icon.loading = "lazy";
+  icon.addEventListener("error", () => {
+    icon.src = "assets/minotruyen.png";
+  });
+
+  const titleText = el("div");
+  titleText.append(el("strong", "", extension.name));
+  titleText.append(
+    el(
+      "span",
+      "",
+      [
+        extension.version ? `v${extension.version}` : "",
+        `${extension.sourceCount} source${extension.sourceCount === 1 ? "" : "s"}`,
+        extension.nsfw ? "NSFW" : "SFW",
+      ]
+        .filter(Boolean)
+        .join(" - "),
+    ),
+  );
+  title.append(icon, titleText);
+
+  const chips = el("div", "source-chips");
+  extension.sources.forEach((source) => chips.append(sourceChip(source)));
+
+  const actions = el("div", "extension-actions");
+  const detailsButton = el("button", "details-toggle", "Details");
+  detailsButton.type = "button";
+  detailsButton.addEventListener("click", () => {
+    const open = item.classList.toggle("open");
+    detailsButton.textContent = open ? "Hide" : "Details";
+  });
+  actions.append(badge(extension.status), detailsButton);
+
+  main.append(title, chips, actions);
+  item.append(main, renderDetails(extension));
+
+  return item;
+}
+
+function renderExtensions() {
+  const container = $("#extensionList");
+  clear(container);
+
+  const visible = filteredExtensions();
+  const totalSources = state.extensions.reduce((sum, extension) => sum + extension.sourceCount, 0);
+  setText(
+    "#extensionSummary",
+    `${state.extensions.length} extensions, ${totalSources} sources. Showing ${visible.length}.`,
+  );
+
+  if (!visible.length) {
+    container.append(el("p", "empty", "No extensions match this view."));
+    return;
+  }
+
+  visible.forEach((extension) => container.append(renderExtension(extension)));
 }
 
 function renderStatus(status, index) {
-  const level = status?.level || "unknown";
-  $("#statusBox").dataset.level = level;
+  const level = status?.level || "loading";
+  const statusBox = $("#status");
+  if (statusBox) statusBox.dataset.level = level;
+
+  const stats = status?.stats || {};
+  const merged = mergeStatus(index, status);
+  const totalSources = stats.totalSources ?? merged.reduce((sum, extension) => sum + extension.sourceCount, 0);
+  const workingSources =
+    stats.workingSources ??
+    merged.reduce(
+      (sum, extension) =>
+        sum + extension.sources.filter((source) => statusFromSource(source) === "working").length,
+      0,
+    );
+  const warningSources =
+    stats.warningSources ??
+    merged.reduce((sum, extension) => sum + extension.warningCount, 0);
+
+  state.extensions = merged;
+
   setText("#statusText", statusLabel(level));
-  setText("#statusSummary", status?.summary || "Chua doc duoc status.json.");
-  renderQuickInfo(status, index);
-  renderSources(status?.sources || flattenIndexSources(index));
-  renderCheckList($("#repoChecks"), status?.repository?.checks || status?.repo?.checks || []);
+  setText("#workingCount", `${workingSources}/${totalSources}`);
+  setText("#statusSummary", status?.summary || "No status data yet.");
+  setText("#warningCount", `${warningSources}`);
+  setText("#checkedAt", formatDate(status?.checkedAt));
+  setText("#intervalHours", status?.intervalHours ? `${status.intervalHours}h` : "--");
+  setText("#durationMs", status?.durationMs ? `Checked in ${formatMs(status.durationMs)}` : "--");
+  setText("#footerNote", `Status updates every ${status?.intervalHours || 5} hours.`);
+
+  renderExtensions();
 }
 
 async function loadJson(url) {
@@ -192,6 +370,7 @@ async function hydrate() {
   $("#indexPbLink").href = INDEX_PB_URL;
   $("#repoJsonLink").href = REPO_JSON_URL;
   $("#statusJsonLink").href = STATUS_URL;
+  $("#apkLink").href = `${GITHUB_BASE}/apk`;
 
   let index = [];
   try {
@@ -199,17 +378,16 @@ async function hydrate() {
   } catch {
     index = [];
   }
-  renderIndex(index);
 
   try {
     renderStatus(await loadJson(STATUS_URL), index);
   } catch (error) {
     renderStatus(
       {
-        level: "unknown",
-        summary: `Khong doc duoc status.json: ${error.message}`,
-        sources: flattenIndexSources(index),
-        repository: { checks: [] },
+        level: "loading",
+        summary: `Could not read status.json: ${error.message}`,
+        sources: [],
+        stats: {},
       },
       index,
     );
@@ -233,4 +411,20 @@ async function copyRepoUrl() {
 }
 
 $("#copyButton").addEventListener("click", copyRepoUrl);
+$("#searchInput").addEventListener("input", (event) => {
+  state.query = event.currentTarget.value;
+  renderExtensions();
+});
+
+document.querySelectorAll(".filter-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    document
+      .querySelectorAll(".filter-button")
+      .forEach((filterButton) => filterButton.classList.remove("active"));
+    button.classList.add("active");
+    state.filter = button.dataset.filter || "all";
+    renderExtensions();
+  });
+});
+
 hydrate();
