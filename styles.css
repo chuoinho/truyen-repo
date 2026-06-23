@@ -100,12 +100,6 @@ footer {
   white-space: nowrap;
 }
 
-.brand img {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius);
-}
-
 .nav-links {
   gap: 6px;
   flex-wrap: wrap;
