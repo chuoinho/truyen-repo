@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,25 +8,25 @@
     <meta http-equiv="Expires" content="0" />
     <meta
       name="description"
-      content="Vietnamese extension repository for Mihon and variants with source status monitoring."
+      content="Kho tiện ích truyện tiếng Việt cho Mihon và các ứng dụng tương thích, kèm trạng thái nguồn."
     />
     <title>Truyen Repo</title>
     <link rel="icon" href="assets/minotruyen.png" />
-    <link rel="stylesheet" href="styles.css?v=20260623-5" />
+    <link rel="stylesheet" href="styles.css?v=20260623-6" />
   </head>
   <body>
-    <a class="skip-link" href="#extensions">Skip to extensions</a>
+    <a class="skip-link" href="#extensions">Bỏ qua để tới danh sách</a>
 
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="Truyen Repo home">
+      <a class="brand" href="#top" aria-label="Trang chính Truyen Repo">
         <img src="assets/minotruyen.png" alt="" />
         <span>Truyen Repo</span>
       </a>
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#install">Add repo</a>
-        <a href="#extensions">Extensions</a>
-        <a href="#status">Status</a>
+      <nav class="nav-links" aria-label="Điều hướng chính">
+        <a id="navInstallLink" href="#">Thêm repo</a>
+        <a href="#extensions">Tiện ích</a>
+        <a href="#status">Trạng thái</a>
         <a href="https://github.com/chuoinho/truyen-repo">GitHub</a>
       </nav>
     </header>
@@ -34,60 +34,60 @@
     <main id="top">
       <section class="hero" aria-labelledby="pageTitle">
         <div class="hero-copy">
-          <p class="eyebrow">Extension repository</p>
+          <p class="eyebrow">Kho tiện ích</p>
           <h1 id="pageTitle">Truyen Repo</h1>
-          <p class="lead">Vietnamese extension repository for Mihon and variants.</p>
+          <p class="lead">Kho tiện ích truyện tiếng Việt cho Mihon và các ứng dụng tương thích.</p>
 
           <div class="actions" id="install">
-            <a class="button primary" id="installLink" href="#">Add repo</a>
-            <button class="button secondary" id="copyButton" type="button">Copy URL</button>
+            <a class="button primary" id="installLink" href="#">Thêm repo</a>
+            <button class="button secondary" id="copyButton" type="button">Sao chép URL</button>
           </div>
           <p class="repo-url" id="repoUrlText"></p>
         </div>
 
-        <aside class="hero-status" id="status" aria-label="Repository status">
+        <aside class="hero-status" id="status" aria-label="Trạng thái kho">
           <div class="status-heading">
             <span class="status-dot" aria-hidden="true"></span>
-            <span id="statusText">loading</span>
+            <span id="statusText">đang tải</span>
           </div>
           <strong id="workingCount">--</strong>
-          <p id="statusSummary">Reading status.json...</p>
+          <p id="statusSummary">Đang đọc trạng thái...</p>
           <dl class="status-meta">
             <div>
-              <dt>Warnings</dt>
+              <dt>Cảnh báo</dt>
               <dd id="warningCount">--</dd>
             </div>
             <div>
-              <dt>Checked</dt>
+              <dt>Đã kiểm tra</dt>
               <dd id="checkedAt">--</dd>
             </div>
             <div>
-              <dt>Interval</dt>
+              <dt>Chu kỳ</dt>
               <dd id="intervalHours">--</dd>
             </div>
           </dl>
         </aside>
       </section>
 
-      <section class="toolbar" aria-label="Extension controls">
+      <section class="toolbar" aria-label="Bộ lọc tiện ích">
         <label class="search">
-          <span>Search</span>
-          <input id="searchInput" type="search" placeholder="Search extension, source, domain..." />
+          <span>Tìm kiếm</span>
+          <input id="searchInput" type="search" placeholder="Tìm tiện ích, nguồn, tên miền..." />
         </label>
 
-        <div class="filters" role="group" aria-label="Filter extensions">
-          <button class="filter-button active" type="button" data-filter="all">All</button>
-          <button class="filter-button" type="button" data-filter="working">Working</button>
-          <button class="filter-button" type="button" data-filter="warning">Warning</button>
-          <button class="filter-button" type="button" data-filter="error">Error</button>
+        <div class="filters" role="group" aria-label="Lọc tiện ích">
+          <button class="filter-button active" type="button" data-filter="all">Tất cả</button>
+          <button class="filter-button" type="button" data-filter="working">Hoạt động</button>
+          <button class="filter-button" type="button" data-filter="warning">Cảnh báo</button>
+          <button class="filter-button" type="button" data-filter="error">Lỗi</button>
         </div>
       </section>
 
       <section class="section" id="extensions">
         <div class="section-head">
           <div>
-            <h2>Extensions</h2>
-            <p id="extensionSummary">Loading extensions...</p>
+            <h2>Tiện ích</h2>
+            <p id="extensionSummary">Đang tải danh sách...</p>
           </div>
           <span class="small-meta" id="durationMs">--</span>
         </div>
@@ -99,9 +99,9 @@
 
     <footer>
       <span>Truyen Repo</span>
-      <span id="footerNote">Status updates every 5 hours.</span>
+      <span id="footerNote">Trạng thái cập nhật mỗi 12 giờ.</span>
     </footer>
 
-    <script src="app.js?v=20260623-5"></script>
+    <script src="app.js?v=20260623-6"></script>
   </body>
 </html>

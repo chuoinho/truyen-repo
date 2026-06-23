@@ -1,5 +1,6 @@
 const fs = require("node:fs/promises");
 const path = require("node:path");
+const dns = require("node:dns/promises");
 
 const OWNER = "chuoinho";
 const REPO = "truyen-repo";
@@ -9,6 +10,7 @@ const REPO_INDEX_URL = `${RAW_BASE}/index.min.json`;
 const REPO_PB_URL = `${RAW_BASE}/index.pb`;
 const REPO_JSON_URL = `${RAW_BASE}/repo.json`;
 const STATUS_INTERVAL_HOURS = 12;
+const FAILURE_THRESHOLD = Number(process.env.SOURCE_FAILURE_THRESHOLD || 2);
 const SOURCE_TIMEOUT_MS = Number(process.env.SOURCE_CHECK_TIMEOUT_MS || 15000);
 const REPO_TIMEOUT_MS = Number(process.env.REPO_CHECK_TIMEOUT_MS || 10000);
 const SOURCE_CONCURRENCY = Number(process.env.SOURCE_CHECK_CONCURRENCY || 5);
@@ -98,12 +100,36 @@ async function timedFetch(url, options = {}) {
   }
 }
 
+async function timedDnsLookup(baseUrl) {
+  const started = performance.now();
+
+  try {
+    const hostname = new URL(baseUrl).hostname;
+    const result = await dns.lookup(hostname);
+    return {
+      address: result.address,
+      detail: hostname,
+      latencyMs: Math.round(performance.now() - started),
+      ok: true,
+      status: 200,
+    };
+  } catch (error) {
+    return {
+      detail: baseUrl,
+      error: errorMessage(error),
+      latencyMs: Math.round(performance.now() - started),
+      ok: false,
+      status: 0,
+    };
+  }
+}
+
 function isRunnerBlockedResponse(result) {
   return [401, 403, 429].includes(Number(result?.status));
 }
 
 function runnerBlockedNote(status) {
-  return `Site is reachable but blocks this status runner with HTTP ${status}.`;
+  return `Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP ${status}.`;
 }
 
 async function fetchJson(url, headers = {}, options = {}) {
@@ -131,6 +157,15 @@ async function readLocalIndex() {
   const indexPath = path.join(process.cwd(), "index.min.json");
   const content = await fs.readFile(indexPath, "utf8");
   return JSON.parse(content);
+}
+
+async function readPreviousStatus() {
+  try {
+    const content = await fs.readFile("status.json", "utf8");
+    return JSON.parse(content);
+  } catch {
+    return null;
+  }
 }
 
 function flattenSources(index) {
@@ -161,11 +196,17 @@ async function checkBaseUrl(baseUrl) {
     };
   }
 
-  return timedFetch(baseUrl, {
+  const dnsResult = await timedDnsLookup(baseUrl);
+  const httpResult = await timedFetch(baseUrl, {
     method: "GET",
     readBody: false,
     timeoutMs: SOURCE_TIMEOUT_MS,
   });
+
+  return {
+    ...httpResult,
+    dns: dnsResult,
+  };
 }
 
 function sourceSpecificChecker(source) {
@@ -214,6 +255,12 @@ async function checkSource(source, baseUrlResults) {
     confidence: runnerBlocked ? "runner-blocked" : undefined,
     primaryCheckId: "base-url",
     checks: [
+      check("dns", "DNS", result.dns?.ok, {
+        detail: result.dns?.detail || source.baseUrl,
+        error: result.dns?.error,
+        latencyMs: result.dns?.latencyMs,
+        statusCode: result.dns?.status,
+      }),
       check("base-url", "Base URL", ok, {
         ...(runnerBlocked ? { status: "warning" } : {}),
         bytes: result.bytes,
@@ -223,6 +270,76 @@ async function checkSource(source, baseUrlResults) {
         statusCode: result.status,
       }),
     ],
+  });
+}
+
+function previousSourceMap(previousStatus) {
+  return new Map((previousStatus?.sources || []).map((source) => [String(source.id), source]));
+}
+
+function sourceHistory(previousStatus, previousSource, checkedAt, source) {
+  const previousHistory = previousSource?.history || {};
+  const previousFailures =
+    Number(previousHistory.consecutiveFailures ?? previousSource?.consecutiveFailures ?? 0) || 0;
+
+  if (source.ok) {
+    return {
+      consecutiveFailures: 0,
+      failureThreshold: FAILURE_THRESHOLD,
+      lastErrorAt: previousHistory.lastErrorAt || previousSource?.lastErrorAt,
+      lastOkAt: checkedAt,
+    };
+  }
+
+  return {
+    consecutiveFailures: previousFailures + 1,
+    failureThreshold: FAILURE_THRESHOLD,
+    lastErrorAt: checkedAt,
+    lastOkAt:
+      previousHistory.lastOkAt ||
+      previousSource?.lastOkAt ||
+      (previousSource?.ok ? previousStatus?.checkedAt : undefined),
+  };
+}
+
+function applySourceHistory(sources, previousStatus, checkedAt) {
+  const previousSources = previousSourceMap(previousStatus);
+
+  return sources.map((source) => {
+    const previousSource = previousSources.get(String(source.id));
+    const history = sourceHistory(previousStatus, previousSource, checkedAt, source);
+
+    if (source.ok) {
+      return {
+        ...source,
+        consecutiveFailures: history.consecutiveFailures,
+        history,
+        lastErrorAt: history.lastErrorAt,
+        lastOkAt: history.lastOkAt,
+      };
+    }
+
+    if (history.consecutiveFailures < FAILURE_THRESHOLD) {
+      return {
+        ...source,
+        consecutiveFailures: history.consecutiveFailures,
+        error: undefined,
+        history,
+        lastErrorAt: history.lastErrorAt,
+        lastOkAt: history.lastOkAt,
+        note: `Nguồn lỗi lần ${history.consecutiveFailures}/${FAILURE_THRESHOLD}; cần thêm lần kiểm tra tiếp theo trước khi báo lỗi.`,
+        ok: true,
+        status: "warning",
+      };
+    }
+
+    return {
+      ...source,
+      consecutiveFailures: history.consecutiveFailures,
+      history,
+      lastErrorAt: history.lastErrorAt,
+      lastOkAt: history.lastOkAt,
+    };
   });
 }
 
@@ -284,7 +401,7 @@ async function checkCuuTruyenSource(source) {
   const note = apiOk
     ? undefined
     : ok
-      ? "CDN/access page reachable; data API is blocked or unavailable from this runner."
+      ? "Trang truy cập/CDN còn hoạt động; API dữ liệu có thể bị chặn từ máy kiểm tra."
       : undefined;
 
   return sourceResult(source, {
@@ -432,9 +549,9 @@ function statusSummary(level, sources) {
   const workingSources = sources.filter((item) => item.ok).length;
   const totalSources = sources.length;
 
-  if (level === "healthy") return `All ${totalSources} sources are working.`;
-  if (level === "degraded") return `${workingSources}/${totalSources} sources are working.`;
-  return `0/${totalSources} sources are working.`;
+  if (level === "healthy") return `Tất cả ${totalSources} nguồn đang hoạt động.`;
+  if (level === "degraded") return `${workingSources}/${totalSources} nguồn đang hoạt động.`;
+  return `0/${totalSources} nguồn đang hoạt động.`;
 }
 
 function extensionSummary(index) {
@@ -455,6 +572,7 @@ async function main() {
   const checkedAtDate = new Date();
   const checkedAt = checkedAtDate.toISOString();
   const index = await readLocalIndex();
+  const previousStatus = await readPreviousStatus();
   const sourceEntries = flattenSources(index);
   const genericSourceEntries = sourceEntries.filter((source) => !sourceSpecificChecker(source));
   const uniqueBaseUrls = [...new Set(genericSourceEntries.map((source) => source.baseUrl).filter(Boolean))];
@@ -464,9 +582,10 @@ async function main() {
     await checkBaseUrl(baseUrl),
   ]);
   const baseUrlResults = new Map(baseUrlChecks);
-  const sources = await runLimited(sourceEntries, SOURCE_CONCURRENCY, (source) =>
+  const rawSources = await runLimited(sourceEntries, SOURCE_CONCURRENCY, (source) =>
     checkSource(source, baseUrlResults),
   );
+  const sources = applySourceHistory(rawSources, previousStatus, checkedAt);
   const repoFileChecks = await repoChecks(index);
   const level = statusLevel(repoFileChecks, sources);
   const workingSources = sources.filter((item) => item.ok).length;
@@ -480,6 +599,10 @@ async function main() {
     level,
     ok: level === "healthy",
     summary: statusSummary(level, sources),
+    checkPolicy: {
+      failureThreshold: FAILURE_THRESHOLD,
+      signals: ["dns", "base-url", "source-api", "history"],
+    },
     stats: {
       totalExtensions: index.length,
       totalSources: sources.length,
@@ -518,7 +641,7 @@ main().catch(async (error) => {
     repo: { ok: false, checks: [] },
     repository: { ok: false, checks: [] },
     sources: [],
-    summary: "Status checker failed before completing checks.",
+    summary: "Bộ kiểm tra trạng thái lỗi trước khi hoàn tất.",
   };
 
   await fs.writeFile("status.json", `${JSON.stringify(payload, null, 2)}\n`);

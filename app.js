@@ -37,7 +37,7 @@ function el(tag, className, text) {
 }
 
 function cleanExtensionName(name) {
-  return String(name || "Unknown").replace(/^Tachiyomi:\s*/i, "");
+  return String(name || "Không rõ").replace(/^Tachiyomi:\s*/i, "");
 }
 
 function normalizePackage(extension) {
@@ -89,11 +89,60 @@ function formatMs(value) {
 }
 
 function statusLabel(level) {
-  if (level === "healthy") return "working";
-  if (level === "degraded") return "partial";
-  if (level === "down") return "error";
-  if (level === "loading") return "loading";
-  return "unknown";
+  if (level === "healthy") return "hoạt động";
+  if (level === "degraded") return "cảnh báo";
+  if (level === "down") return "lỗi";
+  if (level === "loading") return "đang tải";
+  return "chưa rõ";
+}
+
+function statusText(status) {
+  if (status === "working") return "hoạt động";
+  if (status === "warning") return "cảnh báo";
+  if (status === "error") return "lỗi";
+  return "chưa rõ";
+}
+
+function statusSummaryText(level, workingSources, totalSources) {
+  if (!totalSources) return "Chưa có dữ liệu trạng thái.";
+  if (level === "healthy") return `Tất cả ${totalSources} nguồn đang hoạt động.`;
+  if (level === "degraded") return `${workingSources}/${totalSources} nguồn đang hoạt động.`;
+  if (level === "down") return `0/${totalSources} nguồn đang hoạt động.`;
+  return "Chưa xác định được trạng thái nguồn.";
+}
+
+function translateNote(value) {
+  if (!value) return "";
+  if (value.includes("blocks this status runner")) {
+    return value.replace(
+      /Site is reachable but blocks this status runner with HTTP (\d+)\./,
+      "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP $1.",
+    );
+  }
+  if (value.includes("CDN/access page reachable")) {
+    return "Trang truy cập/CDN còn hoạt động; API dữ liệu có thể bị chặn từ máy kiểm tra.";
+  }
+  return translateDetail(value);
+}
+
+function translateCheckName(value) {
+  if (value === "Base URL") return "URL gốc";
+  if (value === "CuuTruyen access page") return "Trang truy cập CuuTruyen";
+  if (value === "Cloudflare trace") return "Cloudflare trace";
+  if (value === "CuuTruyen API") return "API CuuTruyen";
+  if (value === "OTruyen API") return "API OTruyen";
+  return value || "Kiểm tra";
+}
+
+function translateDetail(value) {
+  if (!value) return "";
+  return String(value)
+    .replace(/(\d+) candidate domains/g, "$1 tên miền ứng viên")
+    .replace(/(\d+) items from/g, "$1 mục từ")
+    .replace(/fetch failed/g, "kết nối thất bại")
+    .replace(/Request timed out/g, "quá thời gian phản hồi")
+    .replace(/Invalid JSON/g, "JSON không hợp lệ")
+    .replace(/No detail/g, "Không có chi tiết");
 }
 
 function statusFromSource(source) {
@@ -209,15 +258,15 @@ function sourceChip(source) {
 
   chip.append(el("span", "source-state"));
   const text = el("span");
-  text.append(el("strong", "", source.name || "Unknown source"));
-  text.append(el("span", "", source.baseUrl || "No base URL"));
+  text.append(el("strong", "", source.name || "Nguồn chưa rõ"));
+  text.append(el("span", "", source.baseUrl || "Chưa có URL gốc"));
   chip.append(text);
 
   return chip;
 }
 
 function badge(status) {
-  const node = el("span", "badge", status);
+  const node = el("span", "badge", statusText(status));
   node.dataset.status = status;
   return node;
 }
@@ -226,18 +275,18 @@ function renderCheckGrid(checks) {
   const grid = el("div", "check-grid");
 
   if (!checks?.length) {
-    grid.append(el("div", "check-row", "No check data yet."));
+    grid.append(el("div", "check-row", "Chưa có dữ liệu kiểm tra."));
     return grid;
   }
 
   checks.forEach((check) => {
     const row = el("div", "check-row");
-    const name = el("strong", "", check.name || check.id || "Check");
-    const status = badge(check.ok ? "working" : "error");
+    const name = el("strong", "", translateCheckName(check.name || check.id));
+    const status = badge(check.status || (check.ok ? "working" : "error"));
     const detail = el(
       "span",
       "check-detail",
-      [check.detail || check.error || "No detail", `HTTP ${check.statusCode ?? "--"}`, formatMs(check.latencyMs)]
+      [translateDetail(check.detail || check.error || "Không có chi tiết"), `HTTP ${check.statusCode ?? "--"}`, formatMs(check.latencyMs)]
         .filter(Boolean)
         .join(" - "),
     );
@@ -256,17 +305,17 @@ function renderDetails(extension) {
     .map((source) => source.note || source.error)
     .filter(Boolean);
   if (notes.length) {
-    details.append(el("p", "extension-note", notes.join(" ")));
+    details.append(el("p", "extension-note", notes.map(translateNote).join(" ")));
   }
 
   extension.sources.forEach((source) => {
     const detail = el("div", "source-detail");
-    detail.append(el("h3", "", source.name || "Unknown source"));
+    detail.append(el("h3", "", source.name || "Nguồn chưa rõ"));
     detail.append(
       el(
         "p",
         "",
-        [source.baseUrl, source.finalUrl && source.finalUrl !== source.baseUrl ? `Final: ${source.finalUrl}` : ""]
+        [source.baseUrl, source.finalUrl && source.finalUrl !== source.baseUrl ? `Chuyển tới: ${source.finalUrl}` : ""]
           .filter(Boolean)
           .join(" - "),
       ),
@@ -300,7 +349,7 @@ function renderExtension(extension) {
       "",
       [
         extension.version ? `v${extension.version}` : "",
-        `${extension.sourceCount} source${extension.sourceCount === 1 ? "" : "s"}`,
+        `${extension.sourceCount} nguồn`,
       ]
         .filter(Boolean)
         .join(" - "),
@@ -312,11 +361,11 @@ function renderExtension(extension) {
   extension.sources.forEach((source) => chips.append(sourceChip(source)));
 
   const actions = el("div", "extension-actions");
-  const detailsButton = el("button", "details-toggle", "Details");
+  const detailsButton = el("button", "details-toggle", "Chi tiết");
   detailsButton.type = "button";
   detailsButton.addEventListener("click", () => {
     const open = item.classList.toggle("open");
-    detailsButton.textContent = open ? "Hide" : "Details";
+    detailsButton.textContent = open ? "Ẩn" : "Chi tiết";
   });
   actions.append(badge(extension.status), detailsButton);
 
@@ -334,11 +383,11 @@ function renderExtensions() {
   const totalSources = state.extensions.reduce((sum, extension) => sum + extension.sourceCount, 0);
   setText(
     "#extensionSummary",
-    `${state.extensions.length} extensions, ${totalSources} sources. Showing ${visible.length}.`,
+    `${state.extensions.length} tiện ích, ${totalSources} nguồn. Đang hiển thị ${visible.length}.`,
   );
 
   if (!visible.length) {
-    container.append(el("p", "empty", "No extensions match this view."));
+    container.append(el("p", "empty", "Không có tiện ích phù hợp."));
     return;
   }
 
@@ -368,12 +417,12 @@ function renderStatus(status, index) {
 
   setText("#statusText", statusLabel(level));
   setText("#workingCount", `${workingSources}/${totalSources}`);
-  setText("#statusSummary", status?.summary || "No status data yet.");
+  setText("#statusSummary", statusSummaryText(level, workingSources, totalSources));
   setText("#warningCount", `${warningSources}`);
   setText("#checkedAt", formatDate(status?.checkedAt));
   setText("#intervalHours", status?.intervalHours ? `${status.intervalHours}h` : "--");
-  setText("#durationMs", status?.durationMs ? `Checked in ${formatMs(status.durationMs)}` : "--");
-  setText("#footerNote", `Status updates every ${status?.intervalHours || 5} hours.`);
+  setText("#durationMs", status?.durationMs ? `Kiểm tra trong ${formatMs(status.durationMs)}` : "--");
+  setText("#footerNote", `Trạng thái cập nhật mỗi ${status?.intervalHours || 12} giờ.`);
 
   renderExtensions();
 }
@@ -387,6 +436,7 @@ async function loadJson(url) {
 async function hydrate() {
   $("#repoUrlText").textContent = REPO_URL;
   setHref("#installLink", INSTALL_URL);
+  setHref("#navInstallLink", INSTALL_URL);
 
   let index = [];
   try {
@@ -401,7 +451,7 @@ async function hydrate() {
     renderStatus(
       {
         level: "unknown",
-        summary: `Could not read status.json: ${error.message}`,
+        summary: `Không đọc được status.json: ${error.message}`,
         sources: [],
         stats: {},
       },
@@ -416,9 +466,9 @@ async function copyRepoUrl() {
 
   try {
     await navigator.clipboard.writeText(REPO_URL);
-    button.textContent = "Copied";
+    button.textContent = "Đã sao chép";
   } catch {
-    button.textContent = "Copy failed";
+    button.textContent = "Không sao chép được";
   }
 
   setTimeout(() => {
