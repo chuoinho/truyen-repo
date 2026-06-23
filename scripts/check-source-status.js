@@ -14,6 +14,11 @@ const REPO_TIMEOUT_MS = Number(process.env.REPO_CHECK_TIMEOUT_MS || 10000);
 const SOURCE_CONCURRENCY = Number(process.env.SOURCE_CHECK_CONCURRENCY || 5);
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126 Safari/537.36";
+const OTRUYEN_API_URL = "https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1";
+const CUUTRUYEN_ACCESS_URL = "https://truycapcuutruyen.pages.dev/";
+const CUUTRUYEN_API_PATH = "/api/v2/mangas/top?duration=month&page=1";
+const CUUTRUYEN_TRACE_PATH = "/cdn-cgi/trace";
+const HTTPS_ORIGIN_REGEX = /https:\/\/[a-z0-9.-]+/gi;
 
 function nowIso() {
   return new Date().toISOString();
@@ -63,15 +68,18 @@ async function timedFetch(url, options = {}) {
       },
     });
 
+    let body = "";
     let bytes = Number(response.headers.get("content-length")) || 0;
     if (options.readBody === false) {
       await response.body?.cancel();
     } else if (method !== "HEAD") {
-      const body = Buffer.from(await response.arrayBuffer());
-      bytes = body.length;
+      const buffer = Buffer.from(await response.arrayBuffer());
+      bytes = buffer.length;
+      if (options.returnBody) body = buffer.toString("utf8");
     }
 
     return {
+      body,
       bytes,
       finalUrl: response.url,
       latencyMs: Math.round(performance.now() - started),
@@ -87,6 +95,27 @@ async function timedFetch(url, options = {}) {
     };
   } finally {
     clearTimeout(timeout);
+  }
+}
+
+async function fetchJson(url, headers = {}, options = {}) {
+  const result = await timedFetch(url, {
+    headers,
+    returnBody: true,
+    timeoutMs: options.timeoutMs || SOURCE_TIMEOUT_MS,
+  });
+
+  if (!result.ok) return { ...result, json: null };
+
+  try {
+    return { ...result, json: JSON.parse(result.body) };
+  } catch (error) {
+    return {
+      ...result,
+      error: `Invalid JSON: ${error.message}`,
+      json: null,
+      ok: false,
+    };
   }
 }
 
@@ -131,7 +160,32 @@ async function checkBaseUrl(baseUrl) {
   });
 }
 
+function sourceSpecificChecker(source) {
+  if (source.package === "eu.kanade.tachiyomi.extension.vi.otruyen") return checkOTruyenSource;
+  if (source.package === "eu.kanade.tachiyomi.extension.vi.cuutruyen") return checkCuuTruyenSource;
+  return null;
+}
+
+function sourceResult(source, data) {
+  const ok = Boolean(data.ok);
+  return {
+    ...source,
+    ok,
+    status: data.status || (ok ? "working" : "error"),
+    error: ok ? undefined : data.error,
+    finalUrl: data.finalUrl,
+    latencyMs: data.latencyMs,
+    note: data.note,
+    confidence: data.confidence,
+    primaryCheckId: data.primaryCheckId,
+    checks: data.checks || [],
+  };
+}
+
 async function checkSource(source, baseUrlResults) {
+  const checker = sourceSpecificChecker(source);
+  if (checker) return checker(source);
+
   const started = performance.now();
   const result = baseUrlResults.get(source.baseUrl) || {
     ok: false,
@@ -141,13 +195,12 @@ async function checkSource(source, baseUrlResults) {
   };
   const ok = Boolean(result.ok);
 
-  return {
-    ...source,
+  return sourceResult(source, {
     ok,
-    status: ok ? "working" : "error",
     error: ok ? undefined : result.error || `HTTP ${result.status}`,
     finalUrl: result.finalUrl,
     latencyMs: Math.round(performance.now() - started + (result.latencyMs || 0)),
+    primaryCheckId: "base-url",
     checks: [
       check("base-url", "Base URL", ok, {
         bytes: result.bytes,
@@ -157,7 +210,141 @@ async function checkSource(source, baseUrlResults) {
         statusCode: result.status,
       }),
     ],
-  };
+  });
+}
+
+async function checkOTruyenSource(source) {
+  const started = performance.now();
+  const api = await fetchJson(OTRUYEN_API_URL, {
+    accept: "application/json",
+    referer: `${source.baseUrl}/`,
+  });
+  const items = Array.isArray(api.json?.data?.items) ? api.json.data.items : [];
+  const ok = api.ok && api.json?.status === "success" && items.length > 0;
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : api.error || `OTruyen API returned HTTP ${api.status}`,
+    finalUrl: api.finalUrl,
+    latencyMs: Math.round(performance.now() - started),
+    primaryCheckId: "source-api",
+    confidence: ok ? "api" : "none",
+    checks: [
+      check("source-api", "OTruyen API", ok, {
+        count: items.length,
+        detail: `${items.length} items from ${OTRUYEN_API_URL}`,
+        error: api.error,
+        latencyMs: api.latencyMs,
+        statusCode: api.status,
+      }),
+    ],
+  });
+}
+
+async function checkCuuTruyenSource(source) {
+  const started = performance.now();
+  const access = await timedFetch(CUUTRUYEN_ACCESS_URL, {
+    returnBody: true,
+    timeoutMs: SOURCE_TIMEOUT_MS,
+  });
+  const candidates = uniqueUrls([
+    source.baseUrl,
+    ...parseCuuTruyenBaseUrls(access.body || ""),
+  ]);
+  const trace = await firstReachable(candidates, (baseUrl) =>
+    timedFetch(`${baseUrl}${CUUTRUYEN_TRACE_PATH}`, {
+      readBody: false,
+      timeoutMs: SOURCE_TIMEOUT_MS,
+    }),
+  );
+  const api = await firstReachable(candidates, (baseUrl) =>
+    fetchJson(`${baseUrl}${CUUTRUYEN_API_PATH}`, {
+      accept: "application/json",
+      referer: `${baseUrl}/`,
+    }),
+  );
+  const apiItems = Array.isArray(api.result?.json?.data) ? api.result.json.data : [];
+  const accessHasCandidates = access.ok && candidates.length > 0;
+  const apiOk = Boolean(api.result?.ok && apiItems.length > 0);
+  const traceOk = Boolean(trace.result?.ok);
+  const ok = apiOk || traceOk || accessHasCandidates;
+  const note = apiOk
+    ? undefined
+    : ok
+      ? "CDN/access page reachable; data API is blocked or unavailable from this runner."
+      : undefined;
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : access.error || trace.result?.error || api.result?.error || "CuuTruyen probes failed",
+    finalUrl: api.result?.finalUrl || trace.result?.finalUrl || access.finalUrl,
+    latencyMs: Math.round(performance.now() - started),
+    note,
+    confidence: apiOk ? "api" : traceOk ? "cdn-trace" : accessHasCandidates ? "resolver" : "none",
+    primaryCheckId: apiOk ? "source-api" : traceOk ? "cloudflare-trace" : "access-page",
+    checks: [
+      check("access-page", "CuuTruyen access page", accessHasCandidates, {
+        count: candidates.length,
+        detail: accessHasCandidates
+          ? `${candidates.length} candidate domains`
+          : CUUTRUYEN_ACCESS_URL,
+        error: access.error,
+        latencyMs: access.latencyMs,
+        statusCode: access.status,
+      }),
+      check("cloudflare-trace", "Cloudflare trace", traceOk, {
+        detail: trace.baseUrl || candidates[0] || source.baseUrl,
+        error: trace.result?.error,
+        latencyMs: trace.result?.latencyMs,
+        statusCode: trace.result?.status,
+      }),
+      check("source-api", "CuuTruyen API", apiOk, {
+        count: apiItems.length,
+        detail: api.baseUrl ? `${apiItems.length} items from ${api.baseUrl}` : candidates[0] || source.baseUrl,
+        error: api.result?.error,
+        latencyMs: api.result?.latencyMs,
+        statusCode: api.result?.status,
+      }),
+    ],
+  });
+}
+
+function uniqueUrls(urls) {
+  return [...new Set(urls.filter(Boolean).map((url) => url.trim().replace(/\/$/, "")))];
+}
+
+function parseCuuTruyenBaseUrls(content) {
+  return [...content.matchAll(HTTPS_ORIGIN_REGEX)]
+    .map((match) => normalizeCuuTruyenBaseUrl(match[0]))
+    .filter(Boolean);
+}
+
+function normalizeCuuTruyenBaseUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+    const host = url.host.replace(/^www\./, "");
+
+    if (host.endsWith("pages.dev") || host.endsWith("workers.dev")) return null;
+    if (!host.startsWith("cuutruyen") && !host.startsWith("hetcuutruyen") && !host.startsWith("nettrom")) {
+      return null;
+    }
+
+    return `${url.protocol}//${url.host}`;
+  } catch {
+    return null;
+  }
+}
+
+async function firstReachable(baseUrls, worker) {
+  let firstResult = null;
+
+  for (const baseUrl of baseUrls) {
+    const result = await worker(baseUrl);
+    firstResult ||= { baseUrl, result };
+    if (result.ok) return { baseUrl, result };
+  }
+
+  return firstResult || { baseUrl: null, result: null };
 }
 
 async function checkRepoUrl(id, name, url) {
@@ -256,14 +443,17 @@ async function main() {
   const checkedAt = checkedAtDate.toISOString();
   const index = await readLocalIndex();
   const sourceEntries = flattenSources(index);
-  const uniqueBaseUrls = [...new Set(sourceEntries.map((source) => source.baseUrl).filter(Boolean))];
+  const genericSourceEntries = sourceEntries.filter((source) => !sourceSpecificChecker(source));
+  const uniqueBaseUrls = [...new Set(genericSourceEntries.map((source) => source.baseUrl).filter(Boolean))];
 
   const baseUrlChecks = await runLimited(uniqueBaseUrls, SOURCE_CONCURRENCY, async (baseUrl) => [
     baseUrl,
     await checkBaseUrl(baseUrl),
   ]);
   const baseUrlResults = new Map(baseUrlChecks);
-  const sources = await Promise.all(sourceEntries.map((source) => checkSource(source, baseUrlResults)));
+  const sources = await runLimited(sourceEntries, SOURCE_CONCURRENCY, (source) =>
+    checkSource(source, baseUrlResults),
+  );
   const repoFileChecks = await repoChecks(index);
   const level = statusLevel(repoFileChecks, sources);
   const workingSources = sources.filter((item) => item.ok).length;
@@ -282,6 +472,7 @@ async function main() {
       totalSources: sources.length,
       workingSources,
       errorSources: sources.length - workingSources,
+      warningSources: sources.filter((item) => item.note).length,
       repoFiles: repoFileChecks.length,
       repoErrors: repoFileChecks.filter((item) => !item.ok).length,
     },

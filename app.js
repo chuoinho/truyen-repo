@@ -132,17 +132,20 @@ function renderSources(sources) {
         "",
         [source.extensionName || source.package, source.baseUrl || "No base URL"]
           .filter(Boolean)
-          .join(" · "),
+          .join(" - "),
       ),
     );
     const badge = el("span", "badge", source.status || statusForCheck(source.ok));
     head.append(title, badge);
 
-    const baseCheck = source.checks?.find((checkItem) => checkItem.id === "base-url");
+    const primaryCheck =
+      source.checks?.find((checkItem) => checkItem.id === source.primaryCheckId) ||
+      source.checks?.[0];
     const sample = el("p", "sample");
     sample.textContent = source.ok
-      ? `working · HTTP ${baseCheck?.statusCode || "--"} · ${formatMs(source.latencyMs)}`
-      : `error · ${source.error || baseCheck?.error || `HTTP ${baseCheck?.statusCode || "--"}`}`;
+      ? source.note ||
+        `working - HTTP ${primaryCheck?.statusCode || "--"} - ${formatMs(source.latencyMs)}`
+      : `error - ${source.error || primaryCheck?.error || `HTTP ${primaryCheck?.statusCode || "--"}`}`;
 
     const checks = el("div", "check-list compact");
     renderCheckList(checks, source.checks || []);
