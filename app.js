@@ -90,7 +90,7 @@ function formatMs(value) {
 
 function statusLabel(level) {
   if (level === "healthy") return "hoạt động";
-  if (level === "degraded") return "cảnh báo";
+  if (level === "degraded") return "có lỗi";
   if (level === "down") return "lỗi";
   if (level === "loading") return "đang tải";
   return "chưa rõ";
@@ -98,7 +98,7 @@ function statusLabel(level) {
 
 function statusText(status) {
   if (status === "working") return "hoạt động";
-  if (status === "warning") return "cảnh báo";
+  if (status === "warning") return "hoạt động";
   if (status === "error") return "lỗi";
   return "chưa rõ";
 }
@@ -146,15 +146,13 @@ function translateDetail(value) {
 }
 
 function statusFromSource(source) {
-  if (source.ok === false) return "error";
-  if (source.note || source.status === "warning") return "warning";
-  if (source.ok === true) return "working";
+  if (source.status === "error" || source.ok === false) return "error";
+  if (source.status === "working" || source.status === "warning" || source.ok === true) return "working";
   return "unknown";
 }
 
 function statusFromSources(sources) {
   if (sources.some((source) => statusFromSource(source) === "error")) return "error";
-  if (sources.some((source) => statusFromSource(source) === "warning")) return "warning";
   if (sources.some((source) => statusFromSource(source) === "working")) return "working";
   return "unknown";
 }
@@ -206,7 +204,6 @@ function mergeStatus(index, status) {
       sources,
     };
     next.status = statusFromSources(sources);
-    next.warningCount = sources.filter((source) => statusFromSource(source) === "warning").length;
     next.errorCount = sources.filter((source) => statusFromSource(source) === "error").length;
     return next;
   });
@@ -409,16 +406,20 @@ function renderStatus(status, index) {
         sum + extension.sources.filter((source) => statusFromSource(source) === "working").length,
       0,
     );
-  const warningSources =
-    stats.warningSources ??
-    merged.reduce((sum, extension) => sum + extension.warningCount, 0);
+  const errorSources =
+    stats.errorSources ??
+    merged.reduce(
+      (sum, extension) =>
+        sum + extension.sources.filter((source) => statusFromSource(source) === "error").length,
+      0,
+    );
 
   state.extensions = merged;
 
   setText("#statusText", statusLabel(level));
   setText("#workingCount", `${workingSources}/${totalSources}`);
   setText("#statusSummary", statusSummaryText(level, workingSources, totalSources));
-  setText("#warningCount", `${warningSources}`);
+  setText("#errorCount", `${errorSources}`);
   setText("#checkedAt", formatDate(status?.checkedAt));
   setText("#intervalHours", status?.intervalHours ? `${status.intervalHours}h` : "--");
   setText("#durationMs", status?.durationMs ? `Kiểm tra trong ${formatMs(status.durationMs)}` : "--");

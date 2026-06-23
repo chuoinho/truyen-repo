@@ -132,6 +132,10 @@ function runnerBlockedNote(status) {
   return `Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP ${status}.`;
 }
 
+function dnsReachableNote(error) {
+  return `Tên miền còn phân giải DNS; máy kiểm tra không xác nhận được HTTP${error ? ` (${error})` : ""}.`;
+}
+
 async function fetchJson(url, headers = {}, options = {}) {
   const result = await timedFetch(url, {
     headers,
@@ -243,16 +247,22 @@ async function checkSource(source, baseUrlResults) {
     latencyMs: 0,
   };
   const runnerBlocked = !result.ok && isRunnerBlockedResponse(result);
-  const ok = Boolean(result.ok || runnerBlocked);
+  const dnsReachable = Boolean(result.dns?.ok);
+  const dnsOnly = !result.ok && !runnerBlocked && dnsReachable;
+  const ok = Boolean(result.ok || runnerBlocked || dnsOnly);
+  const baseUrlOk = Boolean(result.ok || runnerBlocked);
 
   return sourceResult(source, {
     ok,
-    status: runnerBlocked ? "warning" : undefined,
     error: ok ? undefined : result.error || `HTTP ${result.status}`,
     finalUrl: result.finalUrl,
     latencyMs: Math.round(performance.now() - started + (result.latencyMs || 0)),
-    note: runnerBlocked ? runnerBlockedNote(result.status) : undefined,
-    confidence: runnerBlocked ? "runner-blocked" : undefined,
+    note: runnerBlocked
+      ? runnerBlockedNote(result.status)
+      : dnsOnly
+        ? dnsReachableNote(result.error || `HTTP ${result.status}`)
+        : undefined,
+    confidence: result.ok ? "base-url" : runnerBlocked ? "runner-blocked" : dnsOnly ? "dns" : undefined,
     primaryCheckId: "base-url",
     checks: [
       check("dns", "DNS", result.dns?.ok, {
@@ -261,8 +271,8 @@ async function checkSource(source, baseUrlResults) {
         latencyMs: result.dns?.latencyMs,
         statusCode: result.dns?.status,
       }),
-      check("base-url", "Base URL", ok, {
-        ...(runnerBlocked ? { status: "warning" } : {}),
+      check("base-url", "Base URL", baseUrlOk, {
+        ...(runnerBlocked || dnsOnly ? { status: "warning" } : {}),
         bytes: result.bytes,
         detail: result.finalUrl && result.finalUrl !== source.baseUrl ? result.finalUrl : source.baseUrl,
         error: result.error,
@@ -329,7 +339,7 @@ function applySourceHistory(sources, previousStatus, checkedAt) {
         lastOkAt: history.lastOkAt,
         note: `Nguồn lỗi lần ${history.consecutiveFailures}/${FAILURE_THRESHOLD}; cần thêm lần kiểm tra tiếp theo trước khi báo lỗi.`,
         ok: true,
-        status: "warning",
+        status: "working",
       };
     }
 
@@ -608,7 +618,7 @@ async function main() {
       totalSources: sources.length,
       workingSources,
       errorSources: sources.length - workingSources,
-      warningSources: sources.filter((item) => item.note).length,
+      warningSources: sources.filter((item) => item.status === "warning").length,
       repoFiles: repoFileChecks.length,
       repoErrors: repoFileChecks.filter((item) => !item.ok).length,
     },
