@@ -1,18 +1,18 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-06-23T08:38:25.469Z",
-  "nextScheduledAt": "2026-06-23T13:38:25.469Z",
-  "intervalHours": 5,
-  "durationMs": 3901,
-  "level": "degraded",
-  "ok": false,
-  "summary": "11/16 sources are working.",
+  "checkedAt": "2026-06-23T11:50:13.144Z",
+  "nextScheduledAt": "2026-06-23T23:50:13.144Z",
+  "intervalHours": 12,
+  "durationMs": 2728,
+  "level": "healthy",
+  "ok": true,
+  "summary": "All 16 sources are working.",
   "stats": {
     "totalExtensions": 14,
     "totalSources": 16,
-    "workingSources": 11,
-    "errorSources": 5,
-    "warningSources": 0,
+    "workingSources": 16,
+    "errorSources": 0,
+    "warningSources": 1,
     "repoFiles": 17,
     "repoErrors": 0
   },
@@ -28,7 +28,7 @@
         "status": "working",
         "bytes": 914,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 127,
+        "latencyMs": 174,
         "statusCode": 200
       },
       {
@@ -38,7 +38,7 @@
         "status": "working",
         "bytes": 5436,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 168,
+        "latencyMs": 183,
         "statusCode": 200
       },
       {
@@ -48,7 +48,7 @@
         "status": "working",
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 118,
+        "latencyMs": 174,
         "statusCode": 200
       },
       {
@@ -58,7 +58,7 @@
         "status": "working",
         "bytes": 165554,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apk",
-        "latencyMs": 152,
+        "latencyMs": 167,
         "statusCode": 200
       },
       {
@@ -68,7 +68,7 @@
         "status": "working",
         "bytes": 200724,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyen-v1.4.4.apk",
-        "latencyMs": 383,
+        "latencyMs": 178,
         "statusCode": 200
       },
       {
@@ -78,7 +78,7 @@
         "status": "working",
         "bytes": 180448,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyenmoe-v1.4.3.apk",
-        "latencyMs": 153,
+        "latencyMs": 180,
         "statusCode": 200
       },
       {
@@ -88,7 +88,7 @@
         "status": "working",
         "bytes": 123559,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.32.apk",
-        "latencyMs": 108,
+        "latencyMs": 167,
         "statusCode": 200
       },
       {
@@ -98,7 +98,7 @@
         "status": "working",
         "bytes": 126897,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.13.apk",
-        "latencyMs": 142,
+        "latencyMs": 186,
         "statusCode": 200
       },
       {
@@ -108,7 +108,7 @@
         "status": "working",
         "bytes": 126363,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.goctruyentranhvui-v1.4.13.apk",
-        "latencyMs": 154,
+        "latencyMs": 179,
         "statusCode": 200
       },
       {
@@ -118,7 +118,7 @@
         "status": "working",
         "bytes": 151334,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.luottruyen-v1.4.4.apk",
-        "latencyMs": 233,
+        "latencyMs": 171,
         "statusCode": 200
       },
       {
@@ -128,7 +128,7 @@
         "status": "working",
         "bytes": 154658,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.5.apk",
-        "latencyMs": 168,
+        "latencyMs": 183,
         "statusCode": 200
       },
       {
@@ -138,7 +138,7 @@
         "status": "working",
         "bytes": 115609,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.nhattruyen-v1.4.29.apk",
-        "latencyMs": 134,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -148,7 +148,7 @@
         "status": "working",
         "bytes": 188977,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.otruyen-v1.4.2.apk",
-        "latencyMs": 141,
+        "latencyMs": 170,
         "statusCode": 200
       },
       {
@@ -158,7 +158,7 @@
         "status": "working",
         "bytes": 132600,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.toptruyen-v1.4.37.apk",
-        "latencyMs": 359,
+        "latencyMs": 166,
         "statusCode": 200
       },
       {
@@ -168,7 +168,7 @@
         "status": "working",
         "bytes": 180906,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenggvn-v1.4.2.apk",
-        "latencyMs": 110,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -178,7 +178,7 @@
         "status": "working",
         "bytes": 115938,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apk",
-        "latencyMs": 133,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -188,7 +188,7 @@
         "status": "working",
         "bytes": 157646,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.10.apk",
-        "latencyMs": 146,
+        "latencyMs": 170,
         "statusCode": 200
       }
     ]
@@ -203,7 +203,7 @@
         "status": "working",
         "bytes": 914,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 127,
+        "latencyMs": 174,
         "statusCode": 200
       },
       {
@@ -213,7 +213,7 @@
         "status": "working",
         "bytes": 5436,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 168,
+        "latencyMs": 183,
         "statusCode": 200
       },
       {
@@ -223,7 +223,7 @@
         "status": "working",
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 118,
+        "latencyMs": 174,
         "statusCode": 200
       },
       {
@@ -233,7 +233,7 @@
         "status": "working",
         "bytes": 165554,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apk",
-        "latencyMs": 152,
+        "latencyMs": 167,
         "statusCode": 200
       },
       {
@@ -243,7 +243,7 @@
         "status": "working",
         "bytes": 200724,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyen-v1.4.4.apk",
-        "latencyMs": 383,
+        "latencyMs": 178,
         "statusCode": 200
       },
       {
@@ -253,7 +253,7 @@
         "status": "working",
         "bytes": 180448,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyenmoe-v1.4.3.apk",
-        "latencyMs": 153,
+        "latencyMs": 180,
         "statusCode": 200
       },
       {
@@ -263,7 +263,7 @@
         "status": "working",
         "bytes": 123559,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.32.apk",
-        "latencyMs": 108,
+        "latencyMs": 167,
         "statusCode": 200
       },
       {
@@ -273,7 +273,7 @@
         "status": "working",
         "bytes": 126897,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.13.apk",
-        "latencyMs": 142,
+        "latencyMs": 186,
         "statusCode": 200
       },
       {
@@ -283,7 +283,7 @@
         "status": "working",
         "bytes": 126363,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.goctruyentranhvui-v1.4.13.apk",
-        "latencyMs": 154,
+        "latencyMs": 179,
         "statusCode": 200
       },
       {
@@ -293,7 +293,7 @@
         "status": "working",
         "bytes": 151334,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.luottruyen-v1.4.4.apk",
-        "latencyMs": 233,
+        "latencyMs": 171,
         "statusCode": 200
       },
       {
@@ -303,7 +303,7 @@
         "status": "working",
         "bytes": 154658,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.5.apk",
-        "latencyMs": 168,
+        "latencyMs": 183,
         "statusCode": 200
       },
       {
@@ -313,7 +313,7 @@
         "status": "working",
         "bytes": 115609,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.nhattruyen-v1.4.29.apk",
-        "latencyMs": 134,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -323,7 +323,7 @@
         "status": "working",
         "bytes": 188977,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.otruyen-v1.4.2.apk",
-        "latencyMs": 141,
+        "latencyMs": 170,
         "statusCode": 200
       },
       {
@@ -333,7 +333,7 @@
         "status": "working",
         "bytes": 132600,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.toptruyen-v1.4.37.apk",
-        "latencyMs": 359,
+        "latencyMs": 166,
         "statusCode": 200
       },
       {
@@ -343,7 +343,7 @@
         "status": "working",
         "bytes": 180906,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenggvn-v1.4.2.apk",
-        "latencyMs": 110,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -353,7 +353,7 @@
         "status": "working",
         "bytes": 115938,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apk",
-        "latencyMs": 133,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -363,7 +363,7 @@
         "status": "working",
         "bytes": 157646,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.10.apk",
-        "latencyMs": 146,
+        "latencyMs": 170,
         "statusCode": 200
       }
     ]
@@ -525,7 +525,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://cmangax17.com/",
-      "latencyMs": 376,
+      "latencyMs": 379,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -535,7 +535,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://cmangax17.com/",
-          "latencyMs": 376,
+          "latencyMs": 379,
           "statusCode": 200
         }
       ]
@@ -553,10 +553,11 @@
       "versionId": 1,
       "ok": true,
       "status": "working",
-      "finalUrl": "https://cuutruyen.net/api/v2/mangas/top?duration=month&page=1",
-      "latencyMs": 795,
-      "confidence": "api",
-      "primaryCheckId": "source-api",
+      "finalUrl": "https://cuutruyen5c844.site/cdn-cgi/trace",
+      "latencyMs": 1205,
+      "note": "CDN/access page reachable; data API is blocked or unavailable from this runner.",
+      "confidence": "cdn-trace",
+      "primaryCheckId": "cloudflare-trace",
       "checks": [
         {
           "id": "access-page",
@@ -565,7 +566,7 @@
           "status": "working",
           "count": 4,
           "detail": "4 candidate domains",
-          "latencyMs": 120,
+          "latencyMs": 118,
           "statusCode": 200
         },
         {
@@ -573,19 +574,20 @@
           "name": "Cloudflare trace",
           "ok": true,
           "status": "working",
-          "detail": "https://cuutruyen.net",
-          "latencyMs": 119,
+          "detail": "https://cuutruyen5c844.site",
+          "latencyMs": 617,
           "statusCode": 200
         },
         {
           "id": "source-api",
           "name": "CuuTruyen API",
-          "ok": true,
-          "status": "working",
-          "count": 20,
-          "detail": "20 items from https://cuutruyen.net",
-          "latencyMs": 556,
-          "statusCode": 200
+          "ok": false,
+          "status": "error",
+          "count": 0,
+          "detail": "0 items from https://cuutruyen.net",
+          "error": "fetch failed",
+          "latencyMs": 31,
+          "statusCode": 0
         }
       ]
     },
@@ -603,7 +605,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://cuutruyen.moe/",
-      "latencyMs": 892,
+      "latencyMs": 347,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -613,7 +615,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://cuutruyen.moe/",
-          "latencyMs": 892,
+          "latencyMs": 347,
           "statusCode": 200
         }
       ]
@@ -629,22 +631,21 @@
       "extensionName": "DocTruyen3Q",
       "extensionVersion": "1.4.32",
       "versionId": 1,
-      "ok": false,
-      "status": "error",
-      "error": "HTTP 403",
+      "ok": true,
+      "status": "working",
       "finalUrl": "https://doctruyen3qhub1.com/",
-      "latencyMs": 240,
+      "latencyMs": 412,
       "primaryCheckId": "base-url",
       "checks": [
         {
           "id": "base-url",
           "name": "Base URL",
-          "ok": false,
-          "status": "error",
+          "ok": true,
+          "status": "working",
           "bytes": 0,
           "detail": "https://doctruyen3qhub1.com/",
-          "latencyMs": 240,
-          "statusCode": 403
+          "latencyMs": 412,
+          "statusCode": 200
         }
       ]
     },
@@ -662,7 +663,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://foxtruyen2.com/",
-      "latencyMs": 1148,
+      "latencyMs": 468,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -672,7 +673,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://foxtruyen2.com/",
-          "latencyMs": 1148,
+          "latencyMs": 468,
           "statusCode": 200
         }
       ]
@@ -691,7 +692,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://goctruyentranhvui30.com/trang-chu",
-      "latencyMs": 1233,
+      "latencyMs": 620,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -701,7 +702,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://goctruyentranhvui30.com/trang-chu",
-          "latencyMs": 1233,
+          "latencyMs": 620,
           "statusCode": 200
         }
       ]
@@ -720,7 +721,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://luottruyen9.com/",
-      "latencyMs": 655,
+      "latencyMs": 246,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -730,7 +731,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://luottruyen9.com/",
-          "latencyMs": 655,
+          "latencyMs": 246,
           "statusCode": 200
         }
       ]
@@ -749,7 +750,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://minotruyenv7.xyz/",
-      "latencyMs": 521,
+      "latencyMs": 129,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -759,7 +760,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://minotruyenv7.xyz/",
-          "latencyMs": 521,
+          "latencyMs": 129,
           "statusCode": 200
         }
       ]
@@ -778,7 +779,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://minotruyenv7.xyz/",
-      "latencyMs": 521,
+      "latencyMs": 129,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -788,7 +789,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://minotruyenv7.xyz/",
-          "latencyMs": 521,
+          "latencyMs": 129,
           "statusCode": 200
         }
       ]
@@ -807,7 +808,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://minotruyenv7.xyz/",
-      "latencyMs": 521,
+      "latencyMs": 129,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -817,7 +818,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://minotruyenv7.xyz/",
-          "latencyMs": 521,
+          "latencyMs": 129,
           "statusCode": 200
         }
       ]
@@ -833,22 +834,21 @@
       "extensionName": "NhatTruyen",
       "extensionVersion": "1.4.29",
       "versionId": 1,
-      "ok": false,
-      "status": "error",
-      "error": "HTTP 403",
+      "ok": true,
+      "status": "working",
       "finalUrl": "https://nhattruyenqq.com/",
-      "latencyMs": 173,
+      "latencyMs": 109,
       "primaryCheckId": "base-url",
       "checks": [
         {
           "id": "base-url",
           "name": "Base URL",
-          "ok": false,
-          "status": "error",
+          "ok": true,
+          "status": "working",
           "bytes": 0,
           "detail": "https://nhattruyenqq.com/",
-          "latencyMs": 173,
-          "statusCode": 403
+          "latencyMs": 109,
+          "statusCode": 200
         }
       ]
     },
@@ -866,7 +866,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1",
-      "latencyMs": 208,
+      "latencyMs": 395,
       "confidence": "api",
       "primaryCheckId": "source-api",
       "checks": [
@@ -877,7 +877,7 @@
           "status": "working",
           "count": 24,
           "detail": "24 items from https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1",
-          "latencyMs": 208,
+          "latencyMs": 394,
           "statusCode": 200
         }
       ]
@@ -893,22 +893,21 @@
       "extensionName": "Top Truyen",
       "extensionVersion": "1.4.37",
       "versionId": 1,
-      "ok": false,
-      "status": "error",
-      "error": "HTTP 403",
+      "ok": true,
+      "status": "working",
       "finalUrl": "https://www.toptruyenzone4.com/",
-      "latencyMs": 98,
+      "latencyMs": 463,
       "primaryCheckId": "base-url",
       "checks": [
         {
           "id": "base-url",
           "name": "Base URL",
-          "ok": false,
-          "status": "error",
+          "ok": true,
+          "status": "working",
           "bytes": 0,
           "detail": "https://www.toptruyenzone4.com/",
-          "latencyMs": 98,
-          "statusCode": 403
+          "latencyMs": 463,
+          "statusCode": 200
         }
       ]
     },
@@ -923,22 +922,21 @@
       "extensionName": "TruyenGGVN",
       "extensionVersion": "1.4.2",
       "versionId": 1,
-      "ok": false,
-      "status": "error",
-      "error": "HTTP 403",
+      "ok": true,
+      "status": "working",
       "finalUrl": "https://truyenggvn.com/",
-      "latencyMs": 223,
+      "latencyMs": 327,
       "primaryCheckId": "base-url",
       "checks": [
         {
           "id": "base-url",
           "name": "Base URL",
-          "ok": false,
-          "status": "error",
+          "ok": true,
+          "status": "working",
           "bytes": 0,
           "detail": "https://truyenggvn.com/",
-          "latencyMs": 223,
-          "statusCode": 403
+          "latencyMs": 327,
+          "statusCode": 200
         }
       ]
     },
@@ -953,22 +951,21 @@
       "extensionName": "TruyenQQ",
       "extensionVersion": "1.4.24",
       "versionId": 1,
-      "ok": false,
-      "status": "error",
-      "error": "HTTP 403",
+      "ok": true,
+      "status": "working",
       "finalUrl": "https://truyenqqko.com/",
-      "latencyMs": 178,
+      "latencyMs": 321,
       "primaryCheckId": "base-url",
       "checks": [
         {
           "id": "base-url",
           "name": "Base URL",
-          "ok": false,
-          "status": "error",
+          "ok": true,
+          "status": "working",
           "bytes": 0,
           "detail": "https://truyenqqko.com/",
-          "latencyMs": 178,
-          "statusCode": 403
+          "latencyMs": 321,
+          "statusCode": 200
         }
       ]
     },
@@ -986,7 +983,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://www.zettruyen.club/",
-      "latencyMs": 1364,
+      "latencyMs": 229,
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -996,7 +993,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://www.zettruyen.club/",
-          "latencyMs": 1364,
+          "latencyMs": 229,
           "statusCode": 200
         }
       ]

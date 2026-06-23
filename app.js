@@ -2,11 +2,8 @@ const OWNER = "chuoinho";
 const REPO = "truyen-repo";
 const BRANCH = "repo";
 const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
-const GITHUB_BASE = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}`;
 const REPO_URL = `${RAW_BASE}/index.min.json`;
 const LOCAL_INDEX_URL = "index.min.json";
-const LOCAL_INDEX_PB_URL = "index.pb";
-const LOCAL_REPO_JSON_URL = "repo.json";
 const STATUS_URL = "status.json";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
 
@@ -21,6 +18,11 @@ const $ = (selector) => document.querySelector(selector);
 function setText(selector, value) {
   const element = $(selector);
   if (element) element.textContent = value;
+}
+
+function setHref(selector, value) {
+  const element = $(selector);
+  if (element) element.href = value;
 }
 
 function clear(element) {
@@ -299,7 +301,6 @@ function renderExtension(extension) {
       [
         extension.version ? `v${extension.version}` : "",
         `${extension.sourceCount} source${extension.sourceCount === 1 ? "" : "s"}`,
-        extension.nsfw ? "NSFW" : "SFW",
       ]
         .filter(Boolean)
         .join(" - "),
@@ -385,12 +386,7 @@ async function loadJson(url) {
 
 async function hydrate() {
   $("#repoUrlText").textContent = REPO_URL;
-  $("#installLink").href = INSTALL_URL;
-  $("#indexJsonLink").href = LOCAL_INDEX_URL;
-  $("#indexPbLink").href = LOCAL_INDEX_PB_URL;
-  $("#repoJsonLink").href = LOCAL_REPO_JSON_URL;
-  $("#statusJsonLink").href = STATUS_URL;
-  $("#apkLink").href = `${GITHUB_BASE}/apk`;
+  setHref("#installLink", INSTALL_URL);
 
   let index = [];
   try {

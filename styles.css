@@ -1,11 +1,11 @@
 :root {
-  --bg: #e9ede6;
-  --surface: #fbfcf8;
-  --surface-soft: #e2e8df;
+  --bg: #d9e0d6;
+  --surface: #f7f9f4;
+  --surface-soft: #d5ded2;
   --ink: #111510;
   --muted: #5b645d;
-  --line: #cfd8cd;
-  --line-strong: #b8c6b8;
+  --line: #bdc9ba;
+  --line-strong: #aab9a8;
   --ok: #167247;
   --ok-bg: #e8f4ee;
   --warn: #a56200;
@@ -321,7 +321,7 @@ h1 {
   padding: 12px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: rgba(233, 237, 230, 0.94);
+  background: rgba(217, 224, 214, 0.94);
   backdrop-filter: blur(16px);
 }
 
@@ -545,7 +545,7 @@ h2 {
 .extension-details {
   display: none;
   border-top: 1px solid var(--line);
-  background: #f1f5ef;
+  background: #e8eee5;
   padding: 0 16px 16px;
 }
 

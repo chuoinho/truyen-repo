@@ -8,7 +8,7 @@ const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
 const REPO_INDEX_URL = `${RAW_BASE}/index.min.json`;
 const REPO_PB_URL = `${RAW_BASE}/index.pb`;
 const REPO_JSON_URL = `${RAW_BASE}/repo.json`;
-const STATUS_INTERVAL_HOURS = 5;
+const STATUS_INTERVAL_HOURS = 12;
 const SOURCE_TIMEOUT_MS = Number(process.env.SOURCE_CHECK_TIMEOUT_MS || 15000);
 const REPO_TIMEOUT_MS = Number(process.env.REPO_CHECK_TIMEOUT_MS || 10000);
 const SOURCE_CONCURRENCY = Number(process.env.SOURCE_CHECK_CONCURRENCY || 5);
@@ -96,6 +96,14 @@ async function timedFetch(url, options = {}) {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function isRunnerBlockedResponse(result) {
+  return [401, 403, 429].includes(Number(result?.status));
+}
+
+function runnerBlockedNote(status) {
+  return `Site is reachable but blocks this status runner with HTTP ${status}.`;
 }
 
 async function fetchJson(url, headers = {}, options = {}) {
@@ -193,16 +201,21 @@ async function checkSource(source, baseUrlResults) {
     error: "baseUrl was not checked",
     latencyMs: 0,
   };
-  const ok = Boolean(result.ok);
+  const runnerBlocked = !result.ok && isRunnerBlockedResponse(result);
+  const ok = Boolean(result.ok || runnerBlocked);
 
   return sourceResult(source, {
     ok,
+    status: runnerBlocked ? "warning" : undefined,
     error: ok ? undefined : result.error || `HTTP ${result.status}`,
     finalUrl: result.finalUrl,
     latencyMs: Math.round(performance.now() - started + (result.latencyMs || 0)),
+    note: runnerBlocked ? runnerBlockedNote(result.status) : undefined,
+    confidence: runnerBlocked ? "runner-blocked" : undefined,
     primaryCheckId: "base-url",
     checks: [
       check("base-url", "Base URL", ok, {
+        ...(runnerBlocked ? { status: "warning" } : {}),
         bytes: result.bytes,
         detail: result.finalUrl && result.finalUrl !== source.baseUrl ? result.finalUrl : source.baseUrl,
         error: result.error,
