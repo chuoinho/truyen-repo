@@ -6,6 +6,7 @@ const REPO_URL = `${RAW_BASE}/index.min.json`;
 const LOCAL_INDEX_URL = "index.min.json";
 const STATUS_URL = "status.json";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
+const REQUEST_SOURCE_URL = "https://github.com/chuoinho/truyen-repo/issues";
 
 const state = {
   extensions: [],
@@ -209,57 +210,40 @@ function mergeStatus(index, status) {
   });
 }
 
-function matchesQuery(extension, query) {
+function sourceRows() {
+  return state.extensions.flatMap((extension) =>
+    extension.sources.map((source) => ({
+      id: String(source.id || `${extension.package}:${source.name}`),
+      name: source.name || extension.name || "Nguồn chưa rõ",
+      status: statusFromSource(source),
+    })),
+  );
+}
+
+function matchesQuery(source, query) {
   if (!query) return true;
-  const haystack = [
-    extension.name,
-    extension.package,
-    extension.apk,
-    extension.version,
-    ...extension.sources.flatMap((source) => [
-      source.name,
-      source.baseUrl,
-      source.finalUrl,
-      source.note,
-      source.error,
-    ]),
-  ]
+  const haystack = [source.name]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
   return haystack.includes(query);
 }
 
-function matchesFilter(extension, filter) {
+function matchesFilter(source, filter) {
   if (filter === "all") return true;
-  if (filter === "nsfw") return Boolean(extension.nsfw);
-  return extension.status === filter;
+  return source.status === filter;
 }
 
-function filteredExtensions() {
+function filteredSources() {
   const query = state.query.trim().toLowerCase();
-  return state.extensions
-    .filter((extension) => matchesFilter(extension, state.filter))
-    .filter((extension) => matchesQuery(extension, query))
+  return sourceRows()
+    .filter((source) => matchesFilter(source, state.filter))
+    .filter((source) => matchesQuery(source, query))
     .sort((a, b) => {
       const statusDiff = statusWeight(a.status) - statusWeight(b.status);
       if (statusDiff !== 0) return statusDiff;
       return String(a.name).localeCompare(String(b.name), "vi");
     });
-}
-
-function sourceChip(source) {
-  const stateName = statusFromSource(source);
-  const chip = el("span", "source-chip");
-  chip.dataset.state = stateName;
-
-  chip.append(el("span", "source-state"));
-  const text = el("span");
-  text.append(el("strong", "", source.name || "Nguồn chưa rõ"));
-  text.append(el("span", "", source.baseUrl || "Chưa có URL gốc"));
-  chip.append(text);
-
-  return chip;
 }
 
 function badge(status) {
@@ -268,106 +252,11 @@ function badge(status) {
   return node;
 }
 
-function renderCheckGrid(checks) {
-  const grid = el("div", "check-grid");
-
-  if (!checks?.length) {
-    grid.append(el("div", "check-row", "Chưa có dữ liệu kiểm tra."));
-    return grid;
-  }
-
-  checks.forEach((check) => {
-    const row = el("div", "check-row");
-    const name = el("strong", "", translateCheckName(check.name || check.id));
-    const status = badge(check.status || (check.ok ? "working" : "error"));
-    const detail = el(
-      "span",
-      "check-detail",
-      [translateDetail(check.detail || check.error || "Không có chi tiết"), `HTTP ${check.statusCode ?? "--"}`, formatMs(check.latencyMs)]
-        .filter(Boolean)
-        .join(" - "),
-    );
-
-    row.append(name, status, detail);
-    grid.append(row);
-  });
-
-  return grid;
-}
-
-function renderDetails(extension) {
-  const details = el("div", "extension-details");
-
-  const notes = extension.sources
-    .map((source) => source.note || source.error)
-    .filter(Boolean);
-  if (notes.length) {
-    details.append(el("p", "extension-note", notes.map(translateNote).join(" ")));
-  }
-
-  extension.sources.forEach((source) => {
-    const detail = el("div", "source-detail");
-    detail.append(el("h3", "", source.name || "Nguồn chưa rõ"));
-    detail.append(
-      el(
-        "p",
-        "",
-        [source.baseUrl, source.finalUrl && source.finalUrl !== source.baseUrl ? `Chuyển tới: ${source.finalUrl}` : ""]
-          .filter(Boolean)
-          .join(" - "),
-      ),
-    );
-    detail.append(renderCheckGrid(source.checks || []));
-    details.append(detail);
-  });
-
-  return details;
-}
-
-function renderExtension(extension) {
-  const item = el("article", "extension-item");
-  item.dataset.status = extension.status;
-
-  const main = el("div", "extension-main");
-  const title = el("div", "extension-title");
-  const icon = el("img");
-  icon.src = `icon/${extension.package}.png`;
-  icon.alt = "";
-  icon.loading = "lazy";
-  icon.addEventListener("error", () => {
-    icon.src = "assets/minotruyen.png";
-  });
-
-  const titleText = el("div");
-  titleText.append(el("strong", "", extension.name));
-  titleText.append(
-    el(
-      "span",
-      "",
-      [
-        extension.version ? `v${extension.version}` : "",
-        `${extension.sourceCount} nguồn`,
-      ]
-        .filter(Boolean)
-        .join(" - "),
-    ),
-  );
-  title.append(icon, titleText);
-
-  const chips = el("div", "source-chips");
-  extension.sources.forEach((source) => chips.append(sourceChip(source)));
-
-  const actions = el("div", "extension-actions");
-  const detailsButton = el("button", "details-toggle", "Chi tiết");
-  detailsButton.type = "button";
-  detailsButton.addEventListener("click", () => {
-    const open = item.classList.toggle("open");
-    detailsButton.textContent = open ? "Ẩn" : "Chi tiết";
-  });
-  actions.append(badge(extension.status), detailsButton);
-
-  main.append(title, chips, actions);
-  item.append(main, renderDetails(extension));
+function renderSource(source) {
+  const item = el("article", "source-row");
+  item.dataset.status = source.status;
+  item.append(el("strong", "source-name", source.name));
+  item.append(badge(source.status));
 
   return item;
 }
@@ -376,19 +265,19 @@ function renderExtensions() {
   const container = $("#extensionList");
   clear(container);
 
-  const visible = filteredExtensions();
+  const visible = filteredSources();
   const totalSources = state.extensions.reduce((sum, extension) => sum + extension.sourceCount, 0);
   setText(
     "#extensionSummary",
-    `${state.extensions.length} tiện ích, ${totalSources} nguồn. Đang hiển thị ${visible.length}.`,
+    `${totalSources} nguồn. Đang hiển thị ${visible.length}.`,
   );
 
   if (!visible.length) {
-    container.append(el("p", "empty", "Không có tiện ích phù hợp."));
+    container.append(el("p", "empty", "Không có nguồn phù hợp."));
     return;
   }
 
-  visible.forEach((extension) => container.append(renderExtension(extension)));
+  visible.forEach((source) => container.append(renderSource(source)));
 }
 
 function renderStatus(status, index) {
@@ -438,6 +327,8 @@ async function hydrate() {
   $("#repoUrlText").textContent = REPO_URL;
   setHref("#installLink", INSTALL_URL);
   setHref("#navInstallLink", INSTALL_URL);
+  setHref("#requestSourceLink", REQUEST_SOURCE_URL);
+  setHref("#navRequestSourceLink", REQUEST_SOURCE_URL);
 
   let index = [];
   try {

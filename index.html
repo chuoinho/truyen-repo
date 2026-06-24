@@ -12,7 +12,7 @@
     />
     <title>Truyện Repo</title>
     <link rel="icon" href="assets/minotruyen.png" />
-    <link rel="stylesheet" href="styles.css?v=20260623-6" />
+    <link rel="stylesheet" href="styles.css?v=20260624-1" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4094211667156490"
      crossorigin="anonymous"></script>
   </head>
@@ -26,7 +26,8 @@
 
       <nav class="nav-links" aria-label="Điều hướng chính">
         <a id="navInstallLink" href="#">Thêm repo</a>
-        <a href="#extensions">Tiện ích</a>
+        <a id="navRequestSourceLink" href="#">Yêu cầu nguồn mới</a>
+        <a href="#extensions">Nguồn</a>
         <a href="#status">Trạng thái</a>
         <a href="https://github.com/chuoinho/truyen-repo">GitHub</a>
       </nav>
@@ -41,9 +42,11 @@
 
           <div class="actions" id="install">
             <a class="button primary" id="installLink" href="#">Thêm repo</a>
+            <a class="button secondary" id="requestSourceLink" href="#">Yêu cầu nguồn mới</a>
             <button class="button secondary" id="copyButton" type="button">Sao chép URL</button>
           </div>
           <p class="repo-url" id="repoUrlText"></p>
+          <p class="request-note" id="requestNote" aria-live="polite"></p>
         </div>
 
         <aside class="hero-status" id="status" aria-label="Trạng thái kho">
@@ -70,13 +73,13 @@
         </aside>
       </section>
 
-      <section class="toolbar" aria-label="Bộ lọc tiện ích">
+      <section class="toolbar" aria-label="Bộ lọc nguồn">
         <label class="search">
           <span>Tìm kiếm</span>
-          <input id="searchInput" type="search" placeholder="Tìm tiện ích, nguồn, tên miền..." />
+          <input id="searchInput" type="search" placeholder="Tìm nguồn..." />
         </label>
 
-        <div class="filters" role="group" aria-label="Lọc tiện ích">
+        <div class="filters" role="group" aria-label="Lọc nguồn">
           <button class="filter-button active" type="button" data-filter="all">Tất cả</button>
           <button class="filter-button" type="button" data-filter="working">Hoạt động</button>
           <button class="filter-button" type="button" data-filter="error">Lỗi</button>
@@ -86,7 +89,7 @@
       <section class="section" id="extensions">
         <div class="section-head">
           <div>
-            <h2>Tiện ích</h2>
+            <h2>Nguồn</h2>
             <p id="extensionSummary">Đang tải danh sách...</p>
           </div>
           <span class="small-meta" id="durationMs">--</span>
@@ -102,6 +105,6 @@
       <span id="footerNote">Trạng thái cập nhật mỗi 12 giờ.</span>
     </footer>
 
-    <script src="app.js?v=20260623-9"></script>
+    <script src="app.js?v=20260624-1"></script>
   </body>
 </html>
