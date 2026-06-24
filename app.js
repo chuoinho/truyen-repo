@@ -5,6 +5,7 @@ const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
 const REPO_URL = `${RAW_BASE}/index.min.json`;
 const LOCAL_INDEX_URL = "index.min.json";
 const STATUS_URL = "status.json";
+const ICON_DIR = "icon";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
 const REQUEST_SOURCE_URL = "https://github.com/chuoinho/truyen-repo/issues";
 
@@ -43,6 +44,10 @@ function cleanExtensionName(name) {
 
 function normalizePackage(extension) {
   return extension.package || extension.pkg || "";
+}
+
+function iconPath(packageName) {
+  return packageName ? `${ICON_DIR}/${packageName}.png` : "";
 }
 
 function normalizeIndex(index) {
@@ -215,6 +220,7 @@ function sourceRows() {
     extension.sources.map((source) => ({
       id: String(source.id || `${extension.package}:${source.name}`),
       name: source.name || extension.name || "Nguồn chưa rõ",
+      icon: iconPath(extension.package || source.package),
       status: statusFromSource(source),
     })),
   );
@@ -255,7 +261,20 @@ function badge(status) {
 function renderSource(source) {
   const item = el("article", "source-row");
   item.dataset.status = source.status;
-  item.append(el("strong", "source-name", source.name));
+
+  const identity = el("div", "source-identity");
+  if (source.icon) {
+    const icon = el("img", "source-icon");
+    icon.src = source.icon;
+    icon.alt = "";
+    icon.loading = "lazy";
+    icon.decoding = "async";
+    icon.addEventListener("error", () => icon.remove());
+    identity.append(icon);
+  }
+  identity.append(el("strong", "source-name", source.name));
+
+  item.append(identity);
   item.append(badge(source.status));
 
   return item;

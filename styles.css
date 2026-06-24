@@ -895,6 +895,23 @@ h2 {
   padding: 9px 10px;
 }
 
+.source-identity {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.source-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-soft);
+  object-fit: cover;
+}
+
 .source-row .source-name {
   min-width: 0;
   overflow: hidden;
