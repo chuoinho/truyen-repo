@@ -1,9 +1,9 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-06-29T05:01:59.671Z",
-  "nextScheduledAt": "2026-06-29T17:01:59.671Z",
+  "checkedAt": "2026-06-29T16:13:21.953Z",
+  "nextScheduledAt": "2026-06-30T04:13:21.953Z",
   "intervalHours": 12,
-  "durationMs": 2890,
+  "durationMs": 5805,
   "level": "healthy",
   "ok": true,
   "summary": "Tất cả 16 nguồn đang hoạt động.",
@@ -37,7 +37,7 @@
         "status": "working",
         "bytes": 922,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 185,
+        "latencyMs": 170,
         "statusCode": 200
       },
       {
@@ -47,7 +47,7 @@
         "status": "working",
         "bytes": 5436,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 186,
+        "latencyMs": 171,
         "statusCode": 200
       },
       {
@@ -57,7 +57,7 @@
         "status": "working",
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 180,
+        "latencyMs": 160,
         "statusCode": 200
       },
       {
@@ -67,7 +67,7 @@
         "status": "working",
         "bytes": 165554,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apk",
-        "latencyMs": 208,
+        "latencyMs": 275,
         "statusCode": 200
       },
       {
@@ -77,7 +77,7 @@
         "status": "working",
         "bytes": 200724,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyen-v1.4.4.apk",
-        "latencyMs": 171,
+        "latencyMs": 180,
         "statusCode": 200
       },
       {
@@ -87,7 +87,7 @@
         "status": "working",
         "bytes": 180448,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyenmoe-v1.4.3.apk",
-        "latencyMs": 194,
+        "latencyMs": 191,
         "statusCode": 200
       },
       {
@@ -97,7 +97,7 @@
         "status": "working",
         "bytes": 125075,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.34.apk",
-        "latencyMs": 180,
+        "latencyMs": 178,
         "statusCode": 200
       },
       {
@@ -117,7 +117,7 @@
         "status": "working",
         "bytes": 129473,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.goctruyentranhvui-v1.4.14.apk",
-        "latencyMs": 168,
+        "latencyMs": 153,
         "statusCode": 200
       },
       {
@@ -127,7 +127,7 @@
         "status": "working",
         "bytes": 151334,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.luottruyen-v1.4.4.apk",
-        "latencyMs": 155,
+        "latencyMs": 151,
         "statusCode": 200
       },
       {
@@ -137,7 +137,7 @@
         "status": "working",
         "bytes": 165963,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.7.apk",
-        "latencyMs": 178,
+        "latencyMs": 153,
         "statusCode": 200
       },
       {
@@ -147,7 +147,7 @@
         "status": "working",
         "bytes": 115609,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.nhattruyen-v1.4.29.apk",
-        "latencyMs": 205,
+        "latencyMs": 194,
         "statusCode": 200
       },
       {
@@ -157,7 +157,7 @@
         "status": "working",
         "bytes": 188977,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.otruyen-v1.4.2.apk",
-        "latencyMs": 147,
+        "latencyMs": 220,
         "statusCode": 200
       },
       {
@@ -167,7 +167,7 @@
         "status": "working",
         "bytes": 132600,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.toptruyen-v1.4.37.apk",
-        "latencyMs": 174,
+        "latencyMs": 160,
         "statusCode": 200
       },
       {
@@ -177,7 +177,7 @@
         "status": "working",
         "bytes": 180906,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenggvn-v1.4.2.apk",
-        "latencyMs": 158,
+        "latencyMs": 177,
         "statusCode": 200
       },
       {
@@ -187,7 +187,7 @@
         "status": "working",
         "bytes": 115938,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apk",
-        "latencyMs": 133,
+        "latencyMs": 385,
         "statusCode": 200
       },
       {
@@ -197,7 +197,7 @@
         "status": "working",
         "bytes": 157646,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.10.apk",
-        "latencyMs": 168,
+        "latencyMs": 194,
         "statusCode": 200
       }
     ]
@@ -212,7 +212,7 @@
         "status": "working",
         "bytes": 922,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 185,
+        "latencyMs": 170,
         "statusCode": 200
       },
       {
@@ -222,7 +222,7 @@
         "status": "working",
         "bytes": 5436,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 186,
+        "latencyMs": 171,
         "statusCode": 200
       },
       {
@@ -232,7 +232,7 @@
         "status": "working",
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 180,
+        "latencyMs": 160,
         "statusCode": 200
       },
       {
@@ -242,7 +242,7 @@
         "status": "working",
         "bytes": 165554,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apk",
-        "latencyMs": 208,
+        "latencyMs": 275,
         "statusCode": 200
       },
       {
@@ -252,7 +252,7 @@
         "status": "working",
         "bytes": 200724,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyen-v1.4.4.apk",
-        "latencyMs": 171,
+        "latencyMs": 180,
         "statusCode": 200
       },
       {
@@ -262,7 +262,7 @@
         "status": "working",
         "bytes": 180448,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyenmoe-v1.4.3.apk",
-        "latencyMs": 194,
+        "latencyMs": 191,
         "statusCode": 200
       },
       {
@@ -272,7 +272,7 @@
         "status": "working",
         "bytes": 125075,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.34.apk",
-        "latencyMs": 180,
+        "latencyMs": 178,
         "statusCode": 200
       },
       {
@@ -292,7 +292,7 @@
         "status": "working",
         "bytes": 129473,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.goctruyentranhvui-v1.4.14.apk",
-        "latencyMs": 168,
+        "latencyMs": 153,
         "statusCode": 200
       },
       {
@@ -302,7 +302,7 @@
         "status": "working",
         "bytes": 151334,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.luottruyen-v1.4.4.apk",
-        "latencyMs": 155,
+        "latencyMs": 151,
         "statusCode": 200
       },
       {
@@ -312,7 +312,7 @@
         "status": "working",
         "bytes": 165963,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.7.apk",
-        "latencyMs": 178,
+        "latencyMs": 153,
         "statusCode": 200
       },
       {
@@ -322,7 +322,7 @@
         "status": "working",
         "bytes": 115609,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.nhattruyen-v1.4.29.apk",
-        "latencyMs": 205,
+        "latencyMs": 194,
         "statusCode": 200
       },
       {
@@ -332,7 +332,7 @@
         "status": "working",
         "bytes": 188977,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.otruyen-v1.4.2.apk",
-        "latencyMs": 147,
+        "latencyMs": 220,
         "statusCode": 200
       },
       {
@@ -342,7 +342,7 @@
         "status": "working",
         "bytes": 132600,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.toptruyen-v1.4.37.apk",
-        "latencyMs": 174,
+        "latencyMs": 160,
         "statusCode": 200
       },
       {
@@ -352,7 +352,7 @@
         "status": "working",
         "bytes": 180906,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenggvn-v1.4.2.apk",
-        "latencyMs": 158,
+        "latencyMs": 177,
         "statusCode": 200
       },
       {
@@ -362,7 +362,7 @@
         "status": "working",
         "bytes": 115938,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apk",
-        "latencyMs": 133,
+        "latencyMs": 385,
         "statusCode": 200
       },
       {
@@ -372,7 +372,7 @@
         "status": "working",
         "bytes": 157646,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.10.apk",
-        "latencyMs": 168,
+        "latencyMs": 194,
         "statusCode": 200
       }
     ]
@@ -534,7 +534,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://cmangax17.com/",
-      "latencyMs": 377,
+      "latencyMs": 490,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -544,7 +544,7 @@
           "ok": true,
           "status": "working",
           "detail": "cmangax17.com",
-          "latencyMs": 28,
+          "latencyMs": 105,
           "statusCode": 200
         },
         {
@@ -554,7 +554,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://cmangax17.com/",
-          "latencyMs": 377,
+          "latencyMs": 490,
           "statusCode": 200
         }
       ],
@@ -562,9 +562,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "8222087175453285202",
@@ -580,7 +580,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://cuutruyen.net/api/v2/mangas/top?duration=month&page=1",
-      "latencyMs": 474,
+      "latencyMs": 958,
       "confidence": "api",
       "primaryCheckId": "source-api",
       "checks": [
@@ -591,7 +591,7 @@
           "status": "working",
           "count": 4,
           "detail": "4 candidate domains",
-          "latencyMs": 104,
+          "latencyMs": 229,
           "statusCode": 200
         },
         {
@@ -600,7 +600,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://cuutruyen.net",
-          "latencyMs": 73,
+          "latencyMs": 131,
           "statusCode": 200
         },
         {
@@ -610,7 +610,7 @@
           "status": "working",
           "count": 20,
           "detail": "20 items from https://cuutruyen.net",
-          "latencyMs": 295,
+          "latencyMs": 598,
           "statusCode": 200
         }
       ],
@@ -618,9 +618,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "3973269831131863421",
@@ -636,7 +636,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://cuutruyen.moe/",
-      "latencyMs": 888,
+      "latencyMs": 948,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -646,7 +646,7 @@
           "ok": true,
           "status": "working",
           "detail": "cuutruyen.moe",
-          "latencyMs": 81,
+          "latencyMs": 45,
           "statusCode": 200
         },
         {
@@ -656,7 +656,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://cuutruyen.moe/",
-          "latencyMs": 888,
+          "latencyMs": 948,
           "statusCode": 200
         }
       ],
@@ -664,9 +664,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "6168143505244976507",
@@ -682,7 +682,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://doctruyen3qhub1.com/",
-      "latencyMs": 165,
+      "latencyMs": 125,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "runner-blocked",
       "primaryCheckId": "base-url",
@@ -693,7 +693,7 @@
           "ok": true,
           "status": "working",
           "detail": "doctruyen3qhub1.com",
-          "latencyMs": 81,
+          "latencyMs": 122,
           "statusCode": 200
         },
         {
@@ -703,7 +703,7 @@
           "status": "warning",
           "bytes": 0,
           "detail": "https://doctruyen3qhub1.com/",
-          "latencyMs": 165,
+          "latencyMs": 125,
           "statusCode": 403
         }
       ],
@@ -711,9 +711,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "1458993267006200127",
@@ -729,7 +729,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://foxtruyen2.com/",
-      "latencyMs": 999,
+      "latencyMs": 1045,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -739,7 +739,7 @@
           "ok": true,
           "status": "working",
           "detail": "foxtruyen2.com",
-          "latencyMs": 109,
+          "latencyMs": 112,
           "statusCode": 200
         },
         {
@@ -749,7 +749,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://foxtruyen2.com/",
-          "latencyMs": 999,
+          "latencyMs": 1045,
           "statusCode": 200
         }
       ],
@@ -757,9 +757,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "2831859393730435398",
@@ -774,10 +774,9 @@
       "versionId": 1,
       "ok": true,
       "status": "working",
-      "finalUrl": "https://goctruyentranhvui30.com/",
-      "latencyMs": 53,
-      "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
-      "confidence": "runner-blocked",
+      "finalUrl": "https://goctruyentranhvui30.com/trang-chu",
+      "latencyMs": 1411,
+      "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
         {
@@ -786,27 +785,27 @@
           "ok": true,
           "status": "working",
           "detail": "goctruyentranhvui30.com",
-          "latencyMs": 111,
+          "latencyMs": 161,
           "statusCode": 200
         },
         {
           "id": "base-url",
           "name": "Base URL",
           "ok": true,
-          "status": "warning",
-          "bytes": 5563,
-          "detail": "https://goctruyentranhvui30.com/",
-          "latencyMs": 53,
-          "statusCode": 403
+          "status": "working",
+          "bytes": 0,
+          "detail": "https://goctruyentranhvui30.com/trang-chu",
+          "latencyMs": 1411,
+          "statusCode": 200
         }
       ],
       "consecutiveFailures": 0,
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "6560112192335153780",
@@ -822,7 +821,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://luottruyen10.com/",
-      "latencyMs": 376,
+      "latencyMs": 474,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -832,7 +831,7 @@
           "ok": true,
           "status": "working",
           "detail": "luottruyen9.com",
-          "latencyMs": 54,
+          "latencyMs": 60,
           "statusCode": 200
         },
         {
@@ -842,7 +841,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://luottruyen10.com/",
-          "latencyMs": 376,
+          "latencyMs": 474,
           "statusCode": 200
         }
       ],
@@ -850,9 +849,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "1911829101129863006",
@@ -868,7 +867,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://minotruyenv7.xyz/",
-      "latencyMs": 417,
+      "latencyMs": 505,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -878,7 +877,7 @@
           "ok": true,
           "status": "working",
           "detail": "minotruyenv7.xyz",
-          "latencyMs": 253,
+          "latencyMs": 66,
           "statusCode": 200
         },
         {
@@ -888,7 +887,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://minotruyenv7.xyz/",
-          "latencyMs": 417,
+          "latencyMs": 505,
           "statusCode": 200
         }
       ],
@@ -896,9 +895,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "3751671803647824606",
@@ -914,7 +913,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://minotruyenv7.xyz/",
-      "latencyMs": 417,
+      "latencyMs": 505,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -924,7 +923,7 @@
           "ok": true,
           "status": "working",
           "detail": "minotruyenv7.xyz",
-          "latencyMs": 253,
+          "latencyMs": 66,
           "statusCode": 200
         },
         {
@@ -934,7 +933,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://minotruyenv7.xyz/",
-          "latencyMs": 417,
+          "latencyMs": 505,
           "statusCode": 200
         }
       ],
@@ -942,9 +941,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "5865133728324986123",
@@ -960,7 +959,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://minotruyenv7.xyz/",
-      "latencyMs": 417,
+      "latencyMs": 505,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -970,7 +969,7 @@
           "ok": true,
           "status": "working",
           "detail": "minotruyenv7.xyz",
-          "latencyMs": 253,
+          "latencyMs": 66,
           "statusCode": 200
         },
         {
@@ -980,7 +979,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://minotruyenv7.xyz/",
-          "latencyMs": 417,
+          "latencyMs": 505,
           "statusCode": 200
         }
       ],
@@ -988,9 +987,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "6861496002170366525",
@@ -1006,7 +1005,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://nhattruyenqq.com/",
-      "latencyMs": 57,
+      "latencyMs": 69,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "runner-blocked",
       "primaryCheckId": "base-url",
@@ -1017,7 +1016,7 @@
           "ok": true,
           "status": "working",
           "detail": "nhattruyenqq.com",
-          "latencyMs": 40,
+          "latencyMs": 50,
           "statusCode": 200
         },
         {
@@ -1027,7 +1026,7 @@
           "status": "warning",
           "bytes": 0,
           "detail": "https://nhattruyenqq.com/",
-          "latencyMs": 57,
+          "latencyMs": 69,
           "statusCode": 403
         }
       ],
@@ -1035,9 +1034,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "8070757025584294717",
@@ -1053,7 +1052,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1",
-      "latencyMs": 172,
+      "latencyMs": 235,
       "confidence": "api",
       "primaryCheckId": "source-api",
       "checks": [
@@ -1064,7 +1063,7 @@
           "status": "working",
           "count": 24,
           "detail": "24 items from https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1",
-          "latencyMs": 172,
+          "latencyMs": 234,
           "statusCode": 200
         }
       ],
@@ -1072,9 +1071,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "1166901607721102706",
@@ -1090,7 +1089,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://www.toptruyenzone4.com/",
-      "latencyMs": 35,
+      "latencyMs": 66,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "runner-blocked",
       "primaryCheckId": "base-url",
@@ -1101,7 +1100,7 @@
           "ok": true,
           "status": "working",
           "detail": "www.toptruyenzone4.com",
-          "latencyMs": 72,
+          "latencyMs": 55,
           "statusCode": 200
         },
         {
@@ -1111,7 +1110,7 @@
           "status": "warning",
           "bytes": 0,
           "detail": "https://www.toptruyenzone4.com/",
-          "latencyMs": 35,
+          "latencyMs": 66,
           "statusCode": 403
         }
       ],
@@ -1120,10 +1119,10 @@
         "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-06-23T16:55:24.473Z",
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
       "lastErrorAt": "2026-06-23T16:55:24.473Z",
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "3763163116691059571",
@@ -1139,7 +1138,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://truyenggvn.com/",
-      "latencyMs": 41,
+      "latencyMs": 89,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "runner-blocked",
       "primaryCheckId": "base-url",
@@ -1150,7 +1149,7 @@
           "ok": true,
           "status": "working",
           "detail": "truyenggvn.com",
-          "latencyMs": 80,
+          "latencyMs": 58,
           "statusCode": 200
         },
         {
@@ -1160,7 +1159,7 @@
           "status": "warning",
           "bytes": 0,
           "detail": "https://truyenggvn.com/",
-          "latencyMs": 41,
+          "latencyMs": 89,
           "statusCode": 403
         }
       ],
@@ -1168,9 +1167,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "2553532324170433933",
@@ -1186,7 +1185,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://truyenqqko.com/",
-      "latencyMs": 33,
+      "latencyMs": 77,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "runner-blocked",
       "primaryCheckId": "base-url",
@@ -1197,7 +1196,7 @@
           "ok": true,
           "status": "working",
           "detail": "truyenqqko.com",
-          "latencyMs": 21,
+          "latencyMs": 68,
           "statusCode": 200
         },
         {
@@ -1207,7 +1206,7 @@
           "status": "warning",
           "bytes": 0,
           "detail": "https://truyenqqko.com/",
-          "latencyMs": 33,
+          "latencyMs": 77,
           "statusCode": 403
         }
       ],
@@ -1215,9 +1214,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     },
     {
       "id": "893747327087652119",
@@ -1233,7 +1232,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://www.zettruyen.fit/",
-      "latencyMs": 1148,
+      "latencyMs": 2902,
       "confidence": "base-url",
       "primaryCheckId": "base-url",
       "checks": [
@@ -1243,7 +1242,7 @@
           "ok": true,
           "status": "working",
           "detail": "www.zettruyen.club",
-          "latencyMs": 58,
+          "latencyMs": 63,
           "statusCode": 200
         },
         {
@@ -1253,7 +1252,7 @@
           "status": "working",
           "bytes": 0,
           "detail": "https://www.zettruyen.fit/",
-          "latencyMs": 1148,
+          "latencyMs": 2902,
           "statusCode": 200
         }
       ],
@@ -1261,9 +1260,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-06-29T05:01:59.671Z"
+        "lastOkAt": "2026-06-29T16:13:21.953Z"
       },
-      "lastOkAt": "2026-06-29T05:01:59.671Z"
+      "lastOkAt": "2026-06-29T16:13:21.953Z"
     }
   ]
 }
