@@ -128,10 +128,10 @@
   {
     "name": "Tachiyomi: MinoTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.minotruyen",
-    "apk": "tachiyomi-vi.minotruyen-v1.4.7.apk",
+    "apk": "tachiyomi-vi.minotruyen-v1.4.11.apk",
     "lang": "vi",
-    "code": 7,
-    "version": "1.4.7",
+    "code": 11,
+    "version": "1.4.11",
     "nsfw": 1,
     "sources": [
       {
