@@ -214,10 +214,10 @@
   {
     "name": "Tachiyomi: TruyenGGVN",
     "pkg": "eu.kanade.tachiyomi.extension.vi.truyenggvn",
-    "apk": "tachiyomi-vi.truyenggvn-v1.4.4.apk",
+    "apk": "tachiyomi-vi.truyenggvn-v1.4.5.apk",
     "lang": "vi",
-    "code": 4,
-    "version": "1.4.4",
+    "code": 5,
+    "version": "1.4.5",
     "nsfw": 0,
     "sources": [
       {
