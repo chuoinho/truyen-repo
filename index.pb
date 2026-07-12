@@ -32,7 +32,7 @@ mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tach
 Top Truyenvi"https://www.toptruyenzone4.com0*ê
 
 TruyenGGVN+eu.kanade.tachiyomi.extension.vi.truyenggvnì
-mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.truyenggvn-v1.4.2.apk{https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.truyenggvn.png"1.4(21.4.2:2óæã‘ªÜœ4
+mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.truyenggvn-v1.4.3.apk{https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.truyenggvn.png"1.4(21.4.3:2óæã‘ªÜœ4
 TruyenGGVNvi"https://truyenggvn.com*â
 TruyenQQ)eu.kanade.tachiyomi.extension.vi.truyenqqé
 lhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apkyhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.truyenqq.png"1.4(21.4.24:0‹ …êƒş·#TruyenQQvi"https://truyenqqko.com*ë
