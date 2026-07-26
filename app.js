@@ -137,6 +137,11 @@ function translateCheckName(value) {
   if (value === "Cloudflare trace") return "Cloudflare trace";
   if (value === "CuuTruyen API") return "API CuuTruyen";
   if (value === "OTruyen API") return "API OTruyen";
+  if (/^Mino list /.test(value)) return value.replace(/^Mino list /, "Danh sách Mino ");
+  if (/^Mino detail /.test(value)) return value.replace(/^Mino detail /, "Chi tiết Mino ");
+  if (/^Mino chapters /.test(value)) return value.replace(/^Mino chapters /, "Chapter Mino ");
+  if (/^Mino pages /.test(value)) return value.replace(/^Mino pages /, "Trang đọc Mino ");
+  if (/^Mino image /.test(value)) return value.replace(/^Mino image /, "Ảnh Mino ");
   return value || "Kiểm tra";
 }
 

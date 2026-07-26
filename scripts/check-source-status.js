@@ -20,6 +20,8 @@ const OTRUYEN_API_URL = "https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page
 const CUUTRUYEN_ACCESS_URL = "https://truycapcuutruyen.pages.dev/";
 const CUUTRUYEN_API_PATH = "/api/v2/mangas/top?duration=month&page=1";
 const CUUTRUYEN_TRACE_PATH = "/cdn-cgi/trace";
+const MINO_API_URL = "https://api.cloudkk-v1.xyz/api";
+const MINO_CATEGORIES = ["manga", "comics", "hentai"];
 const HTTPS_ORIGIN_REGEX = /https:\/\/[a-z0-9.-]+/gi;
 
 function nowIso() {
@@ -83,6 +85,7 @@ async function timedFetch(url, options = {}) {
     return {
       body,
       bytes,
+      contentType: response.headers.get("content-type") || "",
       finalUrl: response.url,
       latencyMs: Math.round(performance.now() - started),
       ok: response.ok,
@@ -214,6 +217,7 @@ async function checkBaseUrl(baseUrl) {
 }
 
 function sourceSpecificChecker(source) {
+  if (source.package === "eu.kanade.tachiyomi.extension.vi.minotruyen") return checkMinoTruyenSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.otruyen") return checkOTruyenSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.cuutruyen") return checkCuuTruyenSource;
   return null;
@@ -449,6 +453,185 @@ async function checkCuuTruyenSource(source) {
   });
 }
 
+function normalizeMinoImageUrl(url) {
+  if (!url) return "";
+  if (url.startsWith("//")) return `https:${url}`;
+  return url;
+}
+
+function selectMinoImageServer(servers = []) {
+  return (
+    servers.find((server) => {
+      try {
+        const host = new URL(normalizeMinoImageUrl(server.imageUrl)).host;
+        return host && !host.includes("ibyteimg.com");
+      } catch {
+        return false;
+      }
+    }) ||
+    servers[0] ||
+    null
+  );
+}
+
+async function checkImageReadable(imageUrl) {
+  if (!imageUrl) {
+    return {
+      ok: false,
+      error: "Missing image URL",
+      latencyMs: 0,
+      status: 0,
+    };
+  }
+
+  let result = await timedFetch(imageUrl, {
+    headers: { accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8" },
+    method: "HEAD",
+    readBody: false,
+    timeoutMs: SOURCE_TIMEOUT_MS,
+  });
+
+  if (result.status === 405 || result.status === 403 || result.status === 0) {
+    result = await timedFetch(imageUrl, {
+      headers: { accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8" },
+      method: "GET",
+      readBody: false,
+      timeoutMs: SOURCE_TIMEOUT_MS,
+    });
+  }
+
+  return {
+    ...result,
+    ok: Boolean(result.ok && (!result.contentType || result.contentType.startsWith("image/"))),
+  };
+}
+
+async function checkMinoCategory(category) {
+  const listUrl = `${MINO_API_URL}/books?take=6&page=1&category=${category}`;
+  const list = await fetchJson(listUrl, {
+    accept: "application/json",
+    origin: "https://minotruyenv7.xyz",
+    referer: "https://minotruyenv7.xyz/",
+  });
+  const books = Array.isArray(list.json?.data?.books) ? list.json.data.books : [];
+  const listOk = Boolean(list.ok && books.length > 0);
+
+  let detail = null;
+  let chapters = null;
+  let pages = null;
+  let image = null;
+  let selectedBook = null;
+  let selectedChapter = null;
+
+  for (const book of books) {
+    const bookId = book?.bookId;
+    if (!bookId) continue;
+
+    detail = await fetchJson(`${MINO_API_URL}/books/${bookId}`, {
+      accept: "application/json",
+      origin: "https://minotruyenv7.xyz",
+      referer: "https://minotruyenv7.xyz/",
+    });
+    const detailBook = detail.json?.data?.book;
+    const detailOk = Boolean(detail.ok && detailBook?.bookId);
+    if (!detailOk) continue;
+
+    chapters = await fetchJson(`${MINO_API_URL}/books/${bookId}/chapters?order=desc&take=10`, {
+      accept: "application/json",
+      origin: "https://minotruyenv7.xyz",
+      referer: "https://minotruyenv7.xyz/",
+    });
+    const chapterItems = Array.isArray(chapters.json?.data?.chapters) ? chapters.json.data.chapters : [];
+    selectedChapter = chapterItems.find((chapter) => chapter?.chapterId);
+    if (!chapters.ok || !selectedChapter) continue;
+
+    pages = await fetchJson(`${MINO_API_URL}/books/${bookId}/chapters/${selectedChapter.chapterId}`, {
+      accept: "application/json",
+      origin: "https://minotruyenv7.xyz",
+      referer: "https://minotruyenv7.xyz/",
+    });
+    const pageItems = Array.isArray(pages.json?.data?.chapter?.images) ? pages.json.data.chapter.images : [];
+    const firstPage = pageItems
+      .slice()
+      .sort((left, right) => Number(left.order || 0) - Number(right.order || 0))
+      .find((item) => Array.isArray(item?.servers) && item.servers.length > 0);
+    const server = selectMinoImageServer(firstPage?.servers);
+    image = await checkImageReadable(normalizeMinoImageUrl(server?.imageUrl || ""));
+
+    selectedBook = book;
+    if (image.ok) break;
+  }
+
+  const detailOk = Boolean(detail?.ok && detail.json?.data?.book?.bookId);
+  const chapterItems = Array.isArray(chapters?.json?.data?.chapters) ? chapters.json.data.chapters : [];
+  const pageItems = Array.isArray(pages?.json?.data?.chapter?.images) ? pages.json.data.chapter.images : [];
+  const chaptersOk = Boolean(chapters?.ok && chapterItems.length > 0);
+  const pagesOk = Boolean(pages?.ok && pageItems.length > 0);
+  const imageOk = Boolean(image?.ok);
+  const ok = Boolean(listOk && detailOk && chaptersOk && pagesOk && imageOk);
+
+  return {
+    category,
+    ok,
+    selectedBook,
+    selectedChapter,
+    checks: [
+      check(`mino-list-${category}`, `Mino list ${category}`, listOk, {
+        count: books.length,
+        detail: `${books.length} books from ${listUrl}`,
+        error: list.error,
+        latencyMs: list.latencyMs,
+        statusCode: list.status,
+      }),
+      check(`mino-detail-${category}`, `Mino detail ${category}`, detailOk, {
+        detail: selectedBook?.bookId ? `${MINO_API_URL}/books/${selectedBook.bookId}` : "No readable book detail",
+        error: detail?.error,
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check(`mino-chapters-${category}`, `Mino chapters ${category}`, chaptersOk, {
+        count: chapterItems.length,
+        detail: selectedBook?.bookId ? `${chapterItems.length} chapters from book ${selectedBook.bookId}` : "No chapters",
+        error: chapters?.error,
+        latencyMs: chapters?.latencyMs,
+        statusCode: chapters?.status,
+      }),
+      check(`mino-pages-${category}`, `Mino pages ${category}`, pagesOk, {
+        count: pageItems.length,
+        detail: selectedChapter?.chapterId ? `${pageItems.length} pages from chapter ${selectedChapter.chapterId}` : "No pages",
+        error: pages?.error,
+        latencyMs: pages?.latencyMs,
+        statusCode: pages?.status,
+      }),
+      check(`mino-image-${category}`, `Mino image ${category}`, imageOk, {
+        bytes: image?.bytes,
+        contentType: image?.contentType,
+        detail: image?.finalUrl,
+        error: image?.error || (!imageOk && image?.contentType ? `Unexpected content-type ${image.contentType}` : undefined),
+        latencyMs: image?.latencyMs,
+        statusCode: image?.status,
+      }),
+    ],
+  };
+}
+
+async function checkMinoTruyenSource(source) {
+  const started = performance.now();
+  const results = await runLimited(MINO_CATEGORIES, 2, checkMinoCategory);
+  const ok = results.every((result) => result.ok);
+  const failed = results.find((result) => !result.ok);
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : `${failed?.category || "MinoTruyen"} read flow failed`,
+    finalUrl: MINO_API_URL,
+    latencyMs: Math.round(performance.now() - started),
+    confidence: ok ? "read-flow" : "none",
+    primaryCheckId: "read-pages",
+    checks: results.flatMap((result) => result.checks),
+  });
+}
+
 function uniqueUrls(urls) {
   return [...new Set(urls.filter(Boolean).map((url) => url.trim().replace(/\/$/, "")))];
 }
@@ -611,7 +794,7 @@ async function main() {
     summary: statusSummary(level, sources),
     checkPolicy: {
       failureThreshold: FAILURE_THRESHOLD,
-      signals: ["dns", "base-url", "source-api", "history"],
+      signals: ["dns", "base-url", "source-api", "read-flow", "history"],
     },
     stats: {
       totalExtensions: index.length,
