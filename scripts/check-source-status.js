@@ -22,6 +22,7 @@ const CUUTRUYEN_API_PATH = "/api/v2/mangas/top?duration=month&page=1";
 const CUUTRUYEN_TRACE_PATH = "/cdn-cgi/trace";
 const MINO_API_URL = "https://api.cloudkk-v1.xyz/api";
 const MINO_CATEGORIES = ["manga", "comics", "hentai"];
+const MINO_PACKAGE = "eu.kanade.tachiyomi.extension.vi.minotruyen";
 const GENERIC_ENTRY_PATHS = ["", "/", "/truyen-moi", "/danh-sach/truyen-moi", "/hot", "/manga", "/truyen-tranh"];
 const HTTPS_ORIGIN_REGEX = /https:\/\/[a-z0-9.-]+/gi;
 
@@ -179,6 +180,21 @@ async function readPreviousStatus() {
 function flattenSources(index) {
   return index.flatMap((extension) => {
     const extensionName = cleanExtensionName(extension.name);
+    if (extension.pkg === MINO_PACKAGE) {
+      return [{
+        id: "mino-read-flow",
+        name: extensionName,
+        baseUrl: extension.sources?.[0]?.baseUrl,
+        lang: extension.lang,
+        nsfw: extension.nsfw,
+        package: extension.pkg,
+        apk: extension.apk,
+        extensionName,
+        extensionVersion: extension.version,
+        versionId: extension.sources?.[0]?.versionId,
+        sourceCount: extension.sources?.length || 0,
+      }];
+    }
     return (extension.sources || []).map((source, sourceIndex) => ({
       id: source.id || `${extension.pkg || extensionName}:${sourceIndex}`,
       name: source.name || extensionName,

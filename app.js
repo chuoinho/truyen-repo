@@ -8,6 +8,7 @@ const STATUS_URL = "status.json";
 const ICON_DIR = "icon";
 const INSTALL_URL = `tachiyomi://add-repo?url=${encodeURIComponent(REPO_URL)}`;
 const REQUEST_SOURCE_URL = "https://github.com/chuoinho/truyen-repo/issues";
+const MINO_PACKAGE = "eu.kanade.tachiyomi.extension.vi.minotruyen";
 
 const state = {
   extensions: [],
@@ -204,7 +205,9 @@ function mergeStatus(index, status) {
   return baseExtensions.map((extension) => {
     const meta = extensionMeta.get(extension.package) || {};
     const fallbackSources = sourcesByPackage.get(extension.package) || [];
-    const baseSources = extension.sources.length ? extension.sources : fallbackSources;
+    const baseSources = extension.package === MINO_PACKAGE && fallbackSources.length
+      ? fallbackSources
+      : extension.sources.length ? extension.sources : fallbackSources;
     const sources = baseSources.map((source) => ({
       ...source,
       ...(statusSources.get(String(source.id)) || {}),
