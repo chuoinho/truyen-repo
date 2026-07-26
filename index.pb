@@ -8,11 +8,11 @@ lhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tach
 CuuTruyen (unoriginal)-eu.kanade.tachiyomi.extension.vi.cuutruyenmoeğ
 ohttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.cuutruyenmoe-v1.4.3.apk}https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.cuutruyenmoe.png"1.4(21.4.3:?ı²‹Ãûø‘7CuuTruyen (unoriginal)vi"https://cuutruyen.moe0*ø
 DocTruyen3Q,eu.kanade.tachiyomi.extension.vi.doctruyen3qï
-ohttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.35.apk|https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.doctruyen3q.png"1.4(#21.4.35::ûê‰ÎçºéÌUDocTruyen3Qvi"https://doctruyen3qui14.pro0*æ
+ohttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.35.apk|https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.doctruyen3q.png"1.4(#21.4.35::ûê‰ÎçºéÌUDocTruyen3Qvi"https://doctruyen3qui14.pro0*ç
 	FoxTruyen*eu.kanade.tachiyomi.extension.vi.foxtruyenë
-mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.foxtruyen-v1.4.14.apkzhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.foxtruyen.png"1.4(21.4.14:0¿²İŒ×ÔØŸ	FoxTruyenvi"https://foxtruyen.com*Ÿ
+mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.foxtruyen-v1.4.15.apkzhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.foxtruyen.png"1.4(21.4.15:1¿²İŒ×ÔØŸ	FoxTruyenvi"https://foxtruyen2.com*Ÿ
 Goc Truyen Tranh Vui2eu.kanade.tachiyomi.extension.vi.goctruyentranhvuiü
-uhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.goctruyentranhvui-v1.4.15.apk‚https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.goctruyentranhvui.png"1.4(21.4.15:EÆ²Ÿ‰Ö£²¦'Goc Truyen Tranh Vuivi"https://goctruyentranhvui23.com*ì
+uhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.goctruyentranhvui-v1.4.16.apk‚https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.goctruyentranhvui.png"1.4(21.4.16:EÆ²Ÿ‰Ö£²¦'Goc Truyen Tranh Vuivi"https://goctruyentranhvui30.com*ì
 
 LuotTruyen+eu.kanade.tachiyomi.extension.vi.luottruyenì
 mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.luottruyen-v1.4.5.apk{https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.luottruyen.png"1.4(21.4.5:4ô”âö‚éŒ…[
@@ -35,7 +35,6 @@ TruyenGGVN+eu.kanade.tachiyomi.extension.vi.truyenggvnì
 mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.truyenggvn-v1.4.8.apk{https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.truyenggvn.png"1.4(21.4.8:2óæã‘ªÜœ4
 TruyenGGVNvi"https://truyenggvn.com*â
 TruyenQQ)eu.kanade.tachiyomi.extension.vi.truyenqqé
-lhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apkyhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.truyenqq.png"1.4(21.4.24:0‹ …êƒş·#TruyenQQvi"https://truyenqqko.com*ë
+lhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apkyhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.truyenqq.png"1.4(21.4.24:0‹ …êƒş·#TruyenQQvi"https://truyenqqko.com*ì
 	ZetTruyen*eu.kanade.tachiyomi.extension.vi.zettruyenë
-mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.zettruyen-v1.4.10.apkzhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.zettruyen.png"1.4(
-21.4.10:5—ÚğÖÎÎ³	ZetTruyenvi"https://www.zettruyen.club
+mhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.zettruyen-v1.4.11.apkzhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.zettruyen.png"1.4(21.4.11:6—ÚğÖÎÎ³	ZetTruyenvi"https://www.zettruyen.homes

@@ -74,36 +74,34 @@
   {
     "name": "Tachiyomi: FoxTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.foxtruyen",
-    "apk": "tachiyomi-vi.foxtruyen-v1.4.14.apk",
-    "lang": "vi",
-    "code": 14,
-    "version": "1.4.14",
-    "nsfw": 0,
-    "sources": [
-      {
-        "name": "FoxTruyen",
-        "lang": "vi",
-        "id": "1458993267006200127",
-        "baseUrl": "https://foxtruyen.com",
-        "versionId": 1
-      }
-    ]
-  },
-  {
-    "name": "Tachiyomi: Goc Truyen Tranh Vui",
-    "pkg": "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui",
-    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.15.apk",
+    "apk": "tachiyomi-vi.foxtruyen-v1.4.15.apk",
     "lang": "vi",
     "code": 15,
     "version": "1.4.15",
     "nsfw": 0,
     "sources": [
       {
+        "name": "FoxTruyen",
+        "lang": "vi",
+        "id": "1458993267006200127",
+        "baseUrl": "https://foxtruyen2.com"
+      }
+    ]
+  },
+  {
+    "name": "Tachiyomi: Goc Truyen Tranh Vui",
+    "pkg": "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui",
+    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.16.apk",
+    "lang": "vi",
+    "code": 16,
+    "version": "1.4.16",
+    "nsfw": 0,
+    "sources": [
+      {
         "name": "Goc Truyen Tranh Vui",
         "lang": "vi",
         "id": "2831859393730435398",
-        "baseUrl": "https://goctruyentranhvui23.com",
-        "versionId": 1
+        "baseUrl": "https://goctruyentranhvui30.com"
       }
     ]
   },
@@ -250,18 +248,17 @@
   {
     "name": "Tachiyomi: ZetTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.zettruyen",
-    "apk": "tachiyomi-vi.zettruyen-v1.4.10.apk",
+    "apk": "tachiyomi-vi.zettruyen-v1.4.11.apk",
     "lang": "vi",
-    "code": 10,
-    "version": "1.4.10",
+    "code": 11,
+    "version": "1.4.11",
     "nsfw": 0,
     "sources": [
       {
         "name": "ZetTruyen",
         "lang": "vi",
         "id": "893747327087652119",
-        "baseUrl": "https://www.zettruyen.club",
-        "versionId": 1
+        "baseUrl": "https://www.zettruyen.homes"
       }
     ]
   }
