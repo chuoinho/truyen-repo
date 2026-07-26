@@ -22,6 +22,7 @@ const CUUTRUYEN_API_PATH = "/api/v2/mangas/top?duration=month&page=1";
 const CUUTRUYEN_TRACE_PATH = "/cdn-cgi/trace";
 const MINO_API_URL = "https://api.cloudkk-v1.xyz/api";
 const MINO_CATEGORIES = ["manga", "comics", "hentai"];
+const GENERIC_ENTRY_PATHS = ["", "/", "/truyen-moi", "/danh-sach/truyen-moi", "/hot", "/manga", "/truyen-tranh"];
 const HTTPS_ORIGIN_REGEX = /https:\/\/[a-z0-9.-]+/gi;
 
 function nowIso() {
@@ -243,48 +244,7 @@ async function checkSource(source, baseUrlResults) {
   const checker = sourceSpecificChecker(source);
   if (checker) return checker(source);
 
-  const started = performance.now();
-  const result = baseUrlResults.get(source.baseUrl) || {
-    ok: false,
-    status: 0,
-    error: "baseUrl was not checked",
-    latencyMs: 0,
-  };
-  const runnerBlocked = !result.ok && isRunnerBlockedResponse(result);
-  const dnsReachable = Boolean(result.dns?.ok);
-  const dnsOnly = !result.ok && !runnerBlocked && dnsReachable;
-  const ok = Boolean(result.ok || runnerBlocked || dnsOnly);
-  const baseUrlOk = Boolean(result.ok || runnerBlocked);
-
-  return sourceResult(source, {
-    ok,
-    error: ok ? undefined : result.error || `HTTP ${result.status}`,
-    finalUrl: result.finalUrl,
-    latencyMs: Math.round(performance.now() - started + (result.latencyMs || 0)),
-    note: runnerBlocked
-      ? runnerBlockedNote(result.status)
-      : dnsOnly
-        ? dnsReachableNote(result.error || `HTTP ${result.status}`)
-        : undefined,
-    confidence: result.ok ? "base-url" : runnerBlocked ? "runner-blocked" : dnsOnly ? "dns" : undefined,
-    primaryCheckId: "base-url",
-    checks: [
-      check("dns", "DNS", result.dns?.ok, {
-        detail: result.dns?.detail || source.baseUrl,
-        error: result.dns?.error,
-        latencyMs: result.dns?.latencyMs,
-        statusCode: result.dns?.status,
-      }),
-      check("base-url", "Base URL", baseUrlOk, {
-        ...(runnerBlocked || dnsOnly ? { status: "warning" } : {}),
-        bytes: result.bytes,
-        detail: result.finalUrl && result.finalUrl !== source.baseUrl ? result.finalUrl : source.baseUrl,
-        error: result.error,
-        latencyMs: result.latencyMs,
-        statusCode: result.status,
-      }),
-    ],
-  });
+  return checkGenericHtmlReadFlow(source);
 }
 
 function previousSourceMap(previousStatus) {
@@ -357,6 +317,198 @@ function applySourceHistory(sources, previousStatus, checkedAt) {
   });
 }
 
+function absoluteUrl(rawUrl, baseUrl) {
+  if (!rawUrl) return "";
+  try {
+    return new URL(rawUrl.replace(/&amp;/g, "&"), baseUrl).toString();
+  } catch {
+    return "";
+  }
+}
+
+function sameSiteUrl(url, baseUrl) {
+  try {
+    const target = new URL(url);
+    const base = new URL(baseUrl);
+    return target.hostname.replace(/^www\./, "") === base.hostname.replace(/^www\./, "");
+  } catch {
+    return false;
+  }
+}
+
+function stripUrlHash(url) {
+  try {
+    const parsed = new URL(url);
+    parsed.hash = "";
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
+function uniqueNormalizedUrls(urls) {
+  return [...new Set(urls.map(stripUrlHash).filter(Boolean))];
+}
+
+function extractHtmlLinks(html, baseUrl) {
+  return uniqueNormalizedUrls(
+    [...String(html || "").matchAll(/\bhref\s*=\s*["']([^"'#]+)["']/gi)]
+      .map((match) => absoluteUrl(match[1], baseUrl))
+      .filter((url) => sameSiteUrl(url, baseUrl)),
+  );
+}
+
+function extractHtmlImages(html, baseUrl) {
+  const attrs = [
+    /\bsrc\s*=\s*["']([^"']+)["']/gi,
+    /\bdata-src\s*=\s*["']([^"']+)["']/gi,
+    /\bdata-original\s*=\s*["']([^"']+)["']/gi,
+    /\bdata-lazy-src\s*=\s*["']([^"']+)["']/gi,
+  ];
+  return uniqueNormalizedUrls(
+    attrs.flatMap((regex) =>
+      [...String(html || "").matchAll(regex)].map((match) => absoluteUrl(match[1], baseUrl)),
+    ).filter((url) => {
+      if (!url || url.startsWith("data:")) return false;
+      return /\.(avif|gif|jpe?g|png|webp)([?#].*)?$/i.test(url) ||
+        /\/(uploads|upload|comic|chapter|chap|manga|images|image)\//i.test(url);
+    }),
+  );
+}
+
+function looksLikeMangaLink(url, baseUrl) {
+  if (!sameSiteUrl(url, baseUrl)) return false;
+  const path = new URL(url).pathname.toLowerCase();
+  if (/\.(css|js|gif|jpe?g|png|svg|webp|ico|woff2?)$/i.test(path)) return false;
+  if (/(login|logout|register|search|tim-kiem|the-loai|genre|tag|category|lich-su|privacy|contact)/i.test(path)) {
+    return false;
+  }
+  return /(truyen|manga|comic|manhwa|manhua|series|read|doc)/i.test(path) ||
+    path.split("/").filter(Boolean).length >= 1;
+}
+
+function looksLikeChapterLink(url, detailUrl) {
+  const path = new URL(url).pathname.toLowerCase();
+  if (stripUrlHash(url) === stripUrlHash(detailUrl)) return false;
+  if (/\.(css|js|gif|jpe?g|png|svg|webp|ico|woff2?)$/i.test(path)) return false;
+  return /(chapter|chap|chuong|chương|\/c\/|\/read\/|\/doc\/|tap-|tap\/|-\d+\/?$)/i.test(path);
+}
+
+async function fetchHtml(url, headers = {}) {
+  return timedFetch(url, {
+    headers: {
+      accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      referer: url,
+      ...headers,
+    },
+    returnBody: true,
+    timeoutMs: SOURCE_TIMEOUT_MS,
+  });
+}
+
+async function checkGenericHtmlReadFlow(source) {
+  const started = performance.now();
+  const baseUrl = source.baseUrl?.replace(/\/$/, "");
+  const dns = await timedDnsLookup(baseUrl);
+  let list = null;
+  let listUrl = null;
+  let detail = null;
+  let detailUrl = null;
+  let chapter = null;
+  let chapterUrl = null;
+  let image = null;
+  let imageUrl = null;
+
+  for (const entryPath of GENERIC_ENTRY_PATHS) {
+    const candidate = `${baseUrl}${entryPath}`;
+    list = await fetchHtml(candidate);
+    if (!list.ok || !list.body) continue;
+    const listBaseUrl = list.finalUrl || candidate;
+    const links = extractHtmlLinks(list.body, listBaseUrl)
+      .filter((url) => looksLikeMangaLink(url, listBaseUrl));
+    if (!links.length) continue;
+
+    listUrl = candidate;
+    for (const candidateDetailUrl of links.slice(0, 12)) {
+      detail = await fetchHtml(candidateDetailUrl, { referer: list.finalUrl || candidate });
+      if (!detail.ok || !detail.body) continue;
+
+      const detailBaseUrl = detail.finalUrl || candidateDetailUrl;
+      const chapterLinks = extractHtmlLinks(detail.body, detailBaseUrl)
+        .filter((url) => looksLikeChapterLink(url, candidateDetailUrl));
+      if (!chapterLinks.length) continue;
+
+      detailUrl = candidateDetailUrl;
+      for (const candidateChapterUrl of chapterLinks.slice(0, 12)) {
+        chapter = await fetchHtml(candidateChapterUrl, { referer: detail.finalUrl || candidateDetailUrl });
+        if (!chapter.ok || !chapter.body) continue;
+
+        const images = extractHtmlImages(chapter.body, chapter.finalUrl || candidateChapterUrl);
+        for (const candidateImageUrl of images.slice(0, 8)) {
+          image = await checkImageReadable(candidateImageUrl);
+          if (image.ok) {
+            chapterUrl = candidateChapterUrl;
+            imageUrl = candidateImageUrl;
+            break;
+          }
+        }
+        if (image?.ok) break;
+      }
+      if (image?.ok) break;
+    }
+    if (image?.ok) break;
+  }
+
+  const listOk = Boolean(list?.ok && listUrl);
+  const detailOk = Boolean(detail?.ok && detailUrl);
+  const chapterOk = Boolean(chapter?.ok && chapterUrl);
+  const imageOk = Boolean(image?.ok);
+  const ok = Boolean(listOk && detailOk && chapterOk && imageOk);
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : image?.error || chapter?.error || detail?.error || list?.error || "Generic read flow failed",
+    finalUrl: chapterUrl || detailUrl || list?.finalUrl || baseUrl,
+    latencyMs: Math.round(performance.now() - started),
+    confidence: ok ? "read-flow" : "none",
+    primaryCheckId: "read-pages",
+    checks: [
+      check("dns", "DNS", dns.ok, {
+        detail: dns.detail || baseUrl,
+        error: dns.error,
+        latencyMs: dns.latencyMs,
+        statusCode: dns.status,
+      }),
+      check("read-list", "Read list", listOk, {
+        detail: listUrl || baseUrl,
+        error: list?.error,
+        latencyMs: list?.latencyMs,
+        statusCode: list?.status,
+      }),
+      check("read-detail", "Read detail", detailOk, {
+        detail: detailUrl || "No manga detail link found",
+        error: detail?.error,
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check("read-chapters", "Read chapters", chapterOk, {
+        detail: chapterUrl || "No chapter link found",
+        error: chapter?.error,
+        latencyMs: chapter?.latencyMs,
+        statusCode: chapter?.status,
+      }),
+      check("read-image", "Read image", imageOk, {
+        bytes: image?.bytes,
+        contentType: image?.contentType,
+        detail: imageUrl || image?.finalUrl,
+        error: image?.error || (!imageOk && image?.contentType ? `Unexpected content-type ${image.contentType}` : undefined),
+        latencyMs: image?.latencyMs,
+        statusCode: image?.status,
+      }),
+    ],
+  });
+}
+
 async function checkOTruyenSource(source) {
   const started = performance.now();
   const api = await fetchJson(OTRUYEN_API_URL, {
@@ -364,22 +516,73 @@ async function checkOTruyenSource(source) {
     referer: `${source.baseUrl}/`,
   });
   const items = Array.isArray(api.json?.data?.items) ? api.json.data.items : [];
-  const ok = api.ok && api.json?.status === "success" && items.length > 0;
+  const item = items.find((entry) => entry?.slug);
+  const detail = item?.slug
+    ? await fetchJson(`https://otruyenapi.com/v1/api/truyen-tranh/${item.slug}`, {
+        accept: "application/json",
+        referer: `${source.baseUrl}/`,
+      })
+    : null;
+  const serverData = detail?.json?.data?.item?.chapters?.[0]?.server_data || [];
+  const chapter = serverData.find((entry) => entry?.chapter_api_data);
+  const pages = chapter?.chapter_api_data
+    ? await fetchJson(chapter.chapter_api_data, {
+        accept: "application/json",
+        referer: `${source.baseUrl}/`,
+      })
+    : null;
+  const imageData = pages?.json?.data?.item;
+  const firstImage = Array.isArray(imageData?.chapter_image) ? imageData.chapter_image[0] : null;
+  const imageUrl = firstImage
+    ? `${pages.json.data.domain_cdn}/${imageData.chapter_path}/${firstImage.image_file}`
+    : "";
+  const image = await checkImageReadable(imageUrl);
+  const listOk = api.ok && api.json?.status === "success" && items.length > 0;
+  const detailOk = Boolean(detail?.ok && detail.json?.data?.item?._id);
+  const chaptersOk = Boolean(chapter?.chapter_api_data);
+  const pagesOk = Boolean(pages?.ok && firstImage);
+  const ok = Boolean(listOk && detailOk && chaptersOk && pagesOk && image.ok);
 
   return sourceResult(source, {
     ok,
-    error: ok ? undefined : api.error || `OTruyen API returned HTTP ${api.status}`,
-    finalUrl: api.finalUrl,
+    error: ok ? undefined : image.error || pages?.error || detail?.error || api.error || "OTruyen read flow failed",
+    finalUrl: pages?.finalUrl || detail?.finalUrl || api.finalUrl,
     latencyMs: Math.round(performance.now() - started),
-    primaryCheckId: "source-api",
-    confidence: ok ? "api" : "none",
+    primaryCheckId: "read-pages",
+    confidence: ok ? "read-flow" : "none",
     checks: [
-      check("source-api", "OTruyen API", ok, {
+      check("read-list", "Read list", listOk, {
         count: items.length,
         detail: `${items.length} items from ${OTRUYEN_API_URL}`,
         error: api.error,
         latencyMs: api.latencyMs,
         statusCode: api.status,
+      }),
+      check("read-detail", "Read detail", detailOk, {
+        detail: item?.slug ? `https://otruyenapi.com/v1/api/truyen-tranh/${item.slug}` : "No OTruyen slug",
+        error: detail?.error,
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check("read-chapters", "Read chapters", chaptersOk, {
+        detail: chapter?.chapter_api_data || "No chapter API",
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check("read-pages", "Read pages", pagesOk, {
+        count: imageData?.chapter_image?.length || 0,
+        detail: chapter?.chapter_api_data || "No pages",
+        error: pages?.error,
+        latencyMs: pages?.latencyMs,
+        statusCode: pages?.status,
+      }),
+      check("read-image", "Read image", image.ok, {
+        bytes: image.bytes,
+        contentType: image.contentType,
+        detail: imageUrl || image.finalUrl,
+        error: image.error,
+        latencyMs: image.latencyMs,
+        statusCode: image.status,
       }),
     ],
   });
@@ -395,6 +598,35 @@ async function checkCuuTruyenSource(source) {
     source.baseUrl,
     ...parseCuuTruyenBaseUrls(access.body || ""),
   ]);
+  const accessCheck = check("access-page", "CuuTruyen access page", access.ok && candidates.length > 0, {
+    count: candidates.length,
+    detail: candidates.length ? `${candidates.length} candidate domains` : CUUTRUYEN_ACCESS_URL,
+    error: access.error,
+    latencyMs: access.latencyMs,
+    statusCode: access.status,
+  });
+
+  let firstReadFlow = null;
+  for (const candidate of candidates) {
+    const readFlow = await checkGenericHtmlReadFlow({ ...source, baseUrl: candidate });
+    firstReadFlow ||= readFlow;
+    if (readFlow.ok) {
+      return {
+        ...readFlow,
+        baseUrl: source.baseUrl,
+        checks: [accessCheck, ...readFlow.checks],
+      };
+    }
+  }
+
+  if (firstReadFlow) {
+    return {
+      ...firstReadFlow,
+      baseUrl: source.baseUrl,
+      checks: [accessCheck, ...firstReadFlow.checks],
+    };
+  }
+
   const trace = await firstReachable(candidates, (baseUrl) =>
     timedFetch(`${baseUrl}${CUUTRUYEN_TRACE_PATH}`, {
       readBody: false,
@@ -411,7 +643,7 @@ async function checkCuuTruyenSource(source) {
   const accessHasCandidates = access.ok && candidates.length > 0;
   const apiOk = Boolean(api.result?.ok && apiItems.length > 0);
   const traceOk = Boolean(trace.result?.ok);
-  const ok = apiOk || traceOk || accessHasCandidates;
+  const ok = false;
   const note = apiOk
     ? undefined
     : ok
@@ -424,18 +656,10 @@ async function checkCuuTruyenSource(source) {
     finalUrl: api.result?.finalUrl || trace.result?.finalUrl || access.finalUrl,
     latencyMs: Math.round(performance.now() - started),
     note,
-    confidence: apiOk ? "api" : traceOk ? "cdn-trace" : accessHasCandidates ? "resolver" : "none",
-    primaryCheckId: apiOk ? "source-api" : traceOk ? "cloudflare-trace" : "access-page",
+    confidence: "none",
+    primaryCheckId: "read-pages",
     checks: [
-      check("access-page", "CuuTruyen access page", accessHasCandidates, {
-        count: candidates.length,
-        detail: accessHasCandidates
-          ? `${candidates.length} candidate domains`
-          : CUUTRUYEN_ACCESS_URL,
-        error: access.error,
-        latencyMs: access.latencyMs,
-        statusCode: access.status,
-      }),
+      accessCheck,
       check("cloudflare-trace", "Cloudflare trace", traceOk, {
         detail: trace.baseUrl || candidates[0] || source.baseUrl,
         error: trace.result?.error,
@@ -778,7 +1002,18 @@ async function main() {
   const rawSources = await runLimited(sourceEntries, SOURCE_CONCURRENCY, (source) =>
     checkSource(source, baseUrlResults),
   );
-  const sources = applySourceHistory(rawSources, previousStatus, checkedAt);
+  const sources = applySourceHistory(rawSources, previousStatus, checkedAt).map((source, index) => {
+    const rawSource = rawSources[index];
+    return rawSource.ok
+      ? source
+      : {
+          ...source,
+          error: rawSource.error,
+          note: rawSource.note,
+          ok: false,
+          status: "error",
+        };
+  });
   const repoFileChecks = await repoChecks(index);
   const level = statusLevel(repoFileChecks, sources);
   const workingSources = sources.filter((item) => item.ok).length;
