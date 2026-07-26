@@ -16,6 +16,8 @@ const REPO_TIMEOUT_MS = Number(process.env.REPO_CHECK_TIMEOUT_MS || 10000);
 const SOURCE_CONCURRENCY = Number(process.env.SOURCE_CHECK_CONCURRENCY || 5);
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126 Safari/537.36";
+const MOBILE_USER_AGENT =
+  "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36";
 const OTRUYEN_API_URL = "https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1";
 const CUUTRUYEN_ACCESS_URL = "https://truycapcuutruyen.pages.dev/";
 const CUUTRUYEN_API_PATH = "/api/v2/mangas/top?duration=month&page=1";
@@ -23,6 +25,10 @@ const CUUTRUYEN_TRACE_PATH = "/cdn-cgi/trace";
 const MINO_API_URL = "https://api.cloudkk-v1.xyz/api";
 const MINO_CATEGORIES = ["manga", "comics", "hentai"];
 const MINO_PACKAGE = "eu.kanade.tachiyomi.extension.vi.minotruyen";
+const CMANGA_PACKAGE = "eu.kanade.tachiyomi.extension.vi.cmanga";
+const CUUTRUYEN_MOE_PACKAGE = "eu.kanade.tachiyomi.extension.vi.cuutruyenmoe";
+const GOC_TRUYEN_PACKAGE = "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui";
+const CMANGA_DOMAIN_CANDIDATES = ["https://cmanga.net", "https://cmangapi.com"];
 const GENERIC_ENTRY_PATHS = ["", "/", "/truyen-moi", "/danh-sach/truyen-moi", "/hot", "/manga", "/truyen-tranh"];
 const HTTPS_ORIGIN_REGEX = /https:\/\/[a-z0-9.-]+/gi;
 
@@ -69,9 +75,10 @@ async function timedFetch(url, options = {}) {
         accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,application/json;q=0.8,*/*;q=0.7",
         "accept-language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
-        "user-agent": USER_AGENT,
+        "user-agent": options.userAgent || USER_AGENT,
         ...(options.headers || {}),
       },
+      body: options.body,
     });
 
     let body = "";
@@ -143,9 +150,12 @@ function dnsReachableNote(error) {
 
 async function fetchJson(url, headers = {}, options = {}) {
   const result = await timedFetch(url, {
+    body: options.body,
     headers,
+    method: options.method,
     returnBody: true,
     timeoutMs: options.timeoutMs || SOURCE_TIMEOUT_MS,
+    userAgent: options.userAgent,
   });
 
   if (!result.ok) return { ...result, json: null };
@@ -234,9 +244,12 @@ async function checkBaseUrl(baseUrl) {
 }
 
 function sourceSpecificChecker(source) {
+  if (source.package === CMANGA_PACKAGE) return checkCMangaSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.minotruyen") return checkMinoTruyenSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.otruyen") return checkOTruyenSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.cuutruyen") return checkCuuTruyenSource;
+  if (source.package === CUUTRUYEN_MOE_PACKAGE) return checkCuuTruyenMoeSource;
+  if (source.package === GOC_TRUYEN_PACKAGE) return checkGocTruyenTranhVuiSource;
   return null;
 }
 
@@ -419,6 +432,7 @@ async function fetchHtml(url, headers = {}) {
     },
     returnBody: true,
     timeoutMs: SOURCE_TIMEOUT_MS,
+    userAgent: headers["user-agent"],
   });
 }
 
@@ -520,6 +534,340 @@ async function checkGenericHtmlReadFlow(source) {
         error: image?.error || (!imageOk && image?.contentType ? `Unexpected content-type ${image.contentType}` : undefined),
         latencyMs: image?.latencyMs,
         statusCode: image?.status,
+      }),
+    ],
+  });
+}
+
+function parseJsonString(value) {
+  if (!value || typeof value !== "string") return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+
+function cleanBaseUrlFromFinalUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch {
+    return url?.replace(/\/$/, "");
+  }
+}
+
+async function resolveCMangaBaseUrl(source) {
+  const candidates = uniqueUrls([source.baseUrl, ...CMANGA_DOMAIN_CANDIDATES]);
+  let first = null;
+
+  for (const candidate of candidates) {
+    const result = await timedFetch(candidate, {
+      headers: { referer: `${candidate}/` },
+      readBody: false,
+    });
+    first ||= { baseUrl: candidate, result };
+    if (result.ok && /cmanga/i.test(result.finalUrl || candidate)) {
+      return { baseUrl: cleanBaseUrlFromFinalUrl(result.finalUrl || candidate), result };
+    }
+  }
+
+  return {
+    baseUrl: cleanBaseUrlFromFinalUrl(first?.result?.finalUrl || source.baseUrl),
+    result: first?.result,
+  };
+}
+
+async function checkCMangaSource(source) {
+  const started = performance.now();
+  const dns = await timedDnsLookup(source.baseUrl);
+  const resolved = await resolveCMangaBaseUrl(source);
+  const baseUrl = resolved.baseUrl?.replace(/\/$/, "");
+  const listUrl = `${baseUrl}/api/home_album_list?file=image&type=hot&sort=view_total&tag=&limit=6&page=1`;
+  const list = await fetchJson(listUrl, {
+    accept: "application/json",
+    referer: `${baseUrl}/`,
+  });
+  const albums = Array.isArray(list.json?.data?.data) ? list.json.data.data : [];
+  const selectedAlbum = albums
+    .map((album) => ({ album, info: parseJsonString(album.info) }))
+    .find((entry) => entry.info?.id && entry.info?.url);
+
+  const chapterListUrl = selectedAlbum
+    ? `${baseUrl}/api/chapter_list?album=${selectedAlbum.info.id}&page=1&limit=10&v=0&slug=${encodeURIComponent(selectedAlbum.info.url)}`
+    : "";
+  const chapters = chapterListUrl
+    ? await fetchJson(chapterListUrl, {
+        accept: "application/json",
+        referer: `${baseUrl}/album/${selectedAlbum.info.url}-${selectedAlbum.info.id}`,
+      })
+    : null;
+  const chapterItems = Array.isArray(chapters?.json?.data) ? chapters.json.data : [];
+  const selectedChapter = chapterItems
+    .map((chapter) => ({ chapter, info: parseJsonString(chapter.info) }))
+    .find((entry) => entry.info?.id || entry.chapter?.id_chapter);
+  const chapterId = selectedChapter?.info?.id || selectedChapter?.chapter?.id_chapter;
+  const pagesUrl = chapterId
+    ? `${baseUrl}/api/chapter_image?chapter=${chapterId}&v=0&time=${Math.floor(Date.now() / 1000)}&user_id=0&user_token=`
+    : "";
+  const pages = pagesUrl
+    ? await fetchJson(pagesUrl, {
+        accept: "application/json",
+        referer: `${baseUrl}/album/${selectedAlbum.info.url}/chapter-${selectedChapter.info?.num || ""}-${chapterId}`,
+      })
+    : null;
+  const images = Array.isArray(pages?.json?.data?.image) ? pages.json.data.image : [];
+  const image = await checkImageReadable(images.find(Boolean));
+
+  const resolvedOk = Boolean(resolved.result?.ok && baseUrl);
+  const listOk = Boolean(list.ok && albums.length > 0 && selectedAlbum);
+  const chaptersOk = Boolean(chapters?.ok && chapterItems.length > 0 && selectedChapter);
+  const pagesOk = Boolean(pages?.ok && images.length > 0);
+  const imageOk = Boolean(image.ok);
+  const ok = Boolean(resolvedOk && listOk && chaptersOk && pagesOk && imageOk);
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : image.error || pages?.error || chapters?.error || list.error || resolved.result?.error || "CManga API read flow failed",
+    finalUrl: pages?.finalUrl || chapters?.finalUrl || list.finalUrl || baseUrl,
+    latencyMs: Math.round(performance.now() - started),
+    confidence: ok ? "read-flow" : "none",
+    primaryCheckId: "read-pages",
+    checks: [
+      check("dns", "DNS", dns.ok, {
+        detail: dns.detail || source.baseUrl,
+        error: dns.error,
+        latencyMs: dns.latencyMs,
+        statusCode: dns.status,
+      }),
+      check("resolve-domain", "Resolve current domain", resolvedOk, {
+        detail: baseUrl || source.baseUrl,
+        error: resolved.result?.error,
+        latencyMs: resolved.result?.latencyMs,
+        statusCode: resolved.result?.status,
+      }),
+      check("read-list", "Read list", listOk, {
+        count: albums.length,
+        detail: `${albums.length} albums from ${listUrl}`,
+        error: list.error,
+        latencyMs: list.latencyMs,
+        statusCode: list.status,
+      }),
+      check("read-chapters", "Read chapters", chaptersOk, {
+        count: chapterItems.length,
+        detail: chapterListUrl || "No CManga album",
+        error: chapters?.error,
+        latencyMs: chapters?.latencyMs,
+        statusCode: chapters?.status,
+      }),
+      check("read-pages", "Read pages", pagesOk, {
+        count: images.length,
+        detail: pagesUrl || "No CManga chapter",
+        error: pages?.error,
+        latencyMs: pages?.latencyMs,
+        statusCode: pages?.status,
+      }),
+      check("read-image", "Read image", imageOk, {
+        bytes: image.bytes,
+        contentType: image.contentType,
+        detail: images[0] || image.finalUrl,
+        error: image.error,
+        latencyMs: image.latencyMs,
+        statusCode: image.status,
+      }),
+    ],
+  });
+}
+
+function cookieHeaderFromSetCookie(headers) {
+  const setCookie =
+    typeof headers?.getSetCookie === "function"
+      ? headers.getSetCookie()
+      : String(headers?.get?.("set-cookie") || "").split(/,(?=\s*[^;,]+=)/);
+  return setCookie
+    .map((value) => String(value).split(";")[0].trim())
+    .filter(Boolean)
+    .join("; ");
+}
+
+async function timedFetchWithHeaders(url, options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs || SOURCE_TIMEOUT_MS);
+  const started = performance.now();
+  const method = options.method || "GET";
+
+  try {
+    const response = await fetch(url, {
+      method,
+      redirect: "follow",
+      signal: controller.signal,
+      headers: {
+        accept: "text/html,application/xhtml+xml,application/xml;q=0.9,application/json;q=0.8,*/*;q=0.7",
+        "accept-language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
+        "user-agent": options.userAgent || USER_AGENT,
+        ...(options.headers || {}),
+      },
+      body: options.body,
+    });
+    const buffer = options.readBody === false ? Buffer.alloc(0) : Buffer.from(await response.arrayBuffer());
+
+    return {
+      body: options.returnBody ? buffer.toString("utf8") : "",
+      bytes: Number(response.headers.get("content-length")) || buffer.length,
+      contentType: response.headers.get("content-type") || "",
+      cookies: cookieHeaderFromSetCookie(response.headers),
+      finalUrl: response.url,
+      latencyMs: Math.round(performance.now() - started),
+      ok: response.ok,
+      status: response.status,
+    };
+  } catch (error) {
+    return {
+      error: errorMessage(error),
+      latencyMs: Math.round(performance.now() - started),
+      ok: false,
+      status: 0,
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function fetchGocJson(url, baseUrl, cookie = "", options = {}) {
+  return fetchJson(url, {
+    accept: "application/json",
+    cookie,
+    origin: baseUrl,
+    referer: `${baseUrl}/`,
+    "x-requested-with": "XMLHttpRequest",
+    ...(options.headers || {}),
+  }, options);
+}
+
+async function checkGocTruyenTranhVuiSource(source) {
+  const started = performance.now();
+  const baseUrl = source.baseUrl?.replace(/\/$/, "");
+  const dns = await timedDnsLookup(baseUrl);
+  const session = await timedFetchWithHeaders(`${baseUrl}/trang-chu`, {
+    headers: {
+      referer: `${baseUrl}/`,
+      "sec-ch-ua-mobile": "?1",
+      "sec-ch-ua-platform": "\"Android\"",
+    },
+    returnBody: false,
+    userAgent: MOBILE_USER_AGENT,
+  });
+  const cookie = session.cookies || "";
+  const listUrl = `${baseUrl}/api/v2/home/filter?p=0&value=recommend`;
+  const list = await fetchGocJson(listUrl, baseUrl, cookie, { userAgent: MOBILE_USER_AGENT });
+  const comics = Array.isArray(list.json?.result?.data) ? list.json.result.data : [];
+  const selectedComic = comics.find((comic) => comic?.id && comic?.nameEn && Array.isArray(comic.chapterLatest) && comic.chapterLatest.length);
+  const detailUrl = selectedComic ? `${baseUrl}/truyen/${selectedComic.nameEn}` : "";
+  const detail = detailUrl
+    ? await fetchHtml(detailUrl, {
+        cookie,
+        referer: `${baseUrl}/trang-chu`,
+        "user-agent": MOBILE_USER_AGENT,
+      })
+    : null;
+  const chaptersUrl = selectedComic ? `${baseUrl}/api/comic/${selectedComic.id}/chapter?limit=-1` : "";
+  const chapters = chaptersUrl
+    ? await fetchGocJson(chaptersUrl, baseUrl, cookie, { userAgent: MOBILE_USER_AGENT })
+    : null;
+  const chapterItems = Array.isArray(chapters?.json?.result?.chapters) ? chapters.json.result.chapters : [];
+  const selectedChapter = chapterItems.find((chapter) => chapter?.numberChapter);
+  const pagesUrl = `${baseUrl}/api/chapter/loadAll`;
+  const body = selectedComic && selectedChapter
+    ? new URLSearchParams({
+        comicId: selectedComic.id,
+        chapterNumber: selectedChapter.numberChapter,
+        nameEn: selectedComic.nameEn,
+      }).toString()
+    : "";
+  const pages = body
+    ? await fetchJson(pagesUrl, {
+        accept: "application/json",
+        "content-type": "application/x-www-form-urlencoded",
+        cookie,
+        origin: baseUrl,
+        referer: `${baseUrl}/truyen/${selectedComic.nameEn}/chuong-${selectedChapter.numberChapter}`,
+        "x-requested-with": "XMLHttpRequest",
+      }, {
+        body,
+        method: "POST",
+        userAgent: MOBILE_USER_AGENT,
+      })
+    : null;
+  const images = Array.isArray(pages?.json?.result?.data) ? pages.json.result.data : [];
+  const imageUrl = images.find(Boolean)?.startsWith("/image/") ? `${baseUrl}${images.find(Boolean)}` : images.find(Boolean);
+  const coverUrl = selectedComic?.photo?.startsWith("/") ? `${baseUrl}${selectedComic.photo}` : selectedComic?.photo;
+  const image = await checkImageReadable(imageUrl || coverUrl);
+
+  const sessionOk = Boolean(session.ok && cookie);
+  const listOk = Boolean(list.ok && list.json?.status === true && comics.length > 0 && selectedComic);
+  const detailOk = Boolean(detail?.ok && detail.body);
+  const chaptersOk = Boolean(chapters?.ok && chapters.json?.status === true && chapterItems.length > 0);
+  const pageNeedsToken = Boolean(pages?.ok && pages.json?.status === true && pages.json?.result?.state === true && pages.json?.result?.data == null);
+  const pagesOk = Boolean((pages?.ok && pages.json?.status === true && images.length > 0) || pageNeedsToken);
+  const imageOk = Boolean(image.ok);
+  const ok = Boolean(sessionOk && listOk && detailOk && chaptersOk && pagesOk && imageOk);
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : pages?.error || chapters?.error || detail?.error || list.error || session.error || "GocTruyenTranhVui API read flow failed",
+    finalUrl: pages?.finalUrl || chapters?.finalUrl || detail?.finalUrl || list.finalUrl || session.finalUrl || baseUrl,
+    latencyMs: Math.round(performance.now() - started),
+    note: pageNeedsToken ? "List and chapter API work; page images require a WebView Authorization token." : undefined,
+    confidence: ok ? "read-flow" : "none",
+    primaryCheckId: "read-pages",
+    checks: [
+      check("dns", "DNS", dns.ok, {
+        detail: dns.detail || baseUrl,
+        error: dns.error,
+        latencyMs: dns.latencyMs,
+        statusCode: dns.status,
+      }),
+      check("session", "Refresh session", sessionOk, {
+        detail: session.finalUrl || `${baseUrl}/trang-chu`,
+        error: session.error || (!cookie ? "Missing session cookie" : undefined),
+        latencyMs: session.latencyMs,
+        statusCode: session.status,
+      }),
+      check("read-list", "Read list", listOk, {
+        count: comics.length,
+        detail: `${comics.length} comics from ${listUrl}`,
+        error: list.error,
+        latencyMs: list.latencyMs,
+        statusCode: list.status,
+      }),
+      check("read-detail", "Read detail", detailOk, {
+        detail: detailUrl || "No GocTruyenTranhVui comic",
+        error: detail?.error,
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check("read-chapters", "Read chapters", chaptersOk, {
+        count: chapterItems.length,
+        detail: chaptersUrl || "No GocTruyenTranhVui comic id",
+        error: chapters?.error,
+        latencyMs: chapters?.latencyMs,
+        statusCode: chapters?.status,
+      }),
+      check("read-pages", "Read pages", pagesOk, {
+        count: images.length,
+        detail: pagesUrl,
+        error: pages?.error,
+        latencyMs: pages?.latencyMs,
+        note: pageNeedsToken ? "Pages require WebView Authorization token; extension refreshes it through WebView." : undefined,
+        statusCode: pages?.status,
+      }),
+      check("read-image", "Read image", imageOk, {
+        bytes: image.bytes,
+        contentType: image.contentType,
+        detail: imageUrl || coverUrl || image.finalUrl,
+        error: image.error,
+        latencyMs: image.latencyMs,
+        statusCode: image.status,
       }),
     ],
   });
@@ -635,14 +983,6 @@ async function checkCuuTruyenSource(source) {
     }
   }
 
-  if (firstReadFlow) {
-    return {
-      ...firstReadFlow,
-      baseUrl: source.baseUrl,
-      checks: [accessCheck, ...firstReadFlow.checks],
-    };
-  }
-
   const trace = await firstReachable(candidates, (baseUrl) =>
     timedFetch(`${baseUrl}${CUUTRUYEN_TRACE_PATH}`, {
       readBody: false,
@@ -676,6 +1016,11 @@ async function checkCuuTruyenSource(source) {
     primaryCheckId: "read-pages",
     checks: [
       accessCheck,
+      ...(firstReadFlow?.checks || []).map((item) => ({
+        ...item,
+        id: `html-${item.id}`,
+        name: `HTML ${item.name}`,
+      })),
       check("cloudflare-trace", "Cloudflare trace", traceOk, {
         detail: trace.baseUrl || candidates[0] || source.baseUrl,
         error: trace.result?.error,
@@ -688,6 +1033,43 @@ async function checkCuuTruyenSource(source) {
         error: api.result?.error,
         latencyMs: api.result?.latencyMs,
         statusCode: api.result?.status,
+      }),
+    ],
+  });
+}
+
+async function checkCuuTruyenMoeSource(source) {
+  const started = performance.now();
+  const baseUrl = source.baseUrl?.replace(/\/$/, "");
+  const dns = await timedDnsLookup(baseUrl);
+  const listUrl = `${baseUrl}/tim-kiem?sort=-views&filter%5Bstatus%5D=2,1&page=1`;
+  const list = await fetchHtml(listUrl, { referer: `${baseUrl}/` });
+  const discontinued = /ng(?:u|ừ)ng cung c(?:a|ấ)p d(?:i|ị)ch v(?:u|ụ)|ngừng cung cấp dịch vụ/i.test(list.body || "");
+  const mangaLinks = extractHtmlLinks(list.body, list.finalUrl || listUrl)
+    .filter((url) => sameSiteUrl(url, list.finalUrl || listUrl) && /\/truyen\//i.test(new URL(url).pathname));
+  const listOk = Boolean(list.ok && !discontinued && mangaLinks.length > 0);
+
+  return sourceResult(source, {
+    ok: false,
+    error: discontinued ? "Service discontinued gate page" : list.error || "CuuTruyen Moe read flow failed",
+    finalUrl: list.finalUrl || baseUrl,
+    latencyMs: Math.round(performance.now() - started),
+    note: discontinued ? "The site returns a discontinued-service gate page, not a readable manga list." : undefined,
+    confidence: "none",
+    primaryCheckId: "read-pages",
+    checks: [
+      check("dns", "DNS", dns.ok, {
+        detail: dns.detail || baseUrl,
+        error: dns.error,
+        latencyMs: dns.latencyMs,
+        statusCode: dns.status,
+      }),
+      check("read-list", "Read list", listOk, {
+        count: mangaLinks.length,
+        detail: listUrl,
+        error: discontinued ? "Service discontinued gate page" : list.error,
+        latencyMs: list.latencyMs,
+        statusCode: list.status,
       }),
     ],
   });

@@ -129,6 +129,12 @@ function translateNote(value) {
   if (value.includes("CDN/access page reachable")) {
     return "Trang truy cập/CDN còn hoạt động; API dữ liệu có thể bị chặn từ máy kiểm tra.";
   }
+  if (value.includes("WebView Authorization token")) {
+    return "Danh sach va chapter API hoat dong; anh trang doc can token phien WebView.";
+  }
+  if (value.includes("discontinued-service gate")) {
+    return "Trang tra ve man chan ngung dich vu, khong phai danh sach truyen doc duoc.";
+  }
   return translateDetail(value);
 }
 
@@ -138,6 +144,8 @@ function translateCheckName(value) {
   if (value === "Cloudflare trace") return "Cloudflare trace";
   if (value === "CuuTruyen API") return "API CuuTruyen";
   if (value === "OTruyen API") return "API OTruyen";
+  if (value === "Resolve current domain") return "Ten mien hien tai";
+  if (value === "Refresh session") return "Lam moi phien";
   if (value === "Read list") return "Danh sách truyện";
   if (value === "Read detail") return "Chi tiết truyện";
   if (value === "Read chapters") return "Danh sách chapter";
