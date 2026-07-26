@@ -20,10 +20,10 @@
   {
     "name": "Tachiyomi: CuuTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.cuutruyen",
-    "apk": "tachiyomi-vi.cuutruyen-v1.4.4.apk",
+    "apk": "tachiyomi-vi.cuutruyen-v1.4.5.apk",
     "lang": "vi",
-    "code": 4,
-    "version": "1.4.4",
+    "code": 5,
+    "version": "1.4.5",
     "nsfw": 1,
     "sources": [
       {
@@ -31,24 +31,6 @@
         "lang": "vi",
         "id": "8222087175453285202",
         "baseUrl": "https://cuutruyen.net",
-        "versionId": 1
-      }
-    ]
-  },
-  {
-    "name": "Tachiyomi: CuuTruyen (unoriginal)",
-    "pkg": "eu.kanade.tachiyomi.extension.vi.cuutruyenmoe",
-    "apk": "tachiyomi-vi.cuutruyenmoe-v1.4.3.apk",
-    "lang": "vi",
-    "code": 3,
-    "version": "1.4.3",
-    "nsfw": 1,
-    "sources": [
-      {
-        "name": "CuuTruyen (unoriginal)",
-        "lang": "vi",
-        "id": "3973269831131863421",
-        "baseUrl": "https://cuutruyen.moe",
         "versionId": 1
       }
     ]
@@ -91,17 +73,17 @@
   {
     "name": "Tachiyomi: Goc Truyen Tranh Vui",
     "pkg": "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui",
-    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.16.apk",
+    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.17.apk",
     "lang": "vi",
-    "code": 16,
-    "version": "1.4.16",
+    "code": 17,
+    "version": "1.4.17",
     "nsfw": 0,
     "sources": [
       {
         "name": "Goc Truyen Tranh Vui",
         "lang": "vi",
         "id": "2831859393730435398",
-        "baseUrl": "https://goctruyentranhvui30.com"
+        "baseUrl": "https://goctruyentranhvui41.com"
       }
     ]
   },
