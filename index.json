@@ -71,23 +71,6 @@
     ]
   },
   {
-    "name": "Tachiyomi: Goc Truyen Tranh Vui",
-    "pkg": "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui",
-    "apk": "tachiyomi-vi.goctruyentranhvui-v1.4.18.apk",
-    "lang": "vi",
-    "code": 18,
-    "version": "1.4.18",
-    "nsfw": 0,
-    "sources": [
-      {
-        "name": "Goc Truyen Tranh Vui",
-        "lang": "vi",
-        "id": "2831859393730435398",
-        "baseUrl": "https://goctruyentranhvui41.com"
-      }
-    ]
-  },
-  {
     "name": "Tachiyomi: LuotTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.luottruyen",
     "apk": "tachiyomi-vi.luottruyen-v1.4.5.apk",
@@ -194,10 +177,10 @@
   {
     "name": "Tachiyomi: TruyenGGVN",
     "pkg": "eu.kanade.tachiyomi.extension.vi.truyenggvn",
-    "apk": "tachiyomi-vi.truyenggvn-v1.4.8.apk",
+    "apk": "tachiyomi-vi.truyenggvn-v1.4.9.apk",
     "lang": "vi",
-    "code": 8,
-    "version": "1.4.8",
+    "code": 9,
+    "version": "1.4.9",
     "nsfw": 0,
     "sources": [
       {
@@ -230,10 +213,10 @@
   {
     "name": "Tachiyomi: ZetTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.zettruyen",
-    "apk": "tachiyomi-vi.zettruyen-v1.4.11.apk",
+    "apk": "tachiyomi-vi.zettruyen-v1.4.12.apk",
     "lang": "vi",
-    "code": 11,
-    "version": "1.4.11",
+    "code": 12,
+    "version": "1.4.12",
     "nsfw": 0,
     "sources": [
       {
