@@ -264,6 +264,7 @@ function sourceResult(source, data) {
     latencyMs: data.latencyMs,
     note: data.note,
     confidence: data.confidence,
+    inconclusive: Boolean(data.inconclusive),
     primaryCheckId: data.primaryCheckId,
     checks: data.checks || [],
   };
@@ -310,6 +311,30 @@ function applySourceHistory(sources, previousStatus, checkedAt) {
 
   return sources.map((source) => {
     const previousSource = previousSources.get(String(source.id));
+
+    if (source.inconclusive && (previousSource?.lastOkAt || previousSource?.history?.lastOkAt)) {
+      const lastOkAt = previousSource.history?.lastOkAt || previousSource.lastOkAt;
+      const history = {
+        ...(previousSource.history || {}),
+        consecutiveFailures: 0,
+        failureThreshold: FAILURE_THRESHOLD,
+        lastInconclusiveAt: checkedAt,
+        lastOkAt,
+      };
+
+      return {
+        ...source,
+        consecutiveFailures: 0,
+        error: undefined,
+        history,
+        lastErrorAt: history.lastErrorAt,
+        lastOkAt,
+        note: source.note || "Máy kiểm tra bị chặn; giữ kết quả đọc truyện thành công gần nhất.",
+        ok: true,
+        status: "warning",
+      };
+    }
+
     const history = sourceHistory(previousStatus, previousSource, checkedAt, source);
 
     if (source.ok) {
@@ -494,12 +519,19 @@ async function checkGenericHtmlReadFlow(source) {
   const chapterOk = Boolean(chapter?.ok && chapterUrl);
   const imageOk = Boolean(image?.ok);
   const ok = Boolean(listOk && detailOk && chapterOk && imageOk);
+  const inconclusive = Boolean(!ok && dns.ok && isRunnerBlockedResponse(list));
 
   return sourceResult(source, {
     ok,
-    error: ok ? undefined : image?.error || chapter?.error || detail?.error || list?.error || "Generic read flow failed",
+    error: ok
+      ? undefined
+      : inconclusive
+        ? `Status runner blocked with HTTP ${list.status}`
+        : image?.error || chapter?.error || detail?.error || list?.error || "Generic read flow failed",
     finalUrl: chapterUrl || detailUrl || list?.finalUrl || baseUrl,
+    inconclusive,
     latencyMs: Math.round(performance.now() - started),
+    note: inconclusive ? runnerBlockedNote(list.status) : undefined,
     confidence: ok ? "read-flow" : "none",
     primaryCheckId: "read-pages",
     checks: [
@@ -1402,14 +1434,14 @@ async function main() {
   );
   const sources = applySourceHistory(rawSources, previousStatus, checkedAt).map((source, index) => {
     const rawSource = rawSources[index];
-    return rawSource.ok
+    return source.ok
       ? source
       : {
           ...source,
           error: rawSource.error,
-          note: rawSource.note,
+          note: source.note || rawSource.note,
           ok: false,
-          status: "error",
+          status: source.status || "error",
         };
   });
   const repoFileChecks = await repoChecks(index);
