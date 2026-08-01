@@ -21,7 +21,6 @@ const MOBILE_USER_AGENT =
 const OTRUYEN_API_URL = "https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1";
 const CUUTRUYEN_ACCESS_URL = "https://truycapcuutruyen.pages.dev/";
 const CUUTRUYEN_API_PATH = "/api/v2/mangas/top?duration=month&page=1";
-const CUUTRUYEN_TRACE_PATH = "/cdn-cgi/trace";
 const MINO_API_URL = "https://api.cloudkk-v1.xyz/api";
 const MINO_CATEGORIES = ["manga", "comics", "hentai"];
 const MINO_PACKAGE = "eu.kanade.tachiyomi.extension.vi.minotruyen";
@@ -1002,69 +1001,110 @@ async function checkCuuTruyenSource(source) {
     statusCode: access.status,
   });
 
-  let firstReadFlow = null;
-  for (const candidate of candidates) {
-    const readFlow = await checkGenericHtmlReadFlow({ ...source, baseUrl: candidate });
-    firstReadFlow ||= readFlow;
-    if (readFlow.ok) {
-      return {
-        ...readFlow,
-        baseUrl: source.baseUrl,
-        checks: [accessCheck, ...readFlow.checks],
-      };
-    }
-  }
-
-  const trace = await firstReachable(candidates, (baseUrl) =>
-    timedFetch(`${baseUrl}${CUUTRUYEN_TRACE_PATH}`, {
-      readBody: false,
-      timeoutMs: SOURCE_TIMEOUT_MS,
-    }),
-  );
-  const api = await firstReachable(candidates, (baseUrl) =>
+  const list = await firstReachable(candidates, (baseUrl) =>
     fetchJson(`${baseUrl}${CUUTRUYEN_API_PATH}`, {
       accept: "application/json",
       referer: `${baseUrl}/`,
     }),
   );
-  const apiItems = Array.isArray(api.result?.json?.data) ? api.result.json.data : [];
-  const accessHasCandidates = access.ok && candidates.length > 0;
-  const apiOk = Boolean(api.result?.ok && apiItems.length > 0);
-  const traceOk = Boolean(trace.result?.ok);
-  const ok = false;
-  const note = apiOk
-    ? undefined
-    : ok
-      ? "Trang truy cập/CDN còn hoạt động; API dữ liệu có thể bị chặn từ máy kiểm tra."
-      : undefined;
+  const mangas = Array.isArray(list.result?.json?.data) ? list.result.json.data : [];
+  const manga = mangas.find((item) => item?.id != null);
+  const baseUrl = list.baseUrl || candidates[0] || source.baseUrl;
+
+  const detail = manga
+    ? await fetchJson(`${baseUrl}/api/v2/mangas/${manga.id}`, {
+        accept: "application/json",
+        referer: `${baseUrl}/`,
+      })
+    : null;
+  const chapters = manga
+    ? await fetchJson(`${baseUrl}/api/v2/mangas/${manga.id}/chapters`, {
+        accept: "application/json",
+        referer: `${baseUrl}/`,
+      })
+    : null;
+  const chapterItems = Array.isArray(chapters?.json?.data) ? chapters.json.data : [];
+  const chapter = chapterItems.find((item) => item?.id != null);
+  const pages = chapter
+    ? await fetchJson(`${baseUrl}/api/v2/chapters/${chapter.id}`, {
+        accept: "application/json",
+        referer: `${baseUrl}/`,
+      })
+    : null;
+  const pageItems = Array.isArray(pages?.json?.data?.pages) ? pages.json.data.pages : [];
+  const page = pageItems.find((item) => typeof item?.image_url === "string" && item.image_url);
+  const imageUrl = page ? normalizeCuuTruyenImageUrl(page.image_url) : null;
+  const image = page
+    ? await timedFetch(imageUrl, {
+        headers: {
+          accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+          referer: `${baseUrl}/`,
+        },
+        timeoutMs: SOURCE_TIMEOUT_MS,
+      })
+    : null;
+
+  const listOk = Boolean(list.result?.ok && mangas.length > 0 && manga);
+  const detailOk = Boolean(detail?.ok && detail.json?.data?.id != null);
+  const chaptersOk = Boolean(chapters?.ok && chapterItems.length > 0 && chapter);
+  const pagesOk = Boolean(pages?.ok && pageItems.length > 0 && page);
+  const imageOk = Boolean(image?.ok && image.bytes > 0 && image.contentType?.startsWith("image/"));
+  const ok = listOk && detailOk && chaptersOk && pagesOk && imageOk;
+  const transportResults = [list.result, detail, chapters, pages, image].filter(Boolean);
+  const inconclusive = Boolean(
+    !ok &&
+    access.ok &&
+    candidates.length > 0 &&
+    transportResults.some((result) => result.status === 0) &&
+    transportResults.every((result) => result.ok || result.status === 0),
+  );
 
   return sourceResult(source, {
     ok,
-    error: ok ? undefined : access.error || trace.result?.error || api.result?.error || "CuuTruyen probes failed",
-    finalUrl: api.result?.finalUrl || trace.result?.finalUrl || access.finalUrl,
+    error: ok || inconclusive
+      ? undefined
+      : image?.error || pages?.error || chapters?.error || detail?.error || list.result?.error || access.error || "CuuTruyen read flow failed",
+    finalUrl: image?.finalUrl || pages?.finalUrl || chapters?.finalUrl || detail?.finalUrl || list.result?.finalUrl || access.finalUrl,
     latencyMs: Math.round(performance.now() - started),
-    note,
-    confidence: "none",
+    note: inconclusive ? "Máy kiểm tra không hoàn tất được kết nối TLS; extension dùng Chromium WebView cho luồng CuuTruyen." : undefined,
+    confidence: ok ? "high" : "none",
+    inconclusive,
     primaryCheckId: "read-pages",
     checks: [
       accessCheck,
-      ...(firstReadFlow?.checks || []).map((item) => ({
-        ...item,
-        id: `html-${item.id}`,
-        name: `HTML ${item.name}`,
-      })),
-      check("cloudflare-trace", "Cloudflare trace", traceOk, {
-        detail: trace.baseUrl || candidates[0] || source.baseUrl,
-        error: trace.result?.error,
-        latencyMs: trace.result?.latencyMs,
-        statusCode: trace.result?.status,
+      check("read-list", "CuuTruyen manga list", listOk, {
+        count: mangas.length,
+        detail: list.baseUrl || baseUrl,
+        error: list.result?.error,
+        latencyMs: list.result?.latencyMs,
+        statusCode: list.result?.status,
       }),
-      check("source-api", "CuuTruyen API", apiOk, {
-        count: apiItems.length,
-        detail: api.baseUrl ? `${apiItems.length} items from ${api.baseUrl}` : candidates[0] || source.baseUrl,
-        error: api.result?.error,
-        latencyMs: api.result?.latencyMs,
-        statusCode: api.result?.status,
+      check("read-detail", "CuuTruyen manga detail", detailOk, {
+        detail: manga ? `${baseUrl}/api/v2/mangas/${manga.id}` : "No manga returned",
+        error: detail?.error,
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check("read-chapters", "CuuTruyen chapters", chaptersOk, {
+        count: chapterItems.length,
+        detail: chapter ? `${baseUrl}/api/v2/mangas/${manga.id}/chapters` : "No chapter returned",
+        error: chapters?.error,
+        latencyMs: chapters?.latencyMs,
+        statusCode: chapters?.status,
+      }),
+      check("read-pages", "CuuTruyen pages", pagesOk, {
+        count: pageItems.length,
+        detail: chapter ? `${baseUrl}/api/v2/chapters/${chapter.id}` : "No chapter returned",
+        error: pages?.error,
+        latencyMs: pages?.latencyMs,
+        statusCode: pages?.status,
+      }),
+      check("read-image", "CuuTruyen image", imageOk, {
+        bytes: image?.bytes,
+        detail: imageUrl,
+        error: image?.error,
+        latencyMs: image?.latencyMs,
+        statusCode: image?.status,
       }),
     ],
   });
@@ -1309,6 +1349,18 @@ function normalizeCuuTruyenBaseUrl(rawUrl) {
     return `${url.protocol}//${url.host}`;
   } catch {
     return null;
+  }
+}
+
+function normalizeCuuTruyenImageUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+    if (url.hostname === "storage-ct.lrclib.net") {
+      url.hostname = "storage-bravo.cuutruyen.net";
+    }
+    return url.toString();
+  } catch {
+    return rawUrl;
   }
 }
 

@@ -20,10 +20,10 @@
   {
     "name": "Tachiyomi: CuuTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.cuutruyen",
-    "apk": "tachiyomi-vi.cuutruyen-v1.4.5.apk",
+    "apk": "tachiyomi-vi.cuutruyen-v1.4.7.apk",
     "lang": "vi",
-    "code": 5,
-    "version": "1.4.5",
+    "code": 7,
+    "version": "1.4.7",
     "nsfw": 1,
     "sources": [
       {
