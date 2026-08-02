@@ -469,8 +469,10 @@ async function fetchHtml(url, headers = {}) {
 
 async function checkGenericHtmlReadFlow(source) {
   const started = performance.now();
+  const deadline = started + Math.max(30_000, SOURCE_TIMEOUT_MS * 3);
   const baseUrl = source.baseUrl?.replace(/\/$/, "");
   const dns = await timedDnsLookup(baseUrl);
+  let flowTimedOut = false;
   let list = null;
   let listUrl = null;
   let detail = null;
@@ -480,7 +482,12 @@ async function checkGenericHtmlReadFlow(source) {
   let image = null;
   let imageUrl = null;
 
+  entryPaths:
   for (const entryPath of GENERIC_ENTRY_PATHS) {
+    if (performance.now() >= deadline) {
+      flowTimedOut = true;
+      break;
+    }
     const candidate = `${baseUrl}${entryPath}`;
     list = await fetchHtml(candidate);
     if (!list.ok || !list.body) continue;
@@ -491,6 +498,10 @@ async function checkGenericHtmlReadFlow(source) {
 
     listUrl = candidate;
     for (const candidateDetailUrl of links.slice(0, 12)) {
+      if (performance.now() >= deadline) {
+        flowTimedOut = true;
+        break entryPaths;
+      }
       detail = await fetchHtml(candidateDetailUrl, { referer: list.finalUrl || candidate });
       if (!detail.ok || !detail.body) continue;
 
@@ -501,12 +512,20 @@ async function checkGenericHtmlReadFlow(source) {
 
       detailUrl = candidateDetailUrl;
       for (const candidateChapterUrl of chapterLinks.slice(0, 12)) {
+        if (performance.now() >= deadline) {
+          flowTimedOut = true;
+          break entryPaths;
+        }
         chapter = await fetchHtml(candidateChapterUrl, { referer: detail.finalUrl || candidateDetailUrl });
         if (!chapter.ok || !chapter.body) continue;
 
         const images = extractHtmlImages(chapter.body, chapter.finalUrl || candidateChapterUrl)
           .sort((a, b) => readerImageScore(b) - readerImageScore(a));
         for (const candidateImageUrl of images.slice(0, 8)) {
+          if (performance.now() >= deadline) {
+            flowTimedOut = true;
+            break entryPaths;
+          }
           image = await checkImageReadable(candidateImageUrl, {
             referer: chapter.finalUrl || candidateChapterUrl,
           });
@@ -536,7 +555,9 @@ async function checkGenericHtmlReadFlow(source) {
       ? undefined
       : inconclusive
         ? `Status runner blocked with HTTP ${list.status}`
-        : image?.error || chapter?.error || detail?.error || list?.error || "Generic read flow failed",
+        : flowTimedOut
+          ? "Generic read flow timed out"
+          : image?.error || chapter?.error || detail?.error || list?.error || "Generic read flow failed",
     finalUrl: chapterUrl || detailUrl || list?.finalUrl || baseUrl,
     inconclusive,
     latencyMs: Math.round(performance.now() - started),
