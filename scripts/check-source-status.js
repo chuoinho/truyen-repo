@@ -429,6 +429,13 @@ function extractHtmlImages(html, baseUrl) {
   );
 }
 
+function readerImageScore(url) {
+  if (/\/(image_comics|chapter|chap|pages?|uploads\/page)\//i.test(url)) return 2;
+  if (/[?&]data=(vip|vipx)\b/i.test(url)) return 2;
+  if (/\/(logo|default|avatar|user|icon|emoji|comment)\b/i.test(url)) return -1;
+  return 0;
+}
+
 function looksLikeMangaLink(url, baseUrl) {
   if (!sameSiteUrl(url, baseUrl)) return false;
   const path = new URL(url).pathname.toLowerCase();
@@ -497,9 +504,12 @@ async function checkGenericHtmlReadFlow(source) {
         chapter = await fetchHtml(candidateChapterUrl, { referer: detail.finalUrl || candidateDetailUrl });
         if (!chapter.ok || !chapter.body) continue;
 
-        const images = extractHtmlImages(chapter.body, chapter.finalUrl || candidateChapterUrl);
+        const images = extractHtmlImages(chapter.body, chapter.finalUrl || candidateChapterUrl)
+          .sort((a, b) => readerImageScore(b) - readerImageScore(a));
         for (const candidateImageUrl of images.slice(0, 8)) {
-          image = await checkImageReadable(candidateImageUrl);
+          image = await checkImageReadable(candidateImageUrl, {
+            referer: chapter.finalUrl || candidateChapterUrl,
+          });
           if (image.ok) {
             chapterUrl = candidateChapterUrl;
             imageUrl = candidateImageUrl;
@@ -1168,7 +1178,7 @@ function selectMinoImageServer(servers = []) {
   );
 }
 
-async function checkImageReadable(imageUrl) {
+async function checkImageReadable(imageUrl, headers = {}) {
   if (!imageUrl) {
     return {
       ok: false,
@@ -1179,7 +1189,10 @@ async function checkImageReadable(imageUrl) {
   }
 
   let result = await timedFetch(imageUrl, {
-    headers: { accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8" },
+    headers: {
+      accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+      ...headers,
+    },
     method: "HEAD",
     readBody: false,
     timeoutMs: SOURCE_TIMEOUT_MS,
@@ -1187,7 +1200,10 @@ async function checkImageReadable(imageUrl) {
 
   if (result.status === 405 || result.status === 403 || result.status === 0) {
     result = await timedFetch(imageUrl, {
-      headers: { accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8" },
+      headers: {
+        accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+        ...headers,
+      },
       method: "GET",
       readBody: false,
       timeoutMs: SOURCE_TIMEOUT_MS,
