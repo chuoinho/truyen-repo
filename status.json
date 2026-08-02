@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-08-02T09:51:45.839Z",
-  "nextScheduledAt": "2026-08-02T21:51:45.839Z",
+  "checkedAt": "2026-08-02T10:20:18.556Z",
+  "nextScheduledAt": "2026-08-02T22:20:18.556Z",
   "intervalHours": 12,
   "durationMs": 20138,
   "level": "healthy",
   "ok": true,
-  "summary": "Tất cả 12 nguồn đang hoạt động.",
+  "summary": "Tất cả 13 nguồn đang hoạt động.",
   "checkPolicy": {
     "failureThreshold": 2,
     "signals": [
@@ -18,12 +18,12 @@
     ]
   },
   "stats": {
-    "totalExtensions": 12,
-    "totalSources": 12,
-    "workingSources": 12,
+    "totalExtensions": 13,
+    "totalSources": 13,
+    "workingSources": 13,
     "errorSources": 0,
     "warningSources": 5,
-    "repoFiles": 15,
+    "repoFiles": 16,
     "repoErrors": 0
   },
   "repository": {
@@ -32,36 +32,6 @@
     "ok": true,
     "checks": [
       {
-        "id": "repo-index",
-        "name": "index.min.json",
-        "ok": true,
-        "status": "working",
-        "bytes": 822,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 81,
-        "statusCode": 200
-      },
-      {
-        "id": "repo-index-pb",
-        "name": "index.pb",
-        "ok": true,
-        "status": "working",
-        "bytes": 9126,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 82,
-        "statusCode": 200
-      },
-      {
-        "id": "repo-json",
-        "name": "repo.json",
-        "ok": true,
-        "status": "working",
-        "bytes": 227,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 85,
-        "statusCode": 200
-      },
-      {
         "id": "apk:eu.kanade.tachiyomi.extension.vi.cmanga",
         "name": "CManga APK",
         "ok": true,
@@ -99,6 +69,16 @@
         "bytes": 127827,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.15.apk",
         "latencyMs": 85,
+        "statusCode": 200
+      },
+      {
+        "id": "apk:eu.kanade.tachiyomi.extension.vi.hamtruyen",
+        "name": "HamTruyen APK",
+        "ok": true,
+        "status": "working",
+        "bytes": 109034,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.hamtruyen-v1.4.2.apk",
+        "latencyMs": 615,
         "statusCode": 200
       },
       {
@@ -179,6 +159,36 @@
         "bytes": 157190,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.12.apk",
         "latencyMs": 81,
+        "statusCode": 200
+      },
+      {
+        "id": "repo-index",
+        "name": "index.min.json",
+        "ok": true,
+        "status": "working",
+        "bytes": 822,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
+        "latencyMs": 81,
+        "statusCode": 200
+      },
+      {
+        "id": "repo-index-pb",
+        "name": "index.pb",
+        "ok": true,
+        "status": "working",
+        "bytes": 9126,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
+        "latencyMs": 82,
+        "statusCode": 200
+      },
+      {
+        "id": "repo-json",
+        "name": "repo.json",
+        "ok": true,
+        "status": "working",
+        "bytes": 227,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
+        "latencyMs": 85,
         "statusCode": 200
       }
     ]
@@ -187,36 +197,6 @@
     "ok": true,
     "checks": [
       {
-        "id": "repo-index",
-        "name": "index.min.json",
-        "ok": true,
-        "status": "working",
-        "bytes": 822,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 81,
-        "statusCode": 200
-      },
-      {
-        "id": "repo-index-pb",
-        "name": "index.pb",
-        "ok": true,
-        "status": "working",
-        "bytes": 9126,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 82,
-        "statusCode": 200
-      },
-      {
-        "id": "repo-json",
-        "name": "repo.json",
-        "ok": true,
-        "status": "working",
-        "bytes": 227,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 85,
-        "statusCode": 200
-      },
-      {
         "id": "apk:eu.kanade.tachiyomi.extension.vi.cmanga",
         "name": "CManga APK",
         "ok": true,
@@ -254,6 +234,16 @@
         "bytes": 127827,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.15.apk",
         "latencyMs": 85,
+        "statusCode": 200
+      },
+      {
+        "id": "apk:eu.kanade.tachiyomi.extension.vi.hamtruyen",
+        "name": "HamTruyen APK",
+        "ok": true,
+        "status": "working",
+        "bytes": 109034,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.hamtruyen-v1.4.2.apk",
+        "latencyMs": 615,
         "statusCode": 200
       },
       {
@@ -334,6 +324,36 @@
         "bytes": 157190,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.12.apk",
         "latencyMs": 81,
+        "statusCode": 200
+      },
+      {
+        "id": "repo-index",
+        "name": "index.min.json",
+        "ok": true,
+        "status": "working",
+        "bytes": 822,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
+        "latencyMs": 81,
+        "statusCode": 200
+      },
+      {
+        "id": "repo-index-pb",
+        "name": "index.pb",
+        "ok": true,
+        "status": "working",
+        "bytes": 9126,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
+        "latencyMs": 82,
+        "statusCode": 200
+      },
+      {
+        "id": "repo-json",
+        "name": "repo.json",
+        "ok": true,
+        "status": "working",
+        "bytes": 227,
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
+        "latencyMs": 85,
         "statusCode": 200
       }
     ]
@@ -378,6 +398,16 @@
       "package": "eu.kanade.tachiyomi.extension.vi.foxtruyen",
       "sourceCount": 1,
       "version": "1.4.15"
+    },
+    {
+      "apk": "tachiyomi-vi.hamtruyen-v1.4.2.apk",
+      "code": 2,
+      "lang": "vi",
+      "name": "Tachiyomi: HamTruyen",
+      "nsfw": 0,
+      "package": "eu.kanade.tachiyomi.extension.vi.hamtruyen",
+      "sourceCount": 1,
+      "version": "1.4.2"
     },
     {
       "apk": "tachiyomi-vi.luottruyen-v1.4.5.apk",
@@ -782,6 +812,74 @@
         "lastOkAt": "2026-08-02T09:51:45.839Z"
       },
       "lastOkAt": "2026-08-02T09:51:45.839Z"
+    },
+    {
+      "id": "8644632535263837185",
+      "name": "HamTruyen",
+      "baseUrl": "https://hamtruyen.top",
+      "lang": "vi",
+      "nsfw": 0,
+      "package": "eu.kanade.tachiyomi.extension.vi.hamtruyen",
+      "apk": "tachiyomi-vi.hamtruyen-v1.4.2.apk",
+      "extensionName": "HamTruyen",
+      "extensionVersion": "1.4.2",
+      "versionId": 1,
+      "ok": true,
+      "status": "working",
+      "finalUrl": "https://cdn3.zetimage.com/crossed-family-values/20/0.jpg",
+      "latencyMs": 1644,
+      "confidence": "read-flow",
+      "inconclusive": false,
+      "primaryCheckId": "read-pages",
+      "checks": [
+        {
+          "id": "read-list",
+          "name": "HamTruyen manga list",
+          "ok": true,
+          "status": "working",
+          "count": 15,
+          "detail": "https://hamtruyen.top/top/new",
+          "latencyMs": 954,
+          "statusCode": 200
+        },
+        {
+          "id": "read-detail",
+          "name": "HamTruyen manga detail",
+          "ok": true,
+          "status": "working",
+          "detail": "https://hamtruyen.top/crossed-family-values",
+          "latencyMs": 282,
+          "statusCode": 200
+        },
+        {
+          "id": "read-chapters",
+          "name": "HamTruyen chapters",
+          "ok": true,
+          "status": "working",
+          "count": 20,
+          "detail": "https://hamtruyen.top/crossed-family-values/chuong-20",
+          "latencyMs": 259,
+          "statusCode": 200
+        },
+        {
+          "id": "read-image",
+          "name": "HamTruyen image",
+          "ok": true,
+          "status": "working",
+          "bytes": 229188,
+          "contentType": "image/jpeg",
+          "detail": "https://cdn3.zetimage.com/crossed-family-values/20/0.jpg",
+          "latencyMs": 149,
+          "statusCode": 200
+        }
+      ],
+      "consecutiveFailures": 0,
+      "history": {
+        "consecutiveFailures": 0,
+        "failureThreshold": 2,
+        "lastOkAt": "2026-08-02T10:20:18.556Z"
+      },
+      "lastOkAt": "2026-08-02T10:20:18.556Z"
     },
     {
       "id": "6560112192335153780",
