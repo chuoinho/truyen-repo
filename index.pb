@@ -4,7 +4,7 @@
 CManga'eu.kanade.tachiyomi.extension.vi.cmangaä
 ihttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apkwhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.cmanga.png"1.4(21.4.2:-Ù»’Ñ™À‘÷RCMangavi"https://cmangax17.com*æ
 	CuuTruyen*eu.kanade.tachiyomi.extension.vi.cuutruyenê
-lhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.cuutruyen-v1.4.7.apkzhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.cuutruyen.png"1.4(21.4.7:2Ò¶Àé“—®r	CuuTruyenvi"https://cuutruyen.net0*ø
+lhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.cuutruyen-v1.4.8.apkzhttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.cuutruyen.png"1.4(21.4.8:2Ò¶Àé“—®r	CuuTruyenvi"https://cuutruyen.net0*ø
 DocTruyen3Q,eu.kanade.tachiyomi.extension.vi.doctruyen3qï
 ohttps://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.35.apk|https://raw.githubusercontent.com/chuoinho/truyen-repo/refs/heads/repo/icon/eu.kanade.tachiyomi.extension.vi.doctruyen3q.png"1.4(#21.4.35::ûê‰ÎçºéÌUDocTruyen3Qvi"https://doctruyen3qui14.pro0*ç
 	FoxTruyen*eu.kanade.tachiyomi.extension.vi.foxtruyenë
