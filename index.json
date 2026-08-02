@@ -56,10 +56,10 @@
   {
     "name": "Tachiyomi: FoxTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.foxtruyen",
-    "apk": "tachiyomi-vi.foxtruyen-v1.4.15.apk",
+    "apk": "tachiyomi-vi.foxtruyen-v1.4.16.apk",
     "lang": "vi",
-    "code": 15,
-    "version": "1.4.15",
+    "code": 16,
+    "version": "1.4.16",
     "nsfw": 0,
     "sources": [
       {

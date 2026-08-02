@@ -97,7 +97,7 @@
         "ok": true,
         "status": "working",
         "bytes": 127827,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.15.apk",
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.16.apk",
         "latencyMs": 149,
         "statusCode": 200
       },
@@ -262,7 +262,7 @@
         "ok": true,
         "status": "working",
         "bytes": 127827,
-        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.15.apk",
+        "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.16.apk",
         "latencyMs": 149,
         "statusCode": 200
       },
@@ -390,14 +390,14 @@
       "version": "1.4.36"
     },
     {
-      "apk": "tachiyomi-vi.foxtruyen-v1.4.15.apk",
-      "code": 15,
+      "apk": "tachiyomi-vi.foxtruyen-v1.4.16.apk",
+      "code": 16,
       "lang": "vi",
       "name": "Tachiyomi: FoxTruyen",
       "nsfw": 0,
       "package": "eu.kanade.tachiyomi.extension.vi.foxtruyen",
       "sourceCount": 1,
-      "version": "1.4.15"
+      "version": "1.4.16"
     },
     {
       "apk": "tachiyomi-vi.hamtruyen-v1.4.2.apk",
@@ -746,9 +746,9 @@
       "lang": "vi",
       "nsfw": 0,
       "package": "eu.kanade.tachiyomi.extension.vi.foxtruyen",
-      "apk": "tachiyomi-vi.foxtruyen-v1.4.15.apk",
+      "apk": "tachiyomi-vi.foxtruyen-v1.4.16.apk",
       "extensionName": "FoxTruyen",
-      "extensionVersion": "1.4.15",
+      "extensionVersion": "1.4.16",
       "ok": true,
       "status": "working",
       "finalUrl": "https://foxtruyen2.com/rss-chapter",
