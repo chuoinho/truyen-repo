@@ -71,6 +71,24 @@
     ]
   },
   {
+    "name": "Tachiyomi: HamTruyen",
+    "pkg": "eu.kanade.tachiyomi.extension.vi.hamtruyen",
+    "apk": "tachiyomi-vi.hamtruyen-v1.4.2.apk",
+    "lang": "vi",
+    "code": 2,
+    "version": "1.4.2",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "HamTruyen",
+        "lang": "vi",
+        "id": "8644632535263837185",
+        "baseUrl": "https://hamtruyen.top",
+        "versionId": 1
+      }
+    ]
+  },
+  {
     "name": "Tachiyomi: LuotTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.luottruyen",
     "apk": "tachiyomi-vi.luottruyen-v1.4.5.apk",
