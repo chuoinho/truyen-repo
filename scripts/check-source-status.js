@@ -27,6 +27,7 @@ const MINO_PACKAGE = "eu.kanade.tachiyomi.extension.vi.minotruyen";
 const CMANGA_PACKAGE = "eu.kanade.tachiyomi.extension.vi.cmanga";
 const CUUTRUYEN_MOE_PACKAGE = "eu.kanade.tachiyomi.extension.vi.cuutruyenmoe";
 const GOC_TRUYEN_PACKAGE = "eu.kanade.tachiyomi.extension.vi.goctruyentranhvui";
+const HAM_TRUYEN_PACKAGE = "eu.kanade.tachiyomi.extension.vi.hamtruyen";
 const CMANGA_DOMAIN_CANDIDATES = ["https://cmanga.net", "https://cmangapi.com"];
 const GENERIC_ENTRY_PATHS = ["", "/", "/truyen-moi", "/danh-sach/truyen-moi", "/hot", "/manga", "/truyen-tranh"];
 const HTTPS_ORIGIN_REGEX = /https:\/\/[a-z0-9.-]+/gi;
@@ -249,6 +250,7 @@ function sourceSpecificChecker(source) {
   if (source.package === "eu.kanade.tachiyomi.extension.vi.cuutruyen") return checkCuuTruyenSource;
   if (source.package === CUUTRUYEN_MOE_PACKAGE) return checkCuuTruyenMoeSource;
   if (source.package === GOC_TRUYEN_PACKAGE) return checkGocTruyenTranhVuiSource;
+  if (source.package === HAM_TRUYEN_PACKAGE) return checkHamTruyenSource;
   return null;
 }
 
@@ -451,7 +453,15 @@ function looksLikeChapterLink(url, detailUrl) {
   const path = new URL(url).pathname.toLowerCase();
   if (stripUrlHash(url) === stripUrlHash(detailUrl)) return false;
   if (/\.(css|js|gif|jpe?g|png|svg|webp|ico|woff2?)$/i.test(path)) return false;
+  if (/\/(top|danh-sach)\/chapters?\/?$/i.test(path)) return false;
   return /(chapter|chap|chuong|chương|\/c\/|\/read\/|\/doc\/|tap-|tap\/|-\d+\/?$)/i.test(path);
+}
+
+function readerChapterScore(url) {
+  const path = new URL(url).pathname.toLowerCase();
+  if (/\/(chapter|chap|chuong)[-_]?\d/i.test(path)) return 2;
+  if (/(chapter|chap|chuong)/i.test(path)) return 1;
+  return 0;
 }
 
 async function fetchHtml(url, headers = {}) {
@@ -507,7 +517,8 @@ async function checkGenericHtmlReadFlow(source) {
 
       const detailBaseUrl = detail.finalUrl || candidateDetailUrl;
       const chapterLinks = extractHtmlLinks(detail.body, detailBaseUrl)
-        .filter((url) => looksLikeChapterLink(url, candidateDetailUrl));
+        .filter((url) => looksLikeChapterLink(url, candidateDetailUrl))
+        .sort((a, b) => readerChapterScore(b) - readerChapterScore(a));
       if (!chapterLinks.length) continue;
 
       detailUrl = candidateDetailUrl;
@@ -590,6 +601,148 @@ async function checkGenericHtmlReadFlow(source) {
         statusCode: chapter?.status,
       }),
       check("read-image", "Read image", imageOk, {
+        bytes: image?.bytes,
+        contentType: image?.contentType,
+        detail: imageUrl || image?.finalUrl,
+        error: image?.error || (!imageOk && image?.contentType ? `Unexpected content-type ${image.contentType}` : undefined),
+        latencyMs: image?.latencyMs,
+        statusCode: image?.status,
+      }),
+    ],
+  });
+}
+
+function isHamTruyenStoryUrl(url, baseUrl) {
+  if (!sameSiteUrl(url, baseUrl)) return false;
+  const segments = new URL(url).pathname.split("/").filter(Boolean);
+  return segments.length === 1 && !["about", "contact", "page", "search", "top"].includes(segments[0]);
+}
+
+function isHamTruyenChapterUrl(url, detailUrl) {
+  if (!sameSiteUrl(url, detailUrl)) return false;
+  const detailPath = new URL(detailUrl).pathname.replace(/\/$/, "");
+  const chapterPath = new URL(url).pathname;
+  return chapterPath.startsWith(`${detailPath}/chuong-`);
+}
+
+async function checkHamTruyenSource(source) {
+  const started = performance.now();
+  const baseUrl = source.baseUrl.replace(/\/$/, "");
+  const dns = await timedDnsLookup(baseUrl);
+  let list = null;
+  let listUrl = null;
+  let storyUrls = [];
+  let detail = null;
+  let detailUrl = null;
+  let chapter = null;
+  let chapterUrl = null;
+  let chapterUrls = [];
+  let imageUrls = [];
+  let image = null;
+  let imageUrl = null;
+
+  listings:
+  for (const listingPath of ["/top/views", "/top/new"]) {
+    const candidateListUrl = `${baseUrl}${listingPath}`;
+    list = await fetchHtml(candidateListUrl, { referer: `${baseUrl}/` });
+    if (!list.ok || !list.body) continue;
+
+    const listBaseUrl = list.finalUrl || candidateListUrl;
+    storyUrls = extractHtmlLinks(list.body, listBaseUrl)
+      .filter((url) => isHamTruyenStoryUrl(url, listBaseUrl));
+    if (!storyUrls.length) continue;
+    listUrl = candidateListUrl;
+
+    for (const candidateDetailUrl of storyUrls.slice(0, 16)) {
+      detail = await fetchHtml(candidateDetailUrl, { referer: listBaseUrl });
+      if (!detail.ok || !detail.body) continue;
+
+      const detailBaseUrl = detail.finalUrl || candidateDetailUrl;
+      chapterUrls = extractHtmlLinks(detail.body, detailBaseUrl)
+        .filter((url) => isHamTruyenChapterUrl(url, detailBaseUrl));
+      if (!chapterUrls.length) continue;
+      detailUrl = candidateDetailUrl;
+
+      for (const candidateChapterUrl of chapterUrls.slice(0, 4)) {
+        chapter = await fetchHtml(candidateChapterUrl, { referer: detailBaseUrl });
+        if (!chapter.ok || !chapter.body) continue;
+
+        const chapterBaseUrl = chapter.finalUrl || candidateChapterUrl;
+        imageUrls = extractHtmlImages(chapter.body, chapterBaseUrl)
+          .filter((url) => {
+            const parsed = new URL(url);
+            return parsed.hostname === "hamtruyen-api.hamtruyen.top" && parsed.pathname === "/api/image/proxy";
+          });
+        if (!imageUrls.length) continue;
+        chapterUrl = candidateChapterUrl;
+
+        for (const candidateImageUrl of imageUrls.slice(0, 4)) {
+          image = await timedFetch(candidateImageUrl, {
+            headers: {
+              accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+              referer: chapterBaseUrl,
+            },
+            method: "GET",
+            readBody: false,
+          });
+          if (image.ok && image.contentType.startsWith("image/")) {
+            imageUrl = candidateImageUrl;
+            break listings;
+          }
+        }
+      }
+    }
+  }
+
+  const listOk = Boolean(list?.ok && listUrl && storyUrls.length);
+  const detailOk = Boolean(detail?.ok && detailUrl);
+  const chaptersOk = Boolean(chapterUrls.length && chapterUrl);
+  const pagesOk = Boolean(chapter?.ok && imageUrls.length);
+  const imageOk = Boolean(image?.ok && image.contentType.startsWith("image/"));
+  const ok = Boolean(listOk && detailOk && chaptersOk && pagesOk && imageOk);
+
+  return sourceResult(source, {
+    ok,
+    error: ok ? undefined : image?.error || chapter?.error || detail?.error || list?.error || "HamTruyen read flow failed",
+    finalUrl: chapterUrl || detailUrl || list?.finalUrl || baseUrl,
+    latencyMs: Math.round(performance.now() - started),
+    confidence: ok ? "read-flow" : "none",
+    primaryCheckId: "read-pages",
+    checks: [
+      check("dns", "DNS", dns.ok, {
+        detail: dns.detail || baseUrl,
+        error: dns.error,
+        latencyMs: dns.latencyMs,
+        statusCode: dns.status,
+      }),
+      check("read-list", "HamTruyen manga list", listOk, {
+        count: storyUrls.length,
+        detail: listUrl || baseUrl,
+        error: list?.error,
+        latencyMs: list?.latencyMs,
+        statusCode: list?.status,
+      }),
+      check("read-detail", "HamTruyen manga detail", detailOk, {
+        detail: detailUrl || "No manga detail found",
+        error: detail?.error,
+        latencyMs: detail?.latencyMs,
+        statusCode: detail?.status,
+      }),
+      check("read-chapters", "HamTruyen chapters", chaptersOk, {
+        count: chapterUrls.length,
+        detail: chapterUrl || detailUrl || "No chapter found",
+        error: chapter?.error,
+        latencyMs: chapter?.latencyMs,
+        statusCode: chapter?.status,
+      }),
+      check("read-pages", "HamTruyen pages", pagesOk, {
+        count: imageUrls.length,
+        detail: chapterUrl || "No readable chapter found",
+        error: chapter?.error,
+        latencyMs: chapter?.latencyMs,
+        statusCode: chapter?.status,
+      }),
+      check("read-image", "HamTruyen image", imageOk, {
         bytes: image?.bytes,
         contentType: image?.contentType,
         detail: imageUrl || image?.finalUrl,
