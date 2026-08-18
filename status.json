@@ -1,9 +1,9 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-08-17T13:08:49.732Z",
-  "nextScheduledAt": "2026-08-18T01:08:49.732Z",
+  "checkedAt": "2026-08-18T01:52:54.873Z",
+  "nextScheduledAt": "2026-08-18T13:52:54.873Z",
   "intervalHours": 12,
-  "durationMs": 50213,
+  "durationMs": 14041,
   "level": "healthy",
   "ok": true,
   "summary": "Tất cả 13 nguồn đang hoạt động.",
@@ -38,7 +38,7 @@
         "status": "working",
         "bytes": 862,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 160,
+        "latencyMs": 179,
         "statusCode": 200
       },
       {
@@ -48,7 +48,7 @@
         "status": "working",
         "bytes": 9846,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 220,
+        "latencyMs": 183,
         "statusCode": 200
       },
       {
@@ -58,7 +58,7 @@
         "status": "working",
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 156,
+        "latencyMs": 175,
         "statusCode": 200
       },
       {
@@ -68,7 +68,7 @@
         "status": "working",
         "bytes": 165554,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apk",
-        "latencyMs": 246,
+        "latencyMs": 173,
         "statusCode": 200
       },
       {
@@ -78,7 +78,7 @@
         "status": "working",
         "bytes": 11668049,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyen-v1.4.8.apk",
-        "latencyMs": 370,
+        "latencyMs": 396,
         "statusCode": 200
       },
       {
@@ -88,7 +88,7 @@
         "status": "working",
         "bytes": 72667,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.36.apk",
-        "latencyMs": 172,
+        "latencyMs": 232,
         "statusCode": 200
       },
       {
@@ -98,7 +98,7 @@
         "status": "working",
         "bytes": 127864,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.16.apk",
-        "latencyMs": 161,
+        "latencyMs": 134,
         "statusCode": 200
       },
       {
@@ -108,7 +108,7 @@
         "status": "working",
         "bytes": 109034,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.hamtruyen-v1.4.2.apk",
-        "latencyMs": 170,
+        "latencyMs": 193,
         "statusCode": 200
       },
       {
@@ -118,7 +118,7 @@
         "status": "working",
         "bytes": 168632,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.luottruyen-v1.4.5.apk",
-        "latencyMs": 294,
+        "latencyMs": 204,
         "statusCode": 200
       },
       {
@@ -128,7 +128,7 @@
         "status": "working",
         "bytes": 184567,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.11.apk",
-        "latencyMs": 210,
+        "latencyMs": 121,
         "statusCode": 200
       },
       {
@@ -138,7 +138,7 @@
         "status": "working",
         "bytes": 115609,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.nhattruyen-v1.4.29.apk",
-        "latencyMs": 219,
+        "latencyMs": 136,
         "statusCode": 200
       },
       {
@@ -148,7 +148,7 @@
         "status": "working",
         "bytes": 188977,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.otruyen-v1.4.2.apk",
-        "latencyMs": 203,
+        "latencyMs": 179,
         "statusCode": 200
       },
       {
@@ -158,7 +158,7 @@
         "status": "working",
         "bytes": 145346,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.toptruyen-v1.4.38.apk",
-        "latencyMs": 226,
+        "latencyMs": 174,
         "statusCode": 200
       },
       {
@@ -168,7 +168,7 @@
         "status": "working",
         "bytes": 187886,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenggvn-v1.4.9.apk",
-        "latencyMs": 258,
+        "latencyMs": 173,
         "statusCode": 200
       },
       {
@@ -178,7 +178,7 @@
         "status": "working",
         "bytes": 115938,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apk",
-        "latencyMs": 201,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -188,7 +188,7 @@
         "status": "working",
         "bytes": 157190,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.12.apk",
-        "latencyMs": 204,
+        "latencyMs": 171,
         "statusCode": 200
       }
     ]
@@ -203,7 +203,7 @@
         "status": "working",
         "bytes": 862,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.min.json",
-        "latencyMs": 160,
+        "latencyMs": 179,
         "statusCode": 200
       },
       {
@@ -213,7 +213,7 @@
         "status": "working",
         "bytes": 9846,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/index.pb",
-        "latencyMs": 220,
+        "latencyMs": 183,
         "statusCode": 200
       },
       {
@@ -223,7 +223,7 @@
         "status": "working",
         "bytes": 227,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/repo.json",
-        "latencyMs": 156,
+        "latencyMs": 175,
         "statusCode": 200
       },
       {
@@ -233,7 +233,7 @@
         "status": "working",
         "bytes": 165554,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cmanga-v1.4.2.apk",
-        "latencyMs": 246,
+        "latencyMs": 173,
         "statusCode": 200
       },
       {
@@ -243,7 +243,7 @@
         "status": "working",
         "bytes": 11668049,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.cuutruyen-v1.4.8.apk",
-        "latencyMs": 370,
+        "latencyMs": 396,
         "statusCode": 200
       },
       {
@@ -253,7 +253,7 @@
         "status": "working",
         "bytes": 72667,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.doctruyen3q-v1.4.36.apk",
-        "latencyMs": 172,
+        "latencyMs": 232,
         "statusCode": 200
       },
       {
@@ -263,7 +263,7 @@
         "status": "working",
         "bytes": 127864,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.foxtruyen-v1.4.16.apk",
-        "latencyMs": 161,
+        "latencyMs": 134,
         "statusCode": 200
       },
       {
@@ -273,7 +273,7 @@
         "status": "working",
         "bytes": 109034,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.hamtruyen-v1.4.2.apk",
-        "latencyMs": 170,
+        "latencyMs": 193,
         "statusCode": 200
       },
       {
@@ -283,7 +283,7 @@
         "status": "working",
         "bytes": 168632,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.luottruyen-v1.4.5.apk",
-        "latencyMs": 294,
+        "latencyMs": 204,
         "statusCode": 200
       },
       {
@@ -293,7 +293,7 @@
         "status": "working",
         "bytes": 184567,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.minotruyen-v1.4.11.apk",
-        "latencyMs": 210,
+        "latencyMs": 121,
         "statusCode": 200
       },
       {
@@ -303,7 +303,7 @@
         "status": "working",
         "bytes": 115609,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.nhattruyen-v1.4.29.apk",
-        "latencyMs": 219,
+        "latencyMs": 136,
         "statusCode": 200
       },
       {
@@ -313,7 +313,7 @@
         "status": "working",
         "bytes": 188977,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.otruyen-v1.4.2.apk",
-        "latencyMs": 203,
+        "latencyMs": 179,
         "statusCode": 200
       },
       {
@@ -323,7 +323,7 @@
         "status": "working",
         "bytes": 145346,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.toptruyen-v1.4.38.apk",
-        "latencyMs": 226,
+        "latencyMs": 174,
         "statusCode": 200
       },
       {
@@ -333,7 +333,7 @@
         "status": "working",
         "bytes": 187886,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenggvn-v1.4.9.apk",
-        "latencyMs": 258,
+        "latencyMs": 173,
         "statusCode": 200
       },
       {
@@ -343,7 +343,7 @@
         "status": "working",
         "bytes": 115938,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.truyenqq-v1.4.24.apk",
-        "latencyMs": 201,
+        "latencyMs": 172,
         "statusCode": 200
       },
       {
@@ -353,7 +353,7 @@
         "status": "working",
         "bytes": 157190,
         "detail": "https://raw.githubusercontent.com/chuoinho/truyen-repo/repo/apk/tachiyomi-vi.zettruyen-v1.4.12.apk",
-        "latencyMs": 204,
+        "latencyMs": 171,
         "statusCode": 200
       }
     ]
@@ -504,8 +504,8 @@
       "versionId": 1,
       "ok": true,
       "status": "working",
-      "finalUrl": "https://cmangax18.com/api/chapter_image?chapter=1&v=0&time=1786972131&user_id=0&user_token=",
-      "latencyMs": 2330,
+      "finalUrl": "https://cmangax18.com/api/chapter_image?chapter=1&v=0&time=1787017980&user_id=0&user_token=",
+      "latencyMs": 1956,
       "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -516,7 +516,7 @@
           "ok": true,
           "status": "working",
           "detail": "cmangax17.com",
-          "latencyMs": 70,
+          "latencyMs": 73,
           "statusCode": 200
         },
         {
@@ -525,7 +525,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://cmangax18.com",
-          "latencyMs": 441,
+          "latencyMs": 527,
           "statusCode": 200
         },
         {
@@ -535,7 +535,7 @@
           "status": "working",
           "count": 6,
           "detail": "6 albums from https://cmangax18.com/api/home_album_list?file=image&type=hot&sort=view_total&tag=&limit=6&page=1",
-          "latencyMs": 507,
+          "latencyMs": 555,
           "statusCode": 200
         },
         {
@@ -545,7 +545,7 @@
           "status": "working",
           "count": 10,
           "detail": "https://cmangax18.com/api/chapter_list?album=1&page=1&limit=10&v=0&slug=he-thong-tien-ton-tai-do-thi",
-          "latencyMs": 350,
+          "latencyMs": 290,
           "statusCode": 200
         },
         {
@@ -554,8 +554,8 @@
           "ok": true,
           "status": "working",
           "count": 33,
-          "detail": "https://cmangax18.com/api/chapter_image?chapter=1&v=0&time=1786972131&user_id=0&user_token=",
-          "latencyMs": 345,
+          "detail": "https://cmangax18.com/api/chapter_image?chapter=1&v=0&time=1787017980&user_id=0&user_token=",
+          "latencyMs": 309,
           "statusCode": 200
         },
         {
@@ -566,7 +566,7 @@
           "bytes": 134478,
           "contentType": "image/webp",
           "detail": "https://read1.mideman.com/cmanga/chapter/1/43020aa5e1faa67027658e7ccc409842c96e12b4.webp?v=1220250825120616",
-          "latencyMs": 616,
+          "latencyMs": 200,
           "statusCode": 200
         }
       ],
@@ -575,10 +575,10 @@
         "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-07-26T01:28:41.847Z",
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-07-26T01:28:41.847Z",
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "8222087175453285202",
@@ -594,7 +594,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://storage-bravo.cuutruyen.net/file/cuutruyen/uploads/page/2236053/image/scrambled-fd5119fab2febaee48e4a8ae86c41000.jpg",
-      "latencyMs": 1608,
+      "latencyMs": 1544,
       "confidence": "high",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -606,7 +606,7 @@
           "status": "working",
           "count": 4,
           "detail": "4 candidate domains",
-          "latencyMs": 168,
+          "latencyMs": 182,
           "statusCode": 200
         },
         {
@@ -616,7 +616,7 @@
           "status": "working",
           "count": 20,
           "detail": "https://cuutruyen.net",
-          "latencyMs": 623,
+          "latencyMs": 582,
           "statusCode": 200
         },
         {
@@ -625,7 +625,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://cuutruyen.net/api/v2/mangas/203",
-          "latencyMs": 194,
+          "latencyMs": 173,
           "statusCode": 200
         },
         {
@@ -635,7 +635,7 @@
           "status": "working",
           "count": 267,
           "detail": "https://cuutruyen.net/api/v2/mangas/203/chapters",
-          "latencyMs": 206,
+          "latencyMs": 185,
           "statusCode": 200
         },
         {
@@ -645,7 +645,7 @@
           "status": "working",
           "count": 21,
           "detail": "https://cuutruyen.net/api/v2/chapters/90728",
-          "latencyMs": 193,
+          "latencyMs": 172,
           "statusCode": 200
         },
         {
@@ -655,7 +655,7 @@
           "status": "working",
           "bytes": 149865,
           "detail": "https://storage-bravo.cuutruyen.net/file/cuutruyen/uploads/page/2236053/image/scrambled-fd5119fab2febaee48e4a8ae86c41000.jpg",
-          "latencyMs": 223,
+          "latencyMs": 248,
           "statusCode": 200
         }
       ],
@@ -664,10 +664,10 @@
         "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-08-07T13:41:51.668Z",
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-08-07T13:41:51.668Z",
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "6168143505244976507",
@@ -683,7 +683,7 @@
       "ok": true,
       "status": "warning",
       "finalUrl": "https://doctruyen3qhub.vip/truyen-tranh",
-      "latencyMs": 645,
+      "latencyMs": 708,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "none",
       "inconclusive": true,
@@ -695,7 +695,7 @@
           "ok": true,
           "status": "working",
           "detail": "doctruyen3qui14.pro",
-          "latencyMs": 62,
+          "latencyMs": 53,
           "statusCode": 200
         },
         {
@@ -704,7 +704,7 @@
           "ok": false,
           "status": "error",
           "detail": "https://doctruyen3qui14.pro",
-          "latencyMs": 86,
+          "latencyMs": 78,
           "statusCode": 403
         },
         {
@@ -734,7 +734,7 @@
         "failureThreshold": 2,
         "lastErrorAt": "2026-07-30T03:33:05.791Z",
         "lastOkAt": "2026-08-11T13:45:21.728Z",
-        "lastInconclusiveAt": "2026-08-17T13:08:49.732Z"
+        "lastInconclusiveAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-07-30T03:33:05.791Z",
       "lastOkAt": "2026-08-11T13:45:21.728Z"
@@ -752,7 +752,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://foxtruyen2.com/rss-chapter",
-      "latencyMs": 4261,
+      "latencyMs": 2700,
       "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -763,7 +763,7 @@
           "ok": true,
           "status": "working",
           "detail": "foxtruyen2.com",
-          "latencyMs": 63,
+          "latencyMs": 55,
           "statusCode": 200
         },
         {
@@ -772,7 +772,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://foxtruyen2.com",
-          "latencyMs": 1314,
+          "latencyMs": 865,
           "statusCode": 200
         },
         {
@@ -781,7 +781,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://foxtruyen2.com/truyen-moi-cap-nhat/trang-2.html",
-          "latencyMs": 1929,
+          "latencyMs": 839,
           "statusCode": 200
         },
         {
@@ -790,7 +790,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://foxtruyen2.com/rss-chapter",
-          "latencyMs": 812,
+          "latencyMs": 809,
           "statusCode": 200
         },
         {
@@ -798,10 +798,10 @@
           "name": "Read image",
           "ok": true,
           "status": "working",
-          "bytes": 39398,
+          "bytes": 19991,
           "contentType": "image/jpeg",
-          "detail": "https://i.hinhgg.com/ebook/230x300/manh-hon-thac-ai_1786875792.jpg",
-          "latencyMs": 138,
+          "detail": "https://i.hinhgg.com/ebook/230x300/tuyet-the-hoi-quy-1724005979.jpg",
+          "latencyMs": 126,
           "statusCode": 200
         }
       ],
@@ -809,9 +809,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "8644632535263837185",
@@ -827,7 +827,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://hamtruyen.top/chang-re-manh-nhat-lich-su/chuong-406",
-      "latencyMs": 2281,
+      "latencyMs": 2767,
       "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -838,7 +838,7 @@
           "ok": true,
           "status": "working",
           "detail": "hamtruyen.top",
-          "latencyMs": 150,
+          "latencyMs": 115,
           "statusCode": 200
         },
         {
@@ -848,7 +848,7 @@
           "status": "working",
           "count": 17,
           "detail": "https://hamtruyen.top/top/views",
-          "latencyMs": 592,
+          "latencyMs": 284,
           "statusCode": 200
         },
         {
@@ -857,7 +857,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://hamtruyen.top/chang-re-manh-nhat-lich-su",
-          "latencyMs": 586,
+          "latencyMs": 1009,
           "statusCode": 200
         },
         {
@@ -867,7 +867,7 @@
           "status": "working",
           "count": 406,
           "detail": "https://hamtruyen.top/chang-re-manh-nhat-lich-su/chuong-406",
-          "latencyMs": 458,
+          "latencyMs": 406,
           "statusCode": 200
         },
         {
@@ -877,7 +877,7 @@
           "status": "working",
           "count": 64,
           "detail": "https://hamtruyen.top/chang-re-manh-nhat-lich-su/chuong-406",
-          "latencyMs": 458,
+          "latencyMs": 406,
           "statusCode": 200
         },
         {
@@ -888,7 +888,7 @@
           "bytes": 0,
           "contentType": "image/jpeg",
           "detail": "https://hamtruyen-api.hamtruyen.top/api/image/proxy?url=https%3A%2F%2Fcdn4.zetimage.com%2Fchang-re-manh-nhat-lich-su%2F406%2F0.jpg",
-          "latencyMs": 308,
+          "latencyMs": 821,
           "statusCode": 200
         }
       ],
@@ -897,10 +897,10 @@
         "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-08-11T13:45:21.728Z",
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-08-11T13:45:21.728Z",
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "6560112192335153780",
@@ -915,8 +915,8 @@
       "versionId": 1,
       "ok": true,
       "status": "working",
-      "finalUrl": "https://luottruyen16.com/truyen-tranh/quan-vuong-tu-linh-trung-sinh/chapter-22/1611992",
-      "latencyMs": 6533,
+      "finalUrl": "https://luottruyen16.com/truyen-tranh/ky-si-lang-thang/chapter-55/1612038",
+      "latencyMs": 7223,
       "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -927,7 +927,7 @@
           "ok": true,
           "status": "working",
           "detail": "luottruyen.com",
-          "latencyMs": 1,
+          "latencyMs": 0,
           "statusCode": 200
         },
         {
@@ -936,7 +936,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://LuotTruyen.Com",
-          "latencyMs": 301,
+          "latencyMs": 671,
           "statusCode": 200
         },
         {
@@ -945,7 +945,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://luottruyen16.com/tim-truyen",
-          "latencyMs": 420,
+          "latencyMs": 452,
           "statusCode": 200
         },
         {
@@ -953,8 +953,8 @@
           "name": "Read chapters",
           "ok": true,
           "status": "working",
-          "detail": "https://luottruyen16.com/truyen-tranh/quan-vuong-tu-linh-trung-sinh/chapter-22/1611992",
-          "latencyMs": 742,
+          "detail": "https://luottruyen16.com/truyen-tranh/ky-si-lang-thang/chapter-55/1612038",
+          "latencyMs": 635,
           "statusCode": 200
         },
         {
@@ -965,7 +965,7 @@
           "bytes": 57727,
           "contentType": "image/png",
           "detail": "https://luottruyen16.com/Content/images/logo/logo.png",
-          "latencyMs": 287,
+          "latencyMs": 313,
           "statusCode": 200
         }
       ],
@@ -974,10 +974,10 @@
         "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-07-26T01:21:05.037Z",
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-07-26T01:21:05.037Z",
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "mino-read-flow",
@@ -994,7 +994,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://api.cloudkk-v1.xyz/api",
-      "latencyMs": 6440,
+      "latencyMs": 7567,
       "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -1006,7 +1006,7 @@
           "status": "working",
           "count": 6,
           "detail": "6 books from https://api.cloudkk-v1.xyz/api/books?take=6&page=1&category=manga",
-          "latencyMs": 1537,
+          "latencyMs": 1666,
           "statusCode": 200
         },
         {
@@ -1014,8 +1014,8 @@
           "name": "Mino detail manga",
           "ok": true,
           "status": "working",
-          "detail": "https://api.cloudkk-v1.xyz/api/books/13356",
-          "latencyMs": 483,
+          "detail": "https://api.cloudkk-v1.xyz/api/books/20233",
+          "latencyMs": 1525,
           "statusCode": 200
         },
         {
@@ -1023,9 +1023,9 @@
           "name": "Mino chapters manga",
           "ok": true,
           "status": "working",
-          "count": 88,
-          "detail": "88 chapters from book 13356",
-          "latencyMs": 582,
+          "count": 23,
+          "detail": "23 chapters from book 20233",
+          "latencyMs": 514,
           "statusCode": 200
         },
         {
@@ -1033,9 +1033,9 @@
           "name": "Mino pages manga",
           "ok": true,
           "status": "working",
-          "count": 22,
-          "detail": "22 pages from chapter 6566032",
-          "latencyMs": 484,
+          "count": 51,
+          "detail": "51 pages from chapter 6566314",
+          "latencyMs": 614,
           "statusCode": 200
         },
         {
@@ -1043,10 +1043,10 @@
           "name": "Mino image manga",
           "ok": true,
           "status": "working",
-          "bytes": 400827,
+          "bytes": 199144,
           "contentType": "image/jpeg",
-          "detail": "https://phinf.pstatic.net/memo/20260817_123/1786971994901QwFsx_JPEG/test.jpeg",
-          "latencyMs": 696,
+          "detail": "https://phinf.pstatic.net/memo/20260818_1/1787015516977DXzPH_JPEG/test.jpeg",
+          "latencyMs": 818,
           "statusCode": 200
         },
         {
@@ -1056,7 +1056,7 @@
           "status": "working",
           "count": 6,
           "detail": "6 books from https://api.cloudkk-v1.xyz/api/books?take=6&page=1&category=comics",
-          "latencyMs": 1533,
+          "latencyMs": 1619,
           "statusCode": 200
         },
         {
@@ -1064,8 +1064,8 @@
           "name": "Mino detail comics",
           "ok": true,
           "status": "working",
-          "detail": "https://api.cloudkk-v1.xyz/api/books/10907",
-          "latencyMs": 861,
+          "detail": "https://api.cloudkk-v1.xyz/api/books/159",
+          "latencyMs": 970,
           "statusCode": 200
         },
         {
@@ -1073,9 +1073,9 @@
           "name": "Mino chapters comics",
           "ok": true,
           "status": "working",
-          "count": 42,
-          "detail": "42 chapters from book 10907",
-          "latencyMs": 867,
+          "count": 164,
+          "detail": "164 chapters from book 159",
+          "latencyMs": 1258,
           "statusCode": 200
         },
         {
@@ -1083,9 +1083,9 @@
           "name": "Mino pages comics",
           "ok": true,
           "status": "working",
-          "count": 14,
-          "detail": "14 pages from chapter 6566028",
-          "latencyMs": 509,
+          "count": 19,
+          "detail": "19 pages from chapter 6566340",
+          "latencyMs": 1147,
           "statusCode": 200
         },
         {
@@ -1093,10 +1093,10 @@
           "name": "Mino image comics",
           "ok": true,
           "status": "working",
-          "bytes": 142417,
+          "bytes": 733796,
           "contentType": "image/jpeg",
-          "detail": "https://phinf.pstatic.net/memo/20260817_273/1786970263659VdA7i_JPEG/test.jpeg",
-          "latencyMs": 636,
+          "detail": "https://phinf.pstatic.net/memo/20260818_215/1787016962440lpM8R_JPEG/test.jpeg",
+          "latencyMs": 810,
           "statusCode": 200
         },
         {
@@ -1106,7 +1106,7 @@
           "status": "working",
           "count": 6,
           "detail": "6 books from https://api.cloudkk-v1.xyz/api/books?take=6&page=1&category=hentai",
-          "latencyMs": 479,
+          "latencyMs": 561,
           "statusCode": 200
         },
         {
@@ -1114,8 +1114,8 @@
           "name": "Mino detail hentai",
           "ok": true,
           "status": "working",
-          "detail": "https://api.cloudkk-v1.xyz/api/books/51617",
-          "latencyMs": 473,
+          "detail": "https://api.cloudkk-v1.xyz/api/books/52153",
+          "latencyMs": 513,
           "statusCode": 200
         },
         {
@@ -1123,9 +1123,9 @@
           "name": "Mino chapters hentai",
           "ok": true,
           "status": "working",
-          "count": 7,
-          "detail": "7 chapters from book 51617",
-          "latencyMs": 569,
+          "count": 3,
+          "detail": "3 chapters from book 52153",
+          "latencyMs": 493,
           "statusCode": 200
         },
         {
@@ -1133,9 +1133,9 @@
           "name": "Mino pages hentai",
           "ok": true,
           "status": "working",
-          "count": 9,
-          "detail": "9 pages from chapter 6566031",
-          "latencyMs": 503,
+          "count": 26,
+          "detail": "26 pages from chapter 6566341",
+          "latencyMs": 534,
           "statusCode": 200
         },
         {
@@ -1143,10 +1143,10 @@
           "name": "Mino image hentai",
           "ok": true,
           "status": "working",
-          "bytes": 921084,
+          "bytes": 879374,
           "contentType": "image/jpeg",
-          "detail": "https://phinf.pstatic.net/memo/20260817_186/1786971772452u1cmu_JPEG/test.jpeg",
-          "latencyMs": 633,
+          "detail": "https://phinf.pstatic.net/memo/20260818_193/1787017515171vjaoV_JPEG/test.jpeg",
+          "latencyMs": 327,
           "statusCode": 200
         }
       ],
@@ -1154,9 +1154,9 @@
       "history": {
         "consecutiveFailures": 0,
         "failureThreshold": 2,
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "6861496002170366525",
@@ -1172,7 +1172,7 @@
       "ok": true,
       "status": "warning",
       "finalUrl": "https://nhattruyenqq.com/truyen-tranh",
-      "latencyMs": 435,
+      "latencyMs": 381,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "none",
       "inconclusive": true,
@@ -1184,7 +1184,7 @@
           "ok": true,
           "status": "working",
           "detail": "nhattruyenqq.com",
-          "latencyMs": 2,
+          "latencyMs": 0,
           "statusCode": 200
         },
         {
@@ -1193,7 +1193,7 @@
           "ok": false,
           "status": "error",
           "detail": "https://nhattruyenqq.com",
-          "latencyMs": 72,
+          "latencyMs": 53,
           "statusCode": 403
         },
         {
@@ -1223,7 +1223,7 @@
         "failureThreshold": 2,
         "lastErrorAt": "2026-07-30T03:33:05.791Z",
         "lastOkAt": "2026-07-30T08:01:48.119Z",
-        "lastInconclusiveAt": "2026-08-17T13:08:49.732Z"
+        "lastInconclusiveAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-07-30T03:33:05.791Z",
       "lastOkAt": "2026-07-30T08:01:48.119Z"
@@ -1242,7 +1242,7 @@
       "ok": true,
       "status": "working",
       "finalUrl": "https://sv1.otruyencdn.com/v1/api/chapter/66617db4a4468f0e0dda0a16",
-      "latencyMs": 1272,
+      "latencyMs": 1718,
       "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
@@ -1254,7 +1254,7 @@
           "status": "working",
           "count": 24,
           "detail": "24 items from https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=1",
-          "latencyMs": 197,
+          "latencyMs": 307,
           "statusCode": 200
         },
         {
@@ -1263,7 +1263,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://otruyenapi.com/v1/api/truyen-tranh/xuyen-thanh-tieu-muoi-cua-dai-lao-giau-mat",
-          "latencyMs": 58,
+          "latencyMs": 145,
           "statusCode": 200
         },
         {
@@ -1272,7 +1272,7 @@
           "ok": true,
           "status": "working",
           "detail": "https://sv1.otruyencdn.com/v1/api/chapter/66617db4a4468f0e0dda0a16",
-          "latencyMs": 58,
+          "latencyMs": 145,
           "statusCode": 200
         },
         {
@@ -1282,7 +1282,7 @@
           "status": "working",
           "count": 33,
           "detail": "https://sv1.otruyencdn.com/v1/api/chapter/66617db4a4468f0e0dda0a16",
-          "latencyMs": 971,
+          "latencyMs": 1201,
           "statusCode": 200
         },
         {
@@ -1293,7 +1293,7 @@
           "bytes": 64488,
           "contentType": "image/jpeg",
           "detail": "https://sv1.otruyencdn.com/uploads/20240606/cb8c1ed87aba138d8621381bfd1b9fdf/chapter_1/page_0.jpg",
-          "latencyMs": 45,
+          "latencyMs": 65,
           "statusCode": 200
         }
       ],
@@ -1302,10 +1302,10 @@
         "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-08-17T01:56:57.658Z",
-        "lastOkAt": "2026-08-17T13:08:49.732Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-08-17T01:56:57.658Z",
-      "lastOkAt": "2026-08-17T13:08:49.732Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     },
     {
       "id": "1166901607721102706",
@@ -1321,7 +1321,7 @@
       "ok": true,
       "status": "warning",
       "finalUrl": "https://toptruyen279.online/truyen-tranh",
-      "latencyMs": 454,
+      "latencyMs": 408,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "none",
       "inconclusive": true,
@@ -1342,6 +1342,76 @@
           "ok": false,
           "status": "error",
           "detail": "https://toptruyen279.online",
+          "latencyMs": 67,
+          "statusCode": 403
+        },
+        {
+          "id": "read-detail",
+          "name": "Read detail",
+          "ok": false,
+          "status": "error",
+          "detail": "No manga detail link found"
+        },
+        {
+          "id": "read-chapters",
+          "name": "Read chapters",
+          "ok": false,
+          "status": "error",
+          "detail": "No chapter link found"
+        },
+        {
+          "id": "read-image",
+          "name": "Read image",
+          "ok": false,
+          "status": "error"
+        }
+      ],
+      "consecutiveFailures": 0,
+      "history": {
+        "consecutiveFailures": 0,
+        "failureThreshold": 2,
+        "lastErrorAt": "2026-07-30T03:33:05.791Z",
+        "lastOkAt": "2026-07-30T08:01:48.119Z",
+        "lastInconclusiveAt": "2026-08-18T01:52:54.873Z"
+      },
+      "lastErrorAt": "2026-07-30T03:33:05.791Z",
+      "lastOkAt": "2026-07-30T08:01:48.119Z"
+    },
+    {
+      "id": "3763163116691059571",
+      "name": "TruyenGGVN",
+      "baseUrl": "https://truyenggvn.com",
+      "lang": "vi",
+      "nsfw": 0,
+      "package": "eu.kanade.tachiyomi.extension.vi.truyenggvn",
+      "apk": "tachiyomi-vi.truyenggvn-v1.4.9.apk",
+      "extensionName": "TruyenGGVN",
+      "extensionVersion": "1.4.9",
+      "versionId": 1,
+      "ok": true,
+      "status": "warning",
+      "finalUrl": "https://truyenggvn.com/truyen-tranh",
+      "latencyMs": 418,
+      "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
+      "confidence": "none",
+      "inconclusive": true,
+      "primaryCheckId": "read-pages",
+      "checks": [
+        {
+          "id": "dns",
+          "name": "DNS",
+          "ok": true,
+          "status": "working",
+          "detail": "truyenggvn.com",
+          "latencyMs": 1,
+          "statusCode": 200
+        },
+        {
+          "id": "read-list",
+          "name": "Read list",
+          "ok": false,
+          "status": "error",
+          "detail": "https://truyenggvn.com",
           "latencyMs": 68,
           "statusCode": 403
         },
@@ -1372,77 +1442,7 @@
         "failureThreshold": 2,
         "lastErrorAt": "2026-07-30T03:33:05.791Z",
         "lastOkAt": "2026-07-30T08:01:48.119Z",
-        "lastInconclusiveAt": "2026-08-17T13:08:49.732Z"
-      },
-      "lastErrorAt": "2026-07-30T03:33:05.791Z",
-      "lastOkAt": "2026-07-30T08:01:48.119Z"
-    },
-    {
-      "id": "3763163116691059571",
-      "name": "TruyenGGVN",
-      "baseUrl": "https://truyenggvn.com",
-      "lang": "vi",
-      "nsfw": 0,
-      "package": "eu.kanade.tachiyomi.extension.vi.truyenggvn",
-      "apk": "tachiyomi-vi.truyenggvn-v1.4.9.apk",
-      "extensionName": "TruyenGGVN",
-      "extensionVersion": "1.4.9",
-      "versionId": 1,
-      "ok": true,
-      "status": "warning",
-      "finalUrl": "https://truyenggvn.com/truyen-tranh",
-      "latencyMs": 453,
-      "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
-      "confidence": "none",
-      "inconclusive": true,
-      "primaryCheckId": "read-pages",
-      "checks": [
-        {
-          "id": "dns",
-          "name": "DNS",
-          "ok": true,
-          "status": "working",
-          "detail": "truyenggvn.com",
-          "latencyMs": 1,
-          "statusCode": 200
-        },
-        {
-          "id": "read-list",
-          "name": "Read list",
-          "ok": false,
-          "status": "error",
-          "detail": "https://truyenggvn.com",
-          "latencyMs": 73,
-          "statusCode": 403
-        },
-        {
-          "id": "read-detail",
-          "name": "Read detail",
-          "ok": false,
-          "status": "error",
-          "detail": "No manga detail link found"
-        },
-        {
-          "id": "read-chapters",
-          "name": "Read chapters",
-          "ok": false,
-          "status": "error",
-          "detail": "No chapter link found"
-        },
-        {
-          "id": "read-image",
-          "name": "Read image",
-          "ok": false,
-          "status": "error"
-        }
-      ],
-      "consecutiveFailures": 0,
-      "history": {
-        "consecutiveFailures": 0,
-        "failureThreshold": 2,
-        "lastErrorAt": "2026-07-30T03:33:05.791Z",
-        "lastOkAt": "2026-07-30T08:01:48.119Z",
-        "lastInconclusiveAt": "2026-08-17T13:08:49.732Z"
+        "lastInconclusiveAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-07-30T03:33:05.791Z",
       "lastOkAt": "2026-07-30T08:01:48.119Z"
@@ -1461,7 +1461,7 @@
       "ok": true,
       "status": "warning",
       "finalUrl": "https://truyenqqko.com/truyen-tranh",
-      "latencyMs": 463,
+      "latencyMs": 413,
       "note": "Trang vẫn truy cập được nhưng chặn máy kiểm tra với HTTP 403.",
       "confidence": "none",
       "inconclusive": true,
@@ -1473,7 +1473,7 @@
           "ok": true,
           "status": "working",
           "detail": "truyenqqko.com",
-          "latencyMs": 1,
+          "latencyMs": 0,
           "statusCode": 200
         },
         {
@@ -1482,7 +1482,7 @@
           "ok": false,
           "status": "error",
           "detail": "https://truyenqqko.com",
-          "latencyMs": 73,
+          "latencyMs": 55,
           "statusCode": 403
         },
         {
@@ -1512,7 +1512,7 @@
         "failureThreshold": 2,
         "lastErrorAt": "2026-07-30T03:33:05.791Z",
         "lastOkAt": "2026-07-30T08:01:48.119Z",
-        "lastInconclusiveAt": "2026-08-17T13:08:49.732Z"
+        "lastInconclusiveAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-07-30T03:33:05.791Z",
       "lastOkAt": "2026-07-30T08:01:48.119Z"
@@ -1529,10 +1529,9 @@
       "extensionVersion": "1.4.12",
       "ok": true,
       "status": "working",
-      "finalUrl": "https://www.zettruyen.work/",
-      "latencyMs": 45087,
-      "note": "Nguồn lỗi lần 1/2; cần thêm lần kiểm tra tiếp theo trước khi báo lỗi.",
-      "confidence": "none",
+      "finalUrl": "https://www.zettruyen.work/truyen-tranh/wolf-guy-wolfen-crest/chuong-1",
+      "latencyMs": 3258,
+      "confidence": "read-flow",
       "inconclusive": false,
       "primaryCheckId": "read-pages",
       "checks": [
@@ -1542,7 +1541,7 @@
           "ok": true,
           "status": "working",
           "detail": "www.zettruyen.homes",
-          "latencyMs": 1,
+          "latencyMs": 0,
           "statusCode": 200
         },
         {
@@ -1551,42 +1550,48 @@
           "ok": true,
           "status": "working",
           "detail": "https://www.zettruyen.homes",
-          "latencyMs": 81,
+          "latencyMs": 93,
           "statusCode": 200
         },
         {
           "id": "read-detail",
           "name": "Read detail",
-          "ok": false,
-          "status": "error",
-          "detail": "No manga detail link found",
-          "error": "Request timed out",
-          "latencyMs": 15001,
-          "statusCode": 0
+          "ok": true,
+          "status": "working",
+          "detail": "https://www.zettruyen.work/truyen-tranh/wolf-guy-wolfen-crest",
+          "latencyMs": 39,
+          "statusCode": 200
         },
         {
           "id": "read-chapters",
           "name": "Read chapters",
-          "ok": false,
-          "status": "error",
-          "detail": "No chapter link found"
+          "ok": true,
+          "status": "working",
+          "detail": "https://www.zettruyen.work/truyen-tranh/wolf-guy-wolfen-crest/chuong-1",
+          "latencyMs": 2317,
+          "statusCode": 200
         },
         {
           "id": "read-image",
           "name": "Read image",
-          "ok": false,
-          "status": "error"
+          "ok": true,
+          "status": "working",
+          "bytes": 60518,
+          "contentType": "image/webp",
+          "detail": "https://www.zettruyen.work/images/thumb-default.webp?v=1",
+          "latencyMs": 240,
+          "statusCode": 200
         }
       ],
-      "consecutiveFailures": 1,
+      "consecutiveFailures": 0,
       "history": {
-        "consecutiveFailures": 1,
+        "consecutiveFailures": 0,
         "failureThreshold": 2,
         "lastErrorAt": "2026-08-17T13:08:49.732Z",
-        "lastOkAt": "2026-08-17T01:56:57.658Z"
+        "lastOkAt": "2026-08-18T01:52:54.873Z"
       },
       "lastErrorAt": "2026-08-17T13:08:49.732Z",
-      "lastOkAt": "2026-08-17T01:56:57.658Z"
+      "lastOkAt": "2026-08-18T01:52:54.873Z"
     }
   ]
 }
