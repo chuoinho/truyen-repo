@@ -73,10 +73,10 @@
   {
     "name": "Tachiyomi: HamTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.hamtruyen",
-    "apk": "tachiyomi-vi.hamtruyen-v1.4.3.apk",
+    "apk": "tachiyomi-vi.hamtruyen-v1.4.4.apk",
     "lang": "vi",
-    "code": 3,
-    "version": "1.4.3",
+    "code": 4,
+    "version": "1.4.4",
     "nsfw": 0,
     "sources": [
       {
