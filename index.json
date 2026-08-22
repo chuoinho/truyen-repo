@@ -73,10 +73,10 @@
   {
     "name": "Tachiyomi: HamTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.hamtruyen",
-    "apk": "tachiyomi-vi.hamtruyen-v1.4.2.apk",
+    "apk": "tachiyomi-vi.hamtruyen-v1.4.3.apk",
     "lang": "vi",
-    "code": 2,
-    "version": "1.4.2",
+    "code": 3,
+    "version": "1.4.3",
     "nsfw": 0,
     "sources": [
       {
@@ -177,10 +177,10 @@
   {
     "name": "Tachiyomi: Top Truyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.toptruyen",
-    "apk": "tachiyomi-vi.toptruyen-v1.4.38.apk",
+    "apk": "tachiyomi-vi.toptruyen-v1.4.39.apk",
     "lang": "vi",
-    "code": 38,
-    "version": "1.4.38",
+    "code": 39,
+    "version": "1.4.39",
     "nsfw": 1,
     "sources": [
       {
@@ -231,17 +231,18 @@
   {
     "name": "Tachiyomi: ZetTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.zettruyen",
-    "apk": "tachiyomi-vi.zettruyen-v1.4.12.apk",
+    "apk": "tachiyomi-vi.zettruyen-v1.4.13.apk",
     "lang": "vi",
-    "code": 12,
-    "version": "1.4.12",
+    "code": 13,
+    "version": "1.4.13",
     "nsfw": 0,
     "sources": [
       {
         "name": "ZetTruyen",
         "lang": "vi",
         "id": "893747327087652119",
-        "baseUrl": "https://www.zettruyen.homes"
+        "baseUrl": "https://www.zettruyen.work",
+        "versionId": 1
       }
     ]
   }
