@@ -1,0 +1,7 @@
+ext {
+    extName = 'HamTruyen'
+    extClass = '.HamTruyen'
+    extVersionCode = 3
+}
+
+apply from: "$rootDir/common.gradle"
