@@ -18,7 +18,6 @@ import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import java.net.URLDecoder
 
 class HamTruyen : HttpSource() {
 
@@ -77,7 +76,7 @@ class HamTruyen : HttpSource() {
         return SManga.create().apply {
             url = path
             title = titleText
-            thumbnail_url = image.imageUrl()?.toDirectImageUrl()
+            thumbnail_url = image.imageUrl()
         }
     }
 
@@ -113,7 +112,7 @@ class HamTruyen : HttpSource() {
             title = document.selectFirst("main h1")?.text()
                 ?.ifBlank { document.title().substringBefore("—").trim() }
                 .orEmpty()
-            thumbnail_url = detailsSection?.selectFirst("img[src*=/api/image/proxy]")?.imageUrl()?.toDirectImageUrl()
+            thumbnail_url = detailsSection?.selectFirst("img[src*=/api/image/proxy]")?.imageUrl()
                 ?: document.selectFirst("meta[property=og:image]")?.attr("content")
             genre = detailsSection?.select(".flex.flex-wrap.gap-2 span")
                 ?.map { it.text().trim() }
@@ -201,22 +200,6 @@ class HamTruyen : HttpSource() {
             ?: return false
 
         return count == 0
-    }
-
-    private fun String.toDirectImageUrl(): String {
-        val url = toHttpUrlOrNull() ?: return this
-        if (url.host != "hamtruyen-api.hamtruyen.top" || !url.encodedPath.contains("/api/image/proxy")) {
-            return this
-        }
-
-        return url.queryParameter("url")?.takeIf { it.isNotBlank() }
-            ?: runCatching {
-                substringAfter("url=", "")
-                    .substringBefore("&")
-                    .takeIf { it.isNotBlank() }
-                    ?.let { URLDecoder.decode(it, "UTF-8") }
-            }.getOrNull()
-            ?: this
     }
 
     private fun String.toStoryPath(): String? {
