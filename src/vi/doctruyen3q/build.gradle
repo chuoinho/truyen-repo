@@ -1,0 +1,10 @@
+ext {
+    extName = 'DocTruyen3Q'
+    extClass = '.DocTruyen3Q'
+    themePkg = 'wpcomics'
+    baseUrl = 'https://doctruyen3qui21.com'
+    overrideVersionCode = 29
+    isNsfw = true
+}
+
+apply from: "$rootDir/common.gradle"

@@ -13,11 +13,13 @@ import eu.kanade.tachiyomi.util.asJsoup
 import okhttp3.Headers
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import java.util.concurrent.ConcurrentHashMap
 
 class HamTruyen : HttpSource() {
 
@@ -29,7 +31,11 @@ class HamTruyen : HttpSource() {
 
     override val supportsLatest = true
 
+    private val imageCdnCache = ConcurrentHashMap<String, String>()
+    private val imagePathCache = ConcurrentHashMap<String, Boolean>()
+
     override val client: OkHttpClient = network.cloudflareClient.newBuilder()
+        .addInterceptor(::interceptImageProxy)
         .rateLimit(3)
         .build()
 
@@ -107,7 +113,6 @@ class HamTruyen : HttpSource() {
     override fun mangaDetailsParse(response: Response): SManga {
         val document = response.asJsoup()
         val detailsSection = document.selectFirst("main section")
-
         return SManga.create().apply {
             title = document.selectFirst("main h1")?.text()
                 ?.ifBlank { document.title().substringBefore("—").trim() }
@@ -163,12 +168,39 @@ class HamTruyen : HttpSource() {
             .filterNot { it.contains("placeholder", ignoreCase = true) }
             .distinctBy { it.substringBefore("?") }
 
-        if (images.isEmpty()) {
-            throw Exception("Khong tim thay anh chapter tu HamTruyen")
+        val verifiedImages = verifyAndTrimImages(images, chapterUrl)
+        if (verifiedImages != null) {
+            return verifiedImages.mapIndexed { index, imageUrl -> Page(index, chapterUrl, imageUrl) }
         }
 
-        return images.mapIndexed { index, imageUrl -> Page(index, chapterUrl, imageUrl) }
+        throw Exception("HamTruyen da mat anh chapter tren toan bo CDN cua chinh nguon")
     }
+
+    private fun verifyAndTrimImages(images: List<String>, referer: String): List<String>? {
+        if (images.isEmpty()) return null
+        val verified = images.toMutableList()
+
+        if (!isImageAvailable(verified.first(), referer)) {
+            if (verified.size <= 1 || !isImageAvailable(verified[1], referer)) return null
+            verified.removeAt(0)
+        }
+        if (!isImageAvailable(verified.last(), referer)) {
+            if (verified.size <= 1 || !isImageAvailable(verified[verified.lastIndex - 1], referer)) return null
+            verified.removeAt(verified.lastIndex)
+        }
+        if (!isImageAvailable(verified[verified.size / 2], referer)) return null
+        return verified
+    }
+
+    private fun isImageAvailable(url: String, referer: String): Boolean = runCatching {
+        val imageHeaders = headers.newBuilder()
+            .set("Referer", referer)
+            .set("Accept", "image/avif,image/webp,image/apng,image/*,*/*;q=0.8")
+            .build()
+        client.newCall(GET(url, imageHeaders)).execute().use { response ->
+            response.isSuccessful && response.header("Content-Type").orEmpty().startsWith("image/")
+        }
+    }.getOrDefault(false)
 
     override fun imageRequest(page: Page): Request {
         val referer = page.url.takeIf { it.isNotBlank() } ?: "$baseUrl/"
@@ -180,6 +212,53 @@ class HamTruyen : HttpSource() {
     }
 
     override fun imageUrlParse(response: Response): String = throw UnsupportedOperationException()
+
+    private fun interceptImageProxy(chain: Interceptor.Chain): Response {
+        val originalRequest = chain.request()
+        val proxyUrl = originalRequest.url
+        val directUrl = proxyUrl.queryParameter("url")?.toHttpUrlOrNull()
+
+        if (
+            proxyUrl.host != IMAGE_PROXY_HOST ||
+            !proxyUrl.encodedPath.contains(IMAGE_PROXY_PATH) ||
+            directUrl == null ||
+            directUrl.host !in IMAGE_CDN_HOSTS
+        ) {
+            return chain.proceed(originalRequest)
+        }
+
+        val cacheKey = directUrl.encodedPath.substringBeforeLast("/")
+        val originalPath = directUrl.encodedPath
+        val legacyFixedPath = originalPath.replaceFirst(LEGACY_PATH_PREFIX, "/")
+        val cachedHost = imageCdnCache[cacheKey]
+        val cachedPath = if (imagePathCache[cacheKey] == true) legacyFixedPath else originalPath
+        val hosts = listOfNotNull(cachedHost, directUrl.host) + IMAGE_CDN_HOSTS
+        val paths = listOf(cachedPath, originalPath, legacyFixedPath).distinct()
+        val candidates = buildList {
+            paths.forEach { path ->
+                hosts.distinct().forEach { host ->
+                    add(directUrl.newBuilder().host(host).encodedPath(path).build())
+                }
+            }
+        }.distinctBy { it.toString() }
+
+        var response: Response? = null
+        candidates.forEach { candidate ->
+            response?.close()
+            response = chain.proceed(originalRequest.withProxyTarget(candidate))
+            if (response.isSuccessful) {
+                imageCdnCache[cacheKey] = candidate.host
+                imagePathCache[cacheKey] = candidate.encodedPath == legacyFixedPath && legacyFixedPath != originalPath
+                return response
+            }
+        }
+
+        return response ?: chain.proceed(originalRequest)
+    }
+
+    private fun Request.withProxyTarget(targetUrl: okhttp3.HttpUrl): Request = newBuilder()
+        .url(url.newBuilder().setQueryParameter("url", targetUrl.toString()).build())
+        .build()
 
     private fun Document.hasNextLatestPage(currentPage: Int): Boolean = selectFirst("a[href='/page/${currentPage + 1}']") != null
 
@@ -237,6 +316,10 @@ class HamTruyen : HttpSource() {
     }
 
     companion object {
+        private const val IMAGE_PROXY_HOST = "hamtruyen-api.hamtruyen.top"
+        private const val IMAGE_PROXY_PATH = "/api/image/proxy"
+        private const val LEGACY_PATH_PREFIX = "/nettruyen/"
+        private val IMAGE_CDN_HOSTS = (1..4).map { "cdn$it.zetimage.com" }
         private val RESERVED_PATHS = setOf(
             "",
             "about",
