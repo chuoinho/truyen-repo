@@ -166,7 +166,9 @@ class HamTruyen : HttpSource() {
         val images = document.select(".chapter-reader img[src], main img[src*=/api/image/proxy]")
             .mapNotNull { it.imageUrl() }
             .filterNot { it.contains("placeholder", ignoreCase = true) }
-            .distinctBy { it.substringBefore("?") }
+            .distinctBy { imageUrl ->
+                imageUrl.toHttpUrlOrNull()?.queryParameter("url") ?: imageUrl.substringBefore("?")
+            }
 
         val verifiedImages = verifyAndTrimImages(images, chapterUrl)
         if (verifiedImages != null) {
