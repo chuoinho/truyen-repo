@@ -2,17 +2,17 @@
   {
     "name": "Tachiyomi: CManga",
     "pkg": "eu.kanade.tachiyomi.extension.vi.cmanga",
-    "apk": "tachiyomi-vi.cmanga-v1.4.2.apk",
+    "apk": "tachiyomi-vi.cmanga-v1.4.3.apk",
     "lang": "vi",
-    "code": 2,
-    "version": "1.4.2",
+    "code": 3,
+    "version": "1.4.3",
     "nsfw": 0,
     "sources": [
       {
         "name": "CManga",
         "lang": "vi",
         "id": "5975790728262229465",
-        "baseUrl": "https://cmangax17.com",
+        "baseUrl": "https://cmangax18.com",
         "versionId": 1
       }
     ]
@@ -38,17 +38,17 @@
   {
     "name": "Tachiyomi: DocTruyen3Q",
     "pkg": "eu.kanade.tachiyomi.extension.vi.doctruyen3q",
-    "apk": "tachiyomi-vi.doctruyen3q-v1.4.36.apk",
+    "apk": "tachiyomi-vi.doctruyen3q-v1.4.37.apk",
     "lang": "vi",
-    "code": 36,
-    "version": "1.4.36",
+    "code": 37,
+    "version": "1.4.37",
     "nsfw": 1,
     "sources": [
       {
         "name": "DocTruyen3Q",
         "lang": "vi",
         "id": "6168143505244976507",
-        "baseUrl": "https://doctruyen3qui14.pro",
+        "baseUrl": "https://doctruyen3qui21.com",
         "versionId": 1
       }
     ]
@@ -73,10 +73,10 @@
   {
     "name": "Tachiyomi: HamTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.hamtruyen",
-    "apk": "tachiyomi-vi.hamtruyen-v1.4.4.apk",
+    "apk": "tachiyomi-vi.hamtruyen-v1.4.6.apk",
     "lang": "vi",
-    "code": 4,
-    "version": "1.4.4",
+    "code": 6,
+    "version": "1.4.6",
     "nsfw": 0,
     "sources": [
       {
@@ -159,10 +159,10 @@
   {
     "name": "Tachiyomi: OTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.otruyen",
-    "apk": "tachiyomi-vi.otruyen-v1.4.2.apk",
+    "apk": "tachiyomi-vi.otruyen-v1.4.3.apk",
     "lang": "vi",
-    "code": 2,
-    "version": "1.4.2",
+    "code": 3,
+    "version": "1.4.3",
     "nsfw": 0,
     "sources": [
       {
