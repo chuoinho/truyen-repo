@@ -1,23 +1,5 @@
 [
   {
-    "name": "Tachiyomi: CManga",
-    "pkg": "eu.kanade.tachiyomi.extension.vi.cmanga",
-    "apk": "tachiyomi-vi.cmanga-v1.4.3.apk",
-    "lang": "vi",
-    "code": 3,
-    "version": "1.4.3",
-    "nsfw": 0,
-    "sources": [
-      {
-        "name": "CManga",
-        "lang": "vi",
-        "id": "5975790728262229465",
-        "baseUrl": "https://cmangax18.com",
-        "versionId": 1
-      }
-    ]
-  },
-  {
     "name": "Tachiyomi: CuuTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.cuutruyen",
     "apk": "tachiyomi-vi.cuutruyen-v1.4.8.apk",
@@ -224,6 +206,24 @@
         "lang": "vi",
         "id": "2553532324170433933",
         "baseUrl": "https://truyenqqko.com",
+        "versionId": 1
+      }
+    ]
+  },
+  {
+    "name": "Tachiyomi: TruyenDex",
+    "pkg": "eu.kanade.tachiyomi.extension.vi.truyendex",
+    "apk": "tachiyomi-vi.truyendex-v1.4.1.apk",
+    "lang": "vi",
+    "code": 1,
+    "version": "1.4.1",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "TruyenDex",
+        "lang": "vi",
+        "id": "8416916018926147257",
+        "baseUrl": "https://truyendex.cc/nettrom",
         "versionId": 1
       }
     ]
