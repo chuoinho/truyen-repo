@@ -1501,6 +1501,10 @@ async function checkTruyenDexSource(source) {
   const list = await fetchJson(truyenDexProxyUrl(listTarget.toString()), truyenDexHeaders(source));
   const mangas = Array.isArray(list.json?.data) ? list.json.data.filter((manga) => manga?.id) : [];
   const listOk = Boolean(list.ok && mangas.length);
+  const inconclusive = Boolean(
+    !listOk &&
+      (list.status === 0 || list.status >= 500 || /timed out|fetch failed/i.test(list.error || "")),
+  );
 
   let best = null;
 
@@ -1580,6 +1584,7 @@ async function checkTruyenDexSource(source) {
     finalUrl: image?.finalUrl || atHome?.finalUrl || aggregate?.finalUrl || detail?.finalUrl || list?.finalUrl || source.baseUrl,
     latencyMs: Math.round(performance.now() - started),
     confidence: ok ? "read-flow" : "none",
+    inconclusive,
     primaryCheckId: "read-pages",
     checks: [
       check("truyendex-list", "TruyenDex manga list", listOk, {
