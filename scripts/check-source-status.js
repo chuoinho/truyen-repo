@@ -26,6 +26,7 @@ const MINO_CATEGORIES = ["manga", "comics", "hentai"];
 const MINO_PACKAGE = "eu.kanade.tachiyomi.extension.vi.minotruyen";
 const TRUYENDEX_PACKAGE = "eu.kanade.tachiyomi.extension.vi.truyendex";
 const NHATTRUYEN_PACKAGE = "eu.kanade.tachiyomi.extension.vi.nhattruyen";
+const FOX_TRUYEN_PACKAGE = "eu.kanade.tachiyomi.extension.vi.foxtruyen";
 const TRUYENDEX_API_URL = "https://api.mangadex.org";
 const TRUYENDEX_PROXY_URL = "https://services.f-ck.me/v1";
 const CMANGA_PACKAGE = "eu.kanade.tachiyomi.extension.vi.cmanga";
@@ -252,6 +253,7 @@ function sourceSpecificChecker(source) {
   if (source.package === "eu.kanade.tachiyomi.extension.vi.minotruyen") return checkMinoTruyenSource;
   if (source.package === TRUYENDEX_PACKAGE) return checkTruyenDexSource;
   if (source.package === NHATTRUYEN_PACKAGE) return checkNhatTruyenSource;
+  if (source.package === FOX_TRUYEN_PACKAGE) return checkFoxTruyenSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.otruyen") return checkOTruyenSource;
   if (source.package === "eu.kanade.tachiyomi.extension.vi.cuutruyen") return checkCuuTruyenSource;
   if (source.package === CUUTRUYEN_MOE_PACKAGE) return checkCuuTruyenMoeSource;
@@ -272,6 +274,7 @@ function sourceResult(source, data) {
     note: data.note,
     confidence: data.confidence,
     inconclusive: Boolean(data.inconclusive),
+    definitiveFailure: Boolean(data.definitiveFailure),
     primaryCheckId: data.primaryCheckId,
     checks: data.checks || [],
   };
@@ -354,17 +357,30 @@ function applySourceHistory(sources, previousStatus, checkedAt) {
       };
     }
 
+    if (source.definitiveFailure) {
+      return {
+        ...source,
+        consecutiveFailures: history.consecutiveFailures,
+        history,
+        lastErrorAt: history.lastErrorAt,
+        lastOkAt: history.lastOkAt,
+        ok: false,
+        status: "error",
+      };
+    }
+
     if (history.consecutiveFailures < FAILURE_THRESHOLD) {
       return {
         ...source,
         consecutiveFailures: history.consecutiveFailures,
-        error: undefined,
         history,
         lastErrorAt: history.lastErrorAt,
         lastOkAt: history.lastOkAt,
         note: `Nguồn lỗi lần ${history.consecutiveFailures}/${FAILURE_THRESHOLD}; cần thêm lần kiểm tra tiếp theo trước khi báo lỗi.`,
-        ok: true,
-        status: "working",
+        // A failed reader path is never reported as working. Keep it as a
+        // warning until the failure threshold promotes it to an error.
+        ok: false,
+        status: "warning",
       };
     }
 
@@ -698,6 +714,34 @@ async function checkNhatTruyenSource(source) {
       }),
     ],
   });
+}
+
+async function checkFoxTruyenSource(source) {
+  const started = performance.now();
+  const root = await fetchHtml(source.baseUrl);
+  const redirectedOffSite = Boolean(root.ok && root.finalUrl && !sameSiteUrl(root.finalUrl, source.baseUrl));
+
+  if (redirectedOffSite) {
+    return sourceResult(source, {
+      ok: false,
+      definitiveFailure: true,
+      error: `FoxTruyen redirects to an unrelated site: ${root.finalUrl}`,
+      finalUrl: root.finalUrl,
+      latencyMs: Math.round(performance.now() - started),
+      confidence: "none",
+      primaryCheckId: "foxtruyen-domain",
+      checks: [
+        check("foxtruyen-domain", "FoxTruyen canonical domain", false, {
+          detail: root.finalUrl,
+          error: "The configured FoxTruyen domain redirects off-site",
+          latencyMs: root.latencyMs,
+          statusCode: root.status,
+        }),
+      ],
+    });
+  }
+
+  return checkGenericHtmlReadFlow(source);
 }
 
 function isHamTruyenStoryUrl(url, baseUrl) {
@@ -1458,26 +1502,20 @@ async function checkTruyenDexSource(source) {
   const mangas = Array.isArray(list.json?.data) ? list.json.data.filter((manga) => manga?.id) : [];
   const listOk = Boolean(list.ok && mangas.length);
 
-  let detail = null;
-  let aggregate = null;
-  let atHome = null;
-  let cover = null;
-  let image = null;
-  let selectedManga = null;
-  let selectedChapter = null;
-  let pages = [];
+  let best = null;
 
   for (const manga of mangas) {
     const detailTarget = new URL(`${TRUYENDEX_API_URL}/manga/${manga.id}`);
     detailTarget.searchParams.append("includes[]", "cover_art");
     detailTarget.searchParams.append("includes[]", "author");
     detailTarget.searchParams.append("includes[]", "artist");
-    detail = await fetchJson(truyenDexProxyUrl(detailTarget.toString()), truyenDexHeaders(source));
+    const detail = await fetchJson(truyenDexProxyUrl(detailTarget.toString()), truyenDexHeaders(source));
     if (!detail.ok || !detail.json?.data?.id) continue;
 
     const coverFile = detail.json.data.relationships
       ?.find((relationship) => relationship?.type === "cover_art")
       ?.attributes?.fileName;
+    let cover = null;
     if (coverFile) {
       const coverTarget = `https://mangadex.org/covers/${manga.id}/${coverFile}.512.jpg`;
       cover = await timedFetch(truyenDexProxyUrl(coverTarget, "image"), {
@@ -1489,29 +1527,44 @@ async function checkTruyenDexSource(source) {
 
     const aggregateTarget = new URL(`${TRUYENDEX_API_URL}/manga/${manga.id}/aggregate`);
     aggregateTarget.searchParams.append("translatedLanguage[]", "vi");
-    aggregate = await fetchJson(truyenDexProxyUrl(aggregateTarget.toString()), truyenDexHeaders(source));
+    const aggregate = await fetchJson(truyenDexProxyUrl(aggregateTarget.toString()), truyenDexHeaders(source));
     const chapters = truyenDexChapters(aggregate.json);
     const chapter = chapters[0];
     if (!aggregate.ok || !chapter?.id) continue;
 
-    atHome = await fetchJson(
+    const atHome = await fetchJson(
       truyenDexProxyUrl(`${TRUYENDEX_API_URL}/at-home/server/${chapter.id}?forcePort443=true`),
       truyenDexHeaders(source),
     );
-    pages = Array.isArray(atHome.json?.chapter?.data) ? atHome.json.chapter.data : [];
+    const pages = Array.isArray(atHome.json?.chapter?.data) ? atHome.json.chapter.data : [];
     if (!atHome.ok || !atHome.json?.baseUrl || !atHome.json?.chapter?.hash || !pages.length) continue;
 
     const imageUrl = `${atHome.json.baseUrl.replace(/\/$/, "")}/data/${atHome.json.chapter.hash}/${pages[0]}`;
-    image = await timedFetch(imageUrl, {
+    const image = await timedFetch(truyenDexProxyUrl(imageUrl, "image"), {
       headers: truyenDexHeaders(source, "image/avif,image/webp,image/apng,image/*,*/*;q=0.8"),
       method: "GET",
       readBody: false,
     });
 
-    selectedManga = manga;
-    selectedChapter = chapter;
-    if (image.ok && image.contentType.startsWith("image/") && cover?.ok && cover.contentType.startsWith("image/")) break;
+    const imageOk = Boolean(image.ok && image.contentType.startsWith("image/"));
+    const coverOk = Boolean(cover?.ok && cover.contentType.startsWith("image/"));
+    const score = [true, coverOk, true, true, imageOk].filter(Boolean).length;
+    if (!best || score > best.score) {
+      best = { detail, aggregate, atHome, cover, image, selectedManga: manga, selectedChapter: chapter, pages, score };
+    }
+    if (score === 5) break;
   }
+
+  const {
+    detail = null,
+    aggregate = null,
+    atHome = null,
+    cover = null,
+    image = null,
+    selectedManga = null,
+    selectedChapter = null,
+    pages = [],
+  } = best || {};
 
   const detailOk = Boolean(detail?.ok && detail.json?.data?.id);
   const coverOk = Boolean(cover?.ok && cover.contentType.startsWith("image/"));
