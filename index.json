@@ -20,10 +20,10 @@
   {
     "name": "Tachiyomi: DocTruyen3Q",
     "pkg": "eu.kanade.tachiyomi.extension.vi.doctruyen3q",
-    "apk": "tachiyomi-vi.doctruyen3q-v1.4.37.apk",
+    "apk": "tachiyomi-vi.doctruyen3q-v1.4.38.apk",
     "lang": "vi",
-    "code": 37,
-    "version": "1.4.37",
+    "code": 38,
+    "version": "1.4.38",
     "nsfw": 1,
     "sources": [
       {
@@ -91,10 +91,10 @@
   {
     "name": "Tachiyomi: MinoTruyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.minotruyen",
-    "apk": "tachiyomi-vi.minotruyen-v1.4.11.apk",
+    "apk": "tachiyomi-vi.minotruyen-v1.4.13.apk",
     "lang": "vi",
-    "code": 11,
-    "version": "1.4.11",
+    "code": 13,
+    "version": "1.4.13",
     "nsfw": 1,
     "sources": [
       {
@@ -159,10 +159,10 @@
   {
     "name": "Tachiyomi: Top Truyen",
     "pkg": "eu.kanade.tachiyomi.extension.vi.toptruyen",
-    "apk": "tachiyomi-vi.toptruyen-v1.4.39.apk",
+    "apk": "tachiyomi-vi.toptruyen-v1.4.40.apk",
     "lang": "vi",
-    "code": 39,
-    "version": "1.4.39",
+    "code": 40,
+    "version": "1.4.40",
     "nsfw": 1,
     "sources": [
       {
